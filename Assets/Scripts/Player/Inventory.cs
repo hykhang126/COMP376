@@ -178,9 +178,46 @@ public class Inventory : MonoBehaviour
             items.RemoveAt(currentItemIndex);
         }
     }
-
-    public void UseItem(int itemKey)
+    
+    public bool RemoveItemAtIndex(int ItemIndex)
     {
+        if (items.Count > 0 && ItemIndex >= 0 && ItemIndex < items.Count)
+        {
+            items.RemoveAt(ItemIndex);
+            return true;
+        }
+        else
+        {
+            Debug.LogError("Wrong index passed to RemoveItemAtIndex");
+            return false;
+        }
+    }
+
+    public int GetItemIndex(int itemKey)
+    {
+        for (int i = 0; i < items.Count; i++)
+        {
+            if (items[i].itemKey == itemKey)
+            {
+               Item FoundItem = items[i];
+               return i;
+            }
+        }
+        Debug.Log("Item not found");
+        return -1;
+    }
+    
+    public bool UseItem(int itemKey)
+    {
+        int itemIndex = GetItemIndex(itemKey);
+        if (itemIndex >= 0)
+        {
+            if (RemoveItemAtIndex(itemIndex))
+            {
+                return true;
+            }
+        }
+        return false;
         //When the item is used, check if the interactable is not null
         //Check if the item key is the same as the itemKey of the interactable
         //if both checks pass, remove the item from the inventory and call the interactable's Interact method.
