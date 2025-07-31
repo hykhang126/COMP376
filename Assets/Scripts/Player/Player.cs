@@ -30,6 +30,8 @@ public class Player : MonoBehaviour
 
     [SerializeField] private float gamepadSensitivity = 5f; // Gamepad analog stick sensitivity multiplier
 
+    private Vector2 lookInput;
+
     public PlayerInput playerInput { get; private set; }
 
     private RaycastHit hit;
@@ -147,22 +149,7 @@ public class Player : MonoBehaviour
 
     public void OnLook(InputAction.CallbackContext context)
     {
-        Vector2 lookInput = context.ReadValue<Vector2>();
-        lookInput = lookInput.normalized;
-
-        if (Gamepad.current != null && Gamepad.current.wasUpdatedThisFrame)
-        {
-            // Analog stick sensitivity multiplier
-            lookDeltaX += lookInput.x * gamepadSensitivity * Time.deltaTime;
-            lookDeltaY += lookInput.y * gamepadSensitivity * Time.deltaTime;
-        }
-        else if (Gamepad.current == null)
-        {
-            Debug.Log("Getting Mouse Input");
-            // Mouse input (already in delta)
-            lookDeltaX += lookInput.x * mouseSensitivity * Time.deltaTime;
-            lookDeltaY += lookInput.y * mouseSensitivity * Time.deltaTime;
-        }
+        lookInput = context.ReadValue<Vector2>();
     }
 
     public void OnInteract()
@@ -198,10 +185,22 @@ public class Player : MonoBehaviour
         {
             HUD.ShowInteractPrompt(false);
         }
-    }
 
-    void FixedUpdate()
-    {
+        lookInput = lookInput.normalized;
+
+        if (Gamepad.current != null && Gamepad.current.wasUpdatedThisFrame)
+        {
+            // Analog stick sensitivity multiplier
+            lookDeltaX += lookInput.x * gamepadSensitivity * Time.deltaTime;
+            lookDeltaY += lookInput.y * gamepadSensitivity * Time.deltaTime;
+        }
+        else if (Gamepad.current == null)
+        {
+            // Mouse input (already in delta)
+            lookDeltaX += lookInput.x * mouseSensitivity * Time.deltaTime;
+            lookDeltaY += lookInput.y * mouseSensitivity * Time.deltaTime;
+        }
+
         // Movement
         Vector3 moveDirection = new Vector3(movementInput.x, 0, movementInput.y).normalized;
         transform.Translate(moveDirection * movementSpeed * Time.deltaTime);
@@ -228,5 +227,10 @@ public class Player : MonoBehaviour
         // Reset deltas after applying
         lookDeltaX = 0f;
         lookDeltaY = 0f;
+    }
+
+    void FixedUpdate()
+    {
+
     }
 }
