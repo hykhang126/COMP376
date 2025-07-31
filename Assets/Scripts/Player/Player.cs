@@ -14,8 +14,9 @@ public class Player : MonoBehaviour
     [SerializeField] private float cameraSpeed = 100f; // Speed of camera rotation
 
     GameObject _camera;
-    private float xRotation = 0f;
-    private float yRotation = 0f;
+
+    private float lookDeltaX = 0f;
+    private float lookDeltaY = 0f;
 
     Rigidbody rb;
 
@@ -27,7 +28,7 @@ public class Player : MonoBehaviour
 
     [SerializeField] private float mouseSensitivity = 100f; // Mouse sensitivity multiplier
 
-    [SerializeField] private float gamepadSensitivity = 100f; // Gamepad analog stick sensitivity multiplier
+    [SerializeField] private float gamepadSensitivity = 5f; // Gamepad analog stick sensitivity multiplier
 
     public PlayerInput playerInput { get; private set; }
 
@@ -146,20 +147,21 @@ public class Player : MonoBehaviour
 
     public void OnLook(InputAction.CallbackContext context)
     {
-
         Vector2 lookInput = context.ReadValue<Vector2>();
+        lookInput = lookInput.normalized;
 
         if (Gamepad.current != null && Gamepad.current.wasUpdatedThisFrame)
         {
             // Analog stick sensitivity multiplier
-            xRotation = lookInput.x * 100f; // Tweak multiplier as needed
-            yRotation = lookInput.y * 100f;
+            lookDeltaX += lookInput.x * gamepadSensitivity * Time.deltaTime;
+            lookDeltaY += lookInput.y * gamepadSensitivity * Time.deltaTime;
         }
-        else
+        else if (Gamepad.current == null)
         {
+            Debug.Log("Getting Mouse Input");
             // Mouse input (already in delta)
-            xRotation = lookInput.x * 100f;
-            yRotation = lookInput.y * 100f;
+            lookDeltaX += lookInput.x * mouseSensitivity * Time.deltaTime;
+            lookDeltaY += lookInput.y * mouseSensitivity * Time.deltaTime;
         }
     }
 
@@ -203,17 +205,18 @@ public class Player : MonoBehaviour
         // Movement
         Vector3 moveDirection = new Vector3(movementInput.x, 0, movementInput.y).normalized;
         transform.Translate(moveDirection * movementSpeed * Time.deltaTime);
+
         // Horizontal rotation (Player body)
-        transform.Rotate(Vector3.up * xRotation * Time.deltaTime);
+        transform.Rotate(Vector3.up * lookDeltaX);
 
         // Vertical rotation (Camera)
         if (!isInverted)
         {
-            currentXRotation -= yRotation * Time.deltaTime;  // Inverted vertical rotation
+            currentXRotation -= lookDeltaY;  // Inverted vertical rotation
         }
         else
         {
-            currentXRotation += yRotation * Time.deltaTime;  // Normal vertical rotation
+            currentXRotation += lookDeltaY;  // Normal vertical rotation
         }
 
         // Clamp the vertical rotation to the desired limits
@@ -221,5 +224,9 @@ public class Player : MonoBehaviour
 
         // Apply the clamped vertical rotation to the camera
         _camera.transform.localRotation = Quaternion.Euler(currentXRotation, 0, 0);
+
+        // Reset deltas after applying
+        lookDeltaX = 0f;
+        lookDeltaY = 0f;
     }
 }
