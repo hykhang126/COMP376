@@ -51,10 +51,15 @@ namespace SojaExiles
 
 		}
 
+		public void OpenDoor()
+		{
+			StartCoroutine(opening());
+		}
+
 		IEnumerator opening()
 		{
 			print("you are opening the door");
-			openandclose.Play("Opening");
+			openandclose.Play("Opening 1");
 			open = true;
 			yield return new WaitForSeconds(.5f);
 		}
