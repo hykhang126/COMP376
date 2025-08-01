@@ -33,16 +33,17 @@ public class DoorInteractable : Interactable
                 for (int i = 0; i < itemKeysToOpenThisDoor.Length; i++)
                 {
                     //----- To be replaced by getting the equipped key and checking if it is in the array -----
-                    if (player.inventory.UseItem(itemKeysToOpenThisDoor[i]))
+                    if (player.inventory.GetEquippedItemKey() == itemKeysToOpenThisDoor[i])
                     {
                         loadNextScene = SceneManager.LoadSceneAsync(itemKeyToSceneName[itemKeysToOpenThisDoor[i]], LoadSceneMode.Additive);
+                        player.inventory.RemoveItemAtIndex(player.inventory.GetCurrentItemIndex());
                         loadNextScene.completed += UnlockDoor;
                         break;
                         //-------------------------------------------------------------------------------------
                     }
                     else
                     {
-                        Debug.Log("Player doesn't have a key in their inventory!");
+                        Debug.Log("Player doesn't have the correct item equipped in their inventory!");
                     }
                 }
             }

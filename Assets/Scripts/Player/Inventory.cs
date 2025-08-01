@@ -134,6 +134,11 @@ public class Inventory : MonoBehaviour
     {
         currentItemIndex = index;
         Debug.Log("Current item index set to: " + currentItemIndex);
+    }    
+    
+    public int GetCurrentItemIndex()
+    {
+        return currentItemIndex;
     }
 
     public void Next()
@@ -171,11 +176,12 @@ public class Inventory : MonoBehaviour
         }
     }
 
-    public void RemoveItem()
+    public void RemoveCurrentItem()
     {
         if (items.Count > 0)
         {
             items.RemoveAt(currentItemIndex);
+            currentItemIndex--;
         }
     }
     
@@ -184,13 +190,11 @@ public class Inventory : MonoBehaviour
         if (items.Count > 0 && ItemIndex >= 0 && ItemIndex < items.Count)
         {
             items.RemoveAt(ItemIndex);
+            currentItemIndex--;
             return true;
         }
-        else
-        {
-            Debug.LogError("Wrong index passed to RemoveItemAtIndex");
-            return false;
-        }
+        Debug.LogError("Wrong index passed to RemoveItemAtIndex");
+        return false;
     }
 
     public int GetItemIndex(int itemKey)
@@ -206,10 +210,20 @@ public class Inventory : MonoBehaviour
         Debug.Log("Item not found");
         return -1;
     }
-    
-    public bool UseItem(int itemKey)
+
+    public int GetEquippedItemKey()
     {
-        int itemIndex = GetItemIndex(itemKey);
+        if (items.Count > 0 && currentItemIndex >= 0 && currentItemIndex < items.Count)
+        {
+            return items[currentItemIndex].itemKey;
+        }
+
+        return -1;
+    }
+    
+    public bool UseItemByItemKey(int itemKey)
+    {
+        int itemIndex = currentItemIndex;
         if (itemIndex >= 0)
         {
             if (RemoveItemAtIndex(itemIndex))
@@ -218,8 +232,14 @@ public class Inventory : MonoBehaviour
             }
         }
         return false;
+    }
+    
+    public bool UseCurrentItem()
+    {
+        //TODO:
         //When the item is used, check if the interactable is not null
         //Check if the item key is the same as the itemKey of the interactable
         //if both checks pass, remove the item from the inventory and call the interactable's Interact method.
+        return true;
     }
 }
