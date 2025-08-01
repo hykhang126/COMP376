@@ -56,6 +56,11 @@ namespace SojaExiles
 			StartCoroutine(opening());
 		}
 
+		public void CloseDoor()
+		{
+			StartCoroutine(closing());
+		}
+
 		IEnumerator opening()
 		{
 			print("you are opening the door");
@@ -67,7 +72,7 @@ namespace SojaExiles
 		IEnumerator closing()
 		{
 			print("you are closing the door");
-			openandclose.Play("Closing");
+			openandclose.Play("Closing 1");
 			open = false;
 			yield return new WaitForSeconds(.5f);
 		}

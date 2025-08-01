@@ -1,3 +1,4 @@
+using System.Collections;
 using SojaExiles;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -12,6 +13,14 @@ public class MainMenu : MonoBehaviour
     private Button quit;
 
     [SerializeField] private GameObject door;
+
+    private Camera _camera;
+
+    private float distance;
+
+    [SerializeField] private float cameraSpeed = 10f;
+
+    [SerializeField] private GameObject cameraEndLocation;
 
     public void Awake()
     {
@@ -35,13 +44,19 @@ public class MainMenu : MonoBehaviour
     public void Start()
     {
         EventSystem.current.firstSelectedGameObject = start.gameObject;
+        _camera = FindAnyObjectByType<Camera>();
     }
 
     public void StartGame()
     {
         Debug.Log("Start Game");
+        //Door opens as the camera slowly enters through the door. Entering the next room.
+        //Load what is suppose to be behind the door, this case the Main Game Scene
+        //Door Opens
         door.GetComponent<opencloseDoor>().OpenDoor();
-        //Door opens as the camera slowly enters through the door. Entering a dark void
+        //camera moves until a certain point after the door
+        StartCoroutine(SceneTransition(_camera.transform.position, cameraEndLocation.transform.position, cameraSpeed));
+        //close the door
         //Load the Game Scene
     }
 
@@ -54,12 +69,26 @@ public class MainMenu : MonoBehaviour
 
     public void Update()
     {
-         // If no UI element is selected or the selected is not interactable
+        // If no UI element is selected or the selected is not interactable
         /*if (EventSystem.current.currentSelectedGameObject == null ||
             EventSystem.current.currentSelectedGameObject.GetComponent<Selectable>() == null)
         {
             // Reset to default button
             EventSystem.current.SetSelectedGameObject(start.gameObject);
-        } */ 
+        } */
+    }
+
+    private IEnumerator SceneTransition(Vector3 cameraStartPos, Vector3 cameraEndPos, float timeToReach)
+    {
+        float elapsed = 0f;
+        while (elapsed < timeToReach)
+        {
+            _camera.transform.position = Vector3.Lerp(cameraStartPos, cameraEndPos, elapsed / timeToReach);
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+        _camera.transform.position = cameraEndPos;
+
+        door.GetComponent<opencloseDoor>().CloseDoor();
     }
 }
