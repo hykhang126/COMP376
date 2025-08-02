@@ -179,6 +179,11 @@ public class Player : MonoBehaviour
         Debug.DrawRay(_camera.transform.position, _camera.transform.forward * hitRange, Color.red);
         if (Physics.Raycast(_camera.transform.position, _camera.transform.forward, out hit, hitRange))
         {
+            // Pierce through the player layer to allow interaction
+            if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Player"))
+            {
+                hit = new RaycastHit();
+            }
             //Check if the object has an Interactable component, show UI prompt to tell the player they can interact.
             if (hit.collider.gameObject.TryGetComponent(out Interactable interactable))
             {
