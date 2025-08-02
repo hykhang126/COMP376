@@ -77,6 +77,19 @@ namespace SojaExiles
 			yield return new WaitForSeconds(.5f);
 		}
 
+		// Make a function to open the door in the inspector
+		[NaughtyAttributes.Button("Open Door")]
+		public void OpenDoorInspector()
+		{
+			OpenDoor();
+		}
+
+		// Make a function to close the door in the inspector
+		[NaughtyAttributes.Button("Close Door")]
+		public void CloseDoorInspector()
+		{
+			CloseDoor();
+		}
 
 	}
 }
