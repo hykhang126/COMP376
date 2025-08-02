@@ -2066,7 +2066,7 @@ Transform:
   m_GameObject: {fileID: 394989091}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -145, y: 10, z: 3}
+  m_LocalPosition: {x: -146, y: 9, z: 3}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -2272,6 +2272,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemName: Sphere
   itemKey: 1
+  playerInventorySO: {fileID: 0}
+  itemPrefab: {fileID: 0}
 --- !u!135 &417265260
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -7638,6 +7640,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemName: Sphere2
   itemKey: 3
+  playerInventorySO: {fileID: 0}
+  itemPrefab: {fileID: 0}
 --- !u!135 &1045947922
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -10266,6 +10270,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemName: Sphere1
   itemKey: 2
+  playerInventorySO: {fileID: 0}
+  itemPrefab: {fileID: 0}
 --- !u!135 &1450159657
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -13222,8 +13228,7 @@ PrefabInstance:
       propertyPath: m_Convex
       value: 1
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 3451118302482216456, guid: 998e9b809f8b42b42b2c51d5eb45b9f3, type: 3}
+    m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
@@ -13253,6 +13258,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemName: key
   itemKey: 69
+  playerInventorySO: {fileID: 0}
+  itemPrefab: {fileID: 0}
 --- !u!54 &2030188178
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -22080,37 +22087,21 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 394989092}
     m_Modifications:
-    - target: {fileID: 208628007290521926, guid: a134cc40a117af44daa5d51a4d3e902a, type: 3}
-      propertyPath: cameraSpeed
-      value: 200
-      objectReference: {fileID: 0}
-    - target: {fileID: 208628007290521926, guid: a134cc40a117af44daa5d51a4d3e902a, type: 3}
-      propertyPath: movementSpeed
-      value: 10
-      objectReference: {fileID: 0}
     - target: {fileID: 972639073029162981, guid: a134cc40a117af44daa5d51a4d3e902a, type: 3}
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
-    - target: {fileID: 7293616561641714550, guid: a134cc40a117af44daa5d51a4d3e902a, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0.736
-      objectReference: {fileID: 0}
-    - target: {fileID: 7293616561641714550, guid: a134cc40a117af44daa5d51a4d3e902a, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0.177
-      objectReference: {fileID: 0}
     - target: {fileID: 7724768560626574633, guid: a134cc40a117af44daa5d51a4d3e902a, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -1.278
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7724768560626574633, guid: a134cc40a117af44daa5d51a4d3e902a, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -1.41
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7724768560626574633, guid: a134cc40a117af44daa5d51a4d3e902a, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.222
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7724768560626574633, guid: a134cc40a117af44daa5d51a4d3e902a, type: 3}
       propertyPath: m_LocalRotation.w
@@ -22153,6 +22144,22 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 664814317}
     m_Modifications:
+    - target: {fileID: 1126737432109338496, guid: 8e23ad5e861473a49a957bc585721f7b, type: 3}
+      propertyPath: m_Size.x
+      value: 1.1651001
+      objectReference: {fileID: 0}
+    - target: {fileID: 1126737432109338496, guid: 8e23ad5e861473a49a957bc585721f7b, type: 3}
+      propertyPath: m_Size.z
+      value: 1.1874123
+      objectReference: {fileID: 0}
+    - target: {fileID: 1126737432109338496, guid: 8e23ad5e861473a49a957bc585721f7b, type: 3}
+      propertyPath: m_Center.x
+      value: 0.007797241
+      objectReference: {fileID: 0}
+    - target: {fileID: 1126737432109338496, guid: 8e23ad5e861473a49a957bc585721f7b, type: 3}
+      propertyPath: m_Center.z
+      value: -0.020626068
+      objectReference: {fileID: 0}
     - target: {fileID: 2945875798731397007, guid: 8e23ad5e861473a49a957bc585721f7b, type: 3}
       propertyPath: m_Name
       value: Pot

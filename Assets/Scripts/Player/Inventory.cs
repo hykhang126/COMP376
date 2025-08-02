@@ -195,7 +195,6 @@ public class Inventory : MonoBehaviour
         // Logic to add item to the inventory
         if (itemListSO == -1) return;
         Debug.Log("Item added: " + itemName + " with key: " + itemKey);
-        GameObject staticPrefab;
         items.Add(new Item(itemName, itemKey,playerInventorySO.itemList[itemListSO]));
         // Add to Inventory ScriptableObject
         if (playerInventorySO != null)

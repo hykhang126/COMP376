@@ -127,16 +127,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aaea91b1caa02b54da40746d14e1733e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  movementSpeed: 2
+  movementSpeed: 10
   isInverted: 0
-  cameraSpeed: 100
   minY: -40
   maxY: 75
   mouseSensitivity: 50.3
   gamepadSensitivity: 100
   carriedObject: {fileID: 0}
   carryPoint: {fileID: 0}
-  hitRange: 2
+  hitRange: 5
 --- !u!114 &383616103278508239
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -149,7 +148,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac318d88d97725441ab3c8eb0f988783, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 208628007290521926}
   currentState: 0
 --- !u!114 &7025571321497782876
 MonoBehaviour:
@@ -320,7 +318,7 @@ Transform:
   m_GameObject: {fileID: 6127447214756072385}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.02, z: 0}
+  m_LocalPosition: {x: 0, y: 0.736, z: 0.177}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
