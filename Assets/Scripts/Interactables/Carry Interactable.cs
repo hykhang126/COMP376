@@ -6,7 +6,7 @@ using UnityEngine.InputSystem;
 public class CarryInteractable : Interactable
 {
     // When the player interacts with this object, they are able to translate it and rotate it
-    Rigidbody rb;
+    public Rigidbody rb;
 
     private bool isCarried = false;
 
@@ -96,6 +96,8 @@ public class CarryInteractable : Interactable
 
             player.carriedObject = this.gameObject;
         }
+
+        
     }
 
     public void DisableFixedJoint()

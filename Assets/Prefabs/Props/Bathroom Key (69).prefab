@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2579163367696077249}
   m_Layer: 0
-  m_Name: Key2
+  m_Name: Bathroom Key (69)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -125,7 +125,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f19ddf3e40219db42830353d1479e177, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemName: key
+  itemName: Bathroom Key
   itemKey: 69
   playerInventorySO: {fileID: 11400000, guid: 5028993a4a4a40f48a60d83aa1fe42c8, type: 2}
   itemPrefab: {fileID: 1379830720837112018}
