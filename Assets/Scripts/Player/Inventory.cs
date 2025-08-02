@@ -68,7 +68,12 @@ public class Inventory : MonoBehaviour
         pauseSystem = FindAnyObjectByType<Pause>();
         inventoryCamera = transform.Find("InventoryCamera").gameObject?.GetComponent<Camera>();
 
-        itemPreviewSpawnPoint = transform.Find("ItemPreviewSpawnPoint").gameObject?.transform;
+        // find in children of InventoryCamera
+        if (itemPreviewSpawnPoint == null)
+        {
+            itemPreviewSpawnPoint = inventoryCamera.transform.Find("ItemPreviewSpawnPoint").gameObject?.transform;
+        }
+        
     }
 
     public void OnEnable()
@@ -198,7 +203,6 @@ public class Inventory : MonoBehaviour
     {
         Item newItem = new(itemName, itemKey, itemPrefab);
 
-        items.Add(newItem);
         if (playerInventorySO != null)
         {
             playerInventorySO.items.Add(newItem);
@@ -209,24 +213,6 @@ public class Inventory : MonoBehaviour
             Debug.LogWarning("PlayerInventorySO is null, cannot update inventory SO.");
         }
     }
-
-    // public void AddItem(string itemName, int itemKey, Item itemPrefab)
-    // {
-    //     // Logic to add item to the inventory
-    //     Debug.Log("Item added: " + itemName + " with key: " + itemKey);
-
-    //     items.Add(itemPrefab);
-    //     // Add to Inventory ScriptableObject
-    //     if (playerInventorySO != null)
-    //     {
-    //         playerInventorySO.items = items;
-    //         playerInventorySO.currentItemIndex = currentItemIndex;
-    //     }
-    //     else
-    //     {
-    //         Debug.LogWarning("PlayerInventorySO is null, cannot update inventory SO.");
-    //     }
-    // }
 
     public void RemoveItem()
     {
@@ -312,20 +298,29 @@ public class Inventory : MonoBehaviour
             currentItemPreview.transform.localRotation = Quaternion.identity;
 
             // Ensure it's on the correct layer so only the InventoryCamera sees it
-            SetLayerRecursively(currentItemPreview, LayerMask.NameToLayer("ItemLayer"));
+            SetupChildrenRecursively(currentItemPreview, LayerMask.NameToLayer("ItemLayer"));
         }
     }
 
     // Utility function to set layer recursively
-    private void SetLayerRecursively(GameObject obj, int newLayer)
+    private void SetupChildrenRecursively(GameObject obj, int newLayer)
     {
         if (obj == null) return;
 
         obj.layer = newLayer;
+        // Disable collider and rigid body if they exist
+        Collider collider = obj.GetComponent<Collider>();
+        if (collider != null)
+            collider.enabled = false;
+        Rigidbody rb = obj.GetComponent<Rigidbody>();
+        if (rb != null)
+            rb.isKinematic = true;
         foreach (Transform child in obj.transform)
         {
             if (child != null)
-                SetLayerRecursively(child.gameObject, newLayer);
+            {
+                SetupChildrenRecursively(child.gameObject, newLayer);
+            }
         }
     }
 
