@@ -56,5 +56,5 @@
         "temp/": true,
         "Temp/": true
     },
-    "dotnet.defaultSolution": "23.sln"
+    "dotnet.defaultSolution": "23_GMTK25.sln"
 }

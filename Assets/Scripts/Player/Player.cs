@@ -11,11 +11,10 @@ public class Player : MonoBehaviour
     [SerializeField] float movementSpeed = 5f;
     [SerializeField] bool isInverted = false;
 
-    [SerializeField] private float cameraSpeed = 100f; // Speed of camera rotation
-
     GameObject _camera;
-    private float xRotation = 0f;
-    private float yRotation = 0f;
+
+    private float lookDeltaX = 0f;
+    private float lookDeltaY = 0f;
 
     Rigidbody rb;
 
@@ -27,7 +26,9 @@ public class Player : MonoBehaviour
 
     [SerializeField] private float mouseSensitivity = 100f; // Mouse sensitivity multiplier
 
-    [SerializeField] private float gamepadSensitivity = 100f; // Gamepad analog stick sensitivity multiplier
+    [SerializeField] private float gamepadSensitivity = 5f; // Gamepad analog stick sensitivity multiplier
+
+    private Vector2 lookInput;
 
     public PlayerInput playerInput { get; private set; }
 
@@ -49,6 +50,12 @@ public class Player : MonoBehaviour
     {
         playerInput = GetComponent<PlayerInput>();
 
+        playerInput.actions.FindActionMap("Player").Disable();
+
+    }
+
+    void Start()
+    {
         playerInput.actions["Move"].performed += OnMove;
         playerInput.actions["Move"].canceled += OnMove;
         playerInput.actions["Look"].performed += OnLook;
@@ -57,10 +64,8 @@ public class Player : MonoBehaviour
 
         playerInput.actions["Interact"].performed += ctx => OnInteract();
         playerInput.actions["RotateCarryObject"].performed += ctx => RotateCarryObject();
-    }
 
-    void Start()
-    {
+
         HUD = GameObject.Find("UI").transform.Find("HUD").GetComponent<HUD>();
         if (HUD == null)
         {
@@ -141,30 +146,19 @@ public class Player : MonoBehaviour
 
     public void OnMove(InputAction.CallbackContext context)
     {
+        if (PlayerState.instance.currentState == PlayerStateType.InMenu) return;
         movementInput = context.ReadValue<Vector2>();
     }
 
     public void OnLook(InputAction.CallbackContext context)
     {
-
-        Vector2 lookInput = context.ReadValue<Vector2>();
-
-        if (Gamepad.current != null && Gamepad.current.wasUpdatedThisFrame)
-        {
-            // Analog stick sensitivity multiplier
-            xRotation = lookInput.x * 100f; // Tweak multiplier as needed
-            yRotation = lookInput.y * 100f;
-        }
-        else
-        {
-            // Mouse input (already in delta)
-            xRotation = lookInput.x * 100f;
-            yRotation = lookInput.y * 100f;
-        }
+        if (PlayerState.instance.currentState == PlayerStateType.InMenu) return;
+        lookInput = context.ReadValue<Vector2>();
     }
 
     public void OnInteract()
     {
+        if (PlayerState.instance.currentState == PlayerStateType.InMenu) return;
         Debug.Log("Interact button pressed");
         if (carriedObject != null && (PlayerState.instance.currentState == PlayerStateType.CarryingObject || PlayerState.instance.currentState == PlayerStateType.RotatingCarryObject))
         {
@@ -185,6 +179,11 @@ public class Player : MonoBehaviour
         Debug.DrawRay(_camera.transform.position, _camera.transform.forward * hitRange, Color.red);
         if (Physics.Raycast(_camera.transform.position, _camera.transform.forward, out hit, hitRange))
         {
+            // Pierce through the player layer to allow interaction
+            if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Player"))
+            {
+                hit = new RaycastHit();
+            }
             //Check if the object has an Interactable component, show UI prompt to tell the player they can interact.
             if (hit.collider.gameObject.TryGetComponent(out Interactable interactable))
             {
@@ -196,24 +195,35 @@ public class Player : MonoBehaviour
         {
             HUD.ShowInteractPrompt(false);
         }
-    }
 
-    void FixedUpdate()
-    {
+        if (Gamepad.current != null && Gamepad.current.wasUpdatedThisFrame)
+        {
+            // Analog stick sensitivity multiplier
+            lookDeltaX += lookInput.x * gamepadSensitivity * Time.deltaTime;
+            lookDeltaY += lookInput.y * gamepadSensitivity * Time.deltaTime;
+        }
+        else if (Gamepad.current == null)
+        {
+            // Mouse input (already in delta)
+            lookDeltaX += lookInput.x * mouseSensitivity * Time.deltaTime;
+            lookDeltaY += lookInput.y * mouseSensitivity * Time.deltaTime;
+        }
+
         // Movement
         Vector3 moveDirection = new Vector3(movementInput.x, 0, movementInput.y).normalized;
         transform.Translate(moveDirection * movementSpeed * Time.deltaTime);
+
         // Horizontal rotation (Player body)
-        transform.Rotate(Vector3.up * xRotation * Time.deltaTime);
+        transform.Rotate(Vector3.up * lookDeltaX);
 
         // Vertical rotation (Camera)
         if (!isInverted)
         {
-            currentXRotation -= yRotation * Time.deltaTime;  // Inverted vertical rotation
+            currentXRotation -= lookDeltaY;  // Inverted vertical rotation
         }
         else
         {
-            currentXRotation += yRotation * Time.deltaTime;  // Normal vertical rotation
+            currentXRotation += lookDeltaY;  // Normal vertical rotation
         }
 
         // Clamp the vertical rotation to the desired limits
@@ -221,5 +231,14 @@ public class Player : MonoBehaviour
 
         // Apply the clamped vertical rotation to the camera
         _camera.transform.localRotation = Quaternion.Euler(currentXRotation, 0, 0);
+
+        // Reset deltas after applying
+        lookDeltaX = 0f;
+        lookDeltaY = 0f;
+    }
+
+    void FixedUpdate()
+    {
+
     }
 }

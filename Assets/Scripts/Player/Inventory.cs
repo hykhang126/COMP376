@@ -6,11 +6,11 @@ using TMPro;
 
 public class Inventory : MonoBehaviour
 {
-    [SerializeField] private List<Item> items = new List<Item>();
+    public List<Item> items = new List<Item>();
 
     private int currentItemIndex = 0;
 
-    InventoryAction actions;
+    public InventoryAction actions;
 
     private bool isInventoryOpen = false;
 
@@ -19,6 +19,8 @@ public class Inventory : MonoBehaviour
     private TextMeshProUGUI itemNameText; // Reference to the TextMeshProUGUI for item name display 
 
     private Player player;
+
+    private Pause pauseSystem;
 
     [SerializeField] private PlayerInventorySO playerInventorySO;
 
@@ -29,7 +31,6 @@ public class Inventory : MonoBehaviour
         actions.Inventory.Next.performed += _ => Next();
         actions.Inventory.Previous.performed += _ => Previous();
         actions.Inventory.CycleItems.performed += CycleItems;
-        actions.Enable();
     }
 
     public void Start()
@@ -41,6 +42,10 @@ public class Inventory : MonoBehaviour
         inventoryUI.SetActive(false);
         player = FindAnyObjectByType<Player>();
 
+#if UNITY_EDITOR
+        playerInventorySO.items.Clear();
+        playerInventorySO.currentItemIndex = 0;
+#endif
         // Load info from PlayerInventorySO
         if (playerInventorySO != null)
         {
@@ -51,6 +56,9 @@ public class Inventory : MonoBehaviour
         {
             Debug.LogError("PlayerInventorySO not found in Resources");
         }
+
+        actions.Disable();
+        pauseSystem = FindAnyObjectByType<Pause>();
     }
 
     public void OnEnable()
@@ -102,6 +110,7 @@ public class Inventory : MonoBehaviour
         {
             itemNameText.text = ""; // Default text if no items
         }
+        pauseSystem.action.Disable();
     }
 
     private void CloseInventory()
@@ -116,6 +125,7 @@ public class Inventory : MonoBehaviour
         {
             player.playerInput.actions.Enable(); // Re-enable player input actions
         }
+        pauseSystem.action.Enable();
     }
 
     public void CycleItems(InputAction.CallbackContext context)
