@@ -85,6 +85,7 @@ public class PlayerState : MonoBehaviour
                 break;
             case PlayerStateType.InMenu:
                 //Handle Menu Changing Logic
+                break;
             default:
                 Debug.LogWarning("Unhandled player state: " + state);
                 break;

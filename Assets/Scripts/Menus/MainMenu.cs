@@ -27,6 +27,8 @@ public class MainMenu : MonoBehaviour
 
     private Inventory inventorySystem;
 
+    private GameObject blackVoid;
+
     public void Awake()
     {
         start = transform.Find("Start").gameObject?.GetComponent<Button>();
@@ -58,6 +60,10 @@ public class MainMenu : MonoBehaviour
     {
         PlayerState.instance.TriggerTransition(PlayerStateType.InMenu);
         StartCoroutine(MainMenuInit());
+
+        blackVoid = GameObject.Find("BlackQuitVoid");
+
+        blackVoid.SetActive(false);
     }
 
     private IEnumerator MainMenuInit()
@@ -76,15 +82,16 @@ public class MainMenu : MonoBehaviour
         //Door Opens
         door.GetComponent<opencloseDoor>().OpenDoor();
         //camera moves until a certain point after the door
-        StartCoroutine(SceneTransition(_player.transform.position, playerEndLocation.transform.position, cameraSpeed));
+        StartCoroutine(StartSceneTransition(_player.transform.position, playerEndLocation.transform.position, cameraSpeed));
         //Load the Game Scene
     }
 
     public void QuitGame()
     {
         Debug.Log("Quit Game");
+        blackVoid.SetActive(true);
         door.GetComponent<opencloseDoor>().OpenDoor();
-        Application.Quit();
+        StartCoroutine(QuitSceneTransition(_player.transform.position, playerEndLocation.transform.position, cameraSpeed));
     }
 
     public void Update()
@@ -101,7 +108,7 @@ public class MainMenu : MonoBehaviour
         }
     }
 
-    private IEnumerator SceneTransition(Vector3 playerStartPos, Vector3 playerEndPos, float timeToReach)
+    private IEnumerator StartSceneTransition(Vector3 playerStartPos, Vector3 playerEndPos, float timeToReach)
     {
         start.interactable = false;
         quit.interactable = false;
@@ -126,6 +133,25 @@ public class MainMenu : MonoBehaviour
         //Unlock other systems
         pauseSystem.action.Enable();
         inventorySystem.actions.Enable();
+
+    }
+
+    private IEnumerator QuitSceneTransition(Vector3 playerStartPos, Vector3 playerEndPos, float timeToReach)
+    {
+        start.interactable = false;
+        quit.interactable = false;
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
+        float elapsed = 0f;
+        while (elapsed < timeToReach)
+        {
+            _player.transform.position = Vector3.Lerp(playerStartPos, playerEndPos, elapsed / timeToReach);
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+        _player.transform.position = playerEndPos;
+
+        Application.Quit();
 
     }
 }
