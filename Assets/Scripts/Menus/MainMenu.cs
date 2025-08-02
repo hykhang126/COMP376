@@ -80,7 +80,7 @@ public class MainMenu : MonoBehaviour
         //Door opens as the camera slowly enters through the door. Entering the next room.
         //Load what is suppose to be behind the door, this case the Main Game Scene
         //Door Opens
-        door.GetComponent<opencloseDoor>().OpenDoor();
+        door.GetComponent<DoorAction>().OpenDoor();
         //camera moves until a certain point after the door
         StartCoroutine(StartSceneTransition(_player.transform.position, playerEndLocation.transform.position, cameraSpeed));
         //Load the Game Scene
@@ -90,7 +90,7 @@ public class MainMenu : MonoBehaviour
     {
         Debug.Log("Quit Game");
         blackVoid.SetActive(true);
-        door.GetComponent<opencloseDoor>().OpenDoor();
+        door.GetComponent<DoorAction>().OpenDoor();
         StartCoroutine(QuitSceneTransition(_player.transform.position, playerEndLocation.transform.position, cameraSpeed));
     }
 
@@ -123,7 +123,7 @@ public class MainMenu : MonoBehaviour
         }
         _player.transform.position = playerEndPos;
 
-        door.GetComponent<opencloseDoor>().CloseDoor();
+        door.GetComponent<DoorAction>().CloseDoor();
         _player.playerInput.enabled = true;
         PlayerState.instance.TriggerTransition(PlayerStateType.Idle);
         this.gameObject.SetActive(false);
