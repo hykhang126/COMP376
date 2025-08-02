@@ -61,9 +61,8 @@ public class DoorAction : MonoBehaviour
 	{
 		if (player != null && targetPosition != null)
 		{
-			player.position = targetPosition.position;
-			player.rotation = targetPosition.rotation;
-		}
+			player.SetPositionAndRotation(targetPosition.position, targetPosition.rotation);
+        }
 		else
 		{
 			Debug.LogWarning("Player or target position is null.");

@@ -6,38 +6,52 @@ using UnityEngine.UI;
 
 public class DoorInteractable : Interactable
 {
-    
+    [Header("Key Settings")]
     [SerializeField] private int[] itemKeysToOpenThisDoor;
+    [SerializeField] private bool isLockedByKeys = false;
+
+    private Door door;
 
     private AsyncOperation loadNextScene;
 
-    private Dictionary<int, string> itemKeyToSceneName = new Dictionary<int, string>
+    [SerializeField] private ItemKeyToSceneNameSO itemKeyToSceneNameSO;
+    private Dictionary<int, string> itemKeyToSceneName;
+
+    void Awake()
     {
-        // Insert the rest of the key item keys here alongside the scene name they are supposed to open
-        {101, "Scene 1"}
-    };
-    //[SerializeField] private Texture2D inventoryImage;
+        door = GetComponent<Door>();
+        if (door == null)
+        {
+            Debug.LogError("Door component not found on the DoorInteractable object.");
+        }
+        
+        isLockedByKeys = itemKeysToOpenThisDoor.Length > 0;
+    }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        Debug.Log("Item created with key: " + itemKeysToOpenThisDoor);
+        itemKeyToSceneName = itemKeyToSceneNameSO.itemKeyToSceneName;
     }
 
     public override void Interact(Player player)
     {
+        // GMTK 25 - We can either teleport the player or just open the door
         if (player)
         {
-            if (player.inventory)
+            // If door is not locked by keys, open it directly
+            if (!isLockedByKeys)
+            {
+                OpenDoor(player);
+            }
+            else if (player.inventory)
             {
                 for (int i = 0; i < itemKeysToOpenThisDoor.Length; i++)
                 {
                     //----- To be replaced by getting the equipped key and checking if it is in the array -----
                     if (player.inventory.GetEquippedItemKey() == itemKeysToOpenThisDoor[i])
                     {
-                        loadNextScene = SceneManager.LoadSceneAsync(itemKeyToSceneName[itemKeysToOpenThisDoor[i]], LoadSceneMode.Additive);
-                        player.inventory.RemoveItemAtIndex(player.inventory.GetCurrentItemIndex());
-                        loadNextScene.completed += UnlockDoor;
+                        OpenDoor(player);
                         break;
                         //-------------------------------------------------------------------------------------
                     }
@@ -52,16 +66,47 @@ public class DoorInteractable : Interactable
                 Debug.LogError("Player is null, cannot interact with item.");
             }
         }
-        else 
+        else
         {
             Debug.LogError("Player's inventory is null, cannot add item.");
             return;
         }
     }
 
+    private void LoadNextScene(Player player, int keyIndex)
+    {
+        loadNextScene = SceneManager.LoadSceneAsync(itemKeyToSceneName[itemKeysToOpenThisDoor[keyIndex]], LoadSceneMode.Additive);
+        player.inventory.RemoveItemAtIndex(player.inventory.GetCurrentItemIndex());
+        loadNextScene.completed += UnlockDoor;
+    }
+
+    private void OpenDoor(Player player)
+    {
+        if (door.isTeleportable && door.teleportTarget != null)
+        {
+            player.transform.position = door.teleportTarget.position;
+            Debug.Log("Player teleported to " + door.teleportTarget.name);
+        }
+        else if (door.isInteractable && door.doorInteractable != null)
+        {
+            if (door.CheckIfDoorIsOpened())
+            {
+                door.CloseDoorInspector();
+            }
+            else
+            {
+                door.OpenDoorInspector();
+            }
+        }
+        else
+        {
+            Debug.LogError("Door is not interactable or teleportable.");
+        }
+    }
+
     private void UnlockDoor(AsyncOperation op)
     {
-        //TODO: Door Opening anim and sound
-        Debug.Log("Door Open");
+        // TODO: Implement the logic to unlock the door on successful scene load
+        Debug.Log("Door Unlocked and opened.");
     }
 }

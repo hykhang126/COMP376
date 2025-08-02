@@ -186,6 +186,7 @@ GameObject:
   - component: {fileID: 5884846236215251190}
   - component: {fileID: 515566996441416397}
   - component: {fileID: 7296751938604968511}
+  - component: {fileID: 3738448969044396432}
   - component: {fileID: 7296751938604968508}
   - component: {fileID: 7296751938604968510}
   m_Layer: 0
@@ -276,6 +277,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 97ad85d967dc835449a5de81e9e61854, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  doorAction: {fileID: 7296751938604968511}
+  isInteractable: 1
+  doorInteractable: {fileID: 0}
+  isTeleportable: 0
+  teleportTarget: {fileID: 0}
 --- !u!114 &7296751938604968511
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -291,6 +297,20 @@ MonoBehaviour:
   openandclose: {fileID: 7296751938604968510}
   open: 1
   Player: {fileID: 0}
+--- !u!114 &3738448969044396432
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7296751938604968509}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b60947823d0c46edaa00b7decd55896b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemKeysToOpenThisDoor: 
+  itemKeyToSceneNameSO: {fileID: 11400000, guid: 47b3a59a3ae1f3341aa6e890416d974d, type: 2}
 --- !u!65 &7296751938604968508
 BoxCollider:
   m_ObjectHideFlags: 0
