@@ -120,11 +120,14 @@ public class Player : MonoBehaviour
             playerInput.actions["Look"].performed -= carriedObject.GetComponent<CarryInteractable>().RotateObject;
             playerInput.actions["Look"].performed += OnLook;
             carriedObject.GetComponent<CarryInteractable>().EnableFixedJoint();
+
         }
         else
         {
             Debug.Log("Player is not carrying an object to rotate.");
         }
+
+        
     }
 
     public void SetIsCarrying(bool result)
