@@ -1,19 +1,23 @@
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class ItemInteractable : Interactable
 {
 
-    Item item;
+    private Item item;
 
     [SerializeField] private string itemName;
     [SerializeField] private int itemKey;
-    //[SerializeField] private Texture2D inventoryImage;
+
+    [SerializeField] private PlayerInventorySO playerInventorySO;
+
+    [SerializeField] private GameObject itemPrefab;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        item = new Item(itemName, itemKey);
+        item = new Item(itemName, itemKey, itemPrefab);
         Debug.Log("Item created: " + item.itemName + " with key: " + item.itemKey);
     }
 
@@ -31,7 +35,9 @@ public class ItemInteractable : Interactable
         }
         else
         {
-            player.inventory.AddItem(item.itemName, item.itemKey);
+            int itemIndex = playerInventorySO.itemList.IndexOf(item.itemPrefab);
+            player.inventory.AddItem(item.itemName, item.itemKey, itemIndex);
+            // player.inventory.AddItem(item.itemName, item.itemKey, item);
             Destroy(gameObject);
         }
     }
