@@ -196,8 +196,6 @@ public class Player : MonoBehaviour
             HUD.ShowInteractPrompt(false);
         }
 
-        lookInput = lookInput.normalized;
-
         if (Gamepad.current != null && Gamepad.current.wasUpdatedThisFrame)
         {
             // Analog stick sensitivity multiplier

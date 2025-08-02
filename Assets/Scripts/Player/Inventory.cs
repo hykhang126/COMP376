@@ -6,7 +6,7 @@ using TMPro;
 
 public class Inventory : MonoBehaviour
 {
-    [SerializeField] private List<Item> items = new List<Item>();
+    public List<Item> items = new List<Item>();
 
     private int currentItemIndex = 0;
 
@@ -42,6 +42,10 @@ public class Inventory : MonoBehaviour
         inventoryUI.SetActive(false);
         player = FindAnyObjectByType<Player>();
 
+#if UNITY_EDITOR
+        playerInventorySO.items.Clear();
+        playerInventorySO.currentItemIndex = 0;
+#endif
         // Load info from PlayerInventorySO
         if (playerInventorySO != null)
         {
