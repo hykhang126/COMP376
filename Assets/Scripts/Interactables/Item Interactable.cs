@@ -1,4 +1,6 @@
+using System;
 using Unity.VisualScripting;
+using UnityEditorInternal.Profiling.Memory.Experimental;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -35,10 +37,26 @@ public class ItemInteractable : Interactable
         }
         else
         {
-            int itemIndex = playerInventorySO.itemList.IndexOf(item.itemPrefab);
-            player.inventory.AddItem(item.itemName, item.itemKey, itemIndex);
+            player.inventory.AddItem(item.itemName, item.itemKey, GetItemPrefab(item.itemKey));
             // player.inventory.AddItem(item.itemName, item.itemKey, item);
             Destroy(gameObject);
         }
+    }
+
+    // Get the item prefab from the playerInventorySO
+    public GameObject GetItemPrefab(int itemKey)
+    {
+        if (playerInventorySO != null)
+        {
+            foreach (var pair in playerInventorySO.itemList)
+            {
+                if (pair.Key == itemKey)
+                {
+                    return pair.Value;
+                }
+            }
+        }
+        Debug.LogWarning("Item prefab not found for key: " + itemKey);
+        return null;
     }
 }

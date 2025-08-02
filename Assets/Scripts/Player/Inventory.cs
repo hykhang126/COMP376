@@ -190,16 +190,14 @@ public class Inventory : MonoBehaviour
         ShowItemPreview();
     }
 
-    public void AddItem(string itemName, int itemKey,int itemListSO)
+    public void AddItem(string itemName, int itemKey, GameObject itemPrefab = null)
     {
-        // Logic to add item to the inventory
-        if (itemListSO == -1) return;
-        Debug.Log("Item added: " + itemName + " with key: " + itemKey);
-        items.Add(new Item(itemName, itemKey,playerInventorySO.itemList[itemListSO]));
-        // Add to Inventory ScriptableObject
+        Item newItem = new(itemName, itemKey, itemPrefab);
+
+        items.Add(newItem);
         if (playerInventorySO != null)
         {
-            playerInventorySO.items = items;
+            playerInventorySO.items.Add(newItem);
             playerInventorySO.currentItemIndex = currentItemIndex;
         }
         else
