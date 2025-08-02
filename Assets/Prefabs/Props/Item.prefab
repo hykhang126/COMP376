@@ -123,3 +123,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemName: Sphere2
   itemKey: 3
+  playerInventorySO: {fileID: 11400000, guid: 5028993a4a4a40f48a60d83aa1fe42c8, type: 2}
+  itemPrefab: {fileID: 7896930749716505473}

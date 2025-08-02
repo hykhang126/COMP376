@@ -294,7 +294,7 @@ public class Inventory : MonoBehaviour
         if (currentItem.itemPrefab != null)
         {
             currentItemPreview = Instantiate(currentItem.itemPrefab, itemPreviewSpawnPoint.position, Quaternion.identity, itemPreviewSpawnPoint);
-            currentItemPreview.transform.localRotation = Quaternion.identity;
+            // currentItemPreview.transform.localRotation = Quaternion.identity;
 
             // Ensure it's on the correct layer so only the InventoryCamera sees it
             SetupChildrenRecursively(currentItemPreview, LayerMask.NameToLayer("ItemLayer"));
@@ -313,7 +313,7 @@ public class Inventory : MonoBehaviour
             collider.enabled = false;
         Rigidbody rb = obj.GetComponent<Rigidbody>();
         if (rb != null)
-            rb.isKinematic = true;
+            rb.useGravity = false;
         foreach (Transform child in obj.transform)
         {
             if (child != null)
