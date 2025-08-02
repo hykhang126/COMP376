@@ -20,6 +20,8 @@ public class Player : MonoBehaviour
 
     Rigidbody rb;
 
+    private float targetYRotation = 0f; // Used for model rotation in FixedUpdate
+
     // Clamp angles for vertical look (Y-axis rotation)
     [SerializeField] private float minY = -40f;  // Min vertical rotation angle
     [SerializeField] private float maxY = 40f;   // Max vertical rotation angle
@@ -203,10 +205,7 @@ public class Player : MonoBehaviour
 
         // Movement
         Vector3 moveDirection = new Vector3(movementInput.x, 0, movementInput.y).normalized;
-        transform.Translate(moveDirection * movementSpeed * Time.deltaTime);
-
-        // Horizontal rotation (Player body)
-        transform.Rotate(Vector3.up * lookDeltaX);
+        targetYRotation += lookDeltaX;
 
         // Vertical rotation (Camera)
         if (!isInverted)
@@ -231,6 +230,17 @@ public class Player : MonoBehaviour
 
     void FixedUpdate()
     {
+        //Model translation
+        Vector3 moveDirection = new Vector3(movementInput.x, 0, movementInput.y).normalized;
+        Vector3 velocity = transform.TransformDirection(moveDirection) * movementSpeed;
+        rb.linearVelocity = new Vector3(velocity.x, rb.linearVelocity.y, velocity.z);
+
+        // Model rotation using Rigidbody
+        Quaternion deltaRotation = Quaternion.Euler(0f, targetYRotation, 0f);
+        rb.MoveRotation(rb.rotation * deltaRotation);
+
+        // Reset rotation after applying it
+        targetYRotation = 0f;   
+    }
 
     }
-}
