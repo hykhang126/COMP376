@@ -21,6 +21,8 @@ public class Door : MonoBehaviour
 
     private GameObject closeDoorVolume;
 
+    private GameObject openDoorVolume;
+
     private void Awake()
     {
         doorAction = GetComponent<DoorAction>();
@@ -40,6 +42,8 @@ public class Door : MonoBehaviour
     private void Start()
     {
         closeDoorVolume = transform.parent.Find("DoorCloseVolume")?.gameObject;
+
+        openDoorVolume = transform.parent.Find("DoorOpenVolume")?.gameObject;
     }
 
     // Make a function to open the door in the inspector
@@ -88,13 +92,13 @@ public class Door : MonoBehaviour
     {
         if (closeDoorVolume != null && CheckIfDoorIsOpened())
         {
-            Collider[] colliders = Physics.OverlapBox(
+            Collider[] closeColliders = Physics.OverlapBox(
                 closeDoorVolume.transform.position,
                 closeDoorVolume.transform.localScale / 2,
                 closeDoorVolume.transform.rotation
             );
 
-            foreach (var collider in colliders)
+            foreach (var collider in closeColliders)
             {
                 Player collidedPlayer = collider.GetComponent<Player>();
                 if (collidedPlayer != null)
@@ -104,5 +108,24 @@ public class Door : MonoBehaviour
                 }
             }
         }
+
+        if (openDoorVolume != null && !CheckIfDoorIsOpened())
+            {
+                Collider[] openColliders = Physics.OverlapBox(
+                    openDoorVolume.transform.position,
+                    openDoorVolume.transform.localScale / 2,
+                    openDoorVolume.transform.rotation
+                );
+
+                foreach (var collider in openColliders)
+                {
+                    Player collidedPlayer = collider.GetComponent<Player>();
+                    if (collidedPlayer != null)
+                    {
+                        doorAction.OpenDoor();
+                        break;
+                    }
+                }
+            }
     }
 }

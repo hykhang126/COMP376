@@ -49,7 +49,7 @@ public class DoorInteractable : Interactable
                 for (int i = 0; i < itemKeysToOpenThisDoor.Length; i++)
                 {
                     //----- To be replaced by getting the equipped key and checking if it is in the array -----
-                    if (player.inventory.GetEquippedItemKey() == itemKeysToOpenThisDoor[i])
+                    if (player.inventory.items[player.inventory.GetCurrentItemIndex()].itemKey == itemKeysToOpenThisDoor[i])
                     {
                         OpenDoor(player);
                         break;
