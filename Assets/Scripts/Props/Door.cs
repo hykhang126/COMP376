@@ -19,6 +19,8 @@ public class Door : MonoBehaviour
     [NaughtyAttributes.ShowIf("isTeleportable")]
     public Transform teleportTarget;
 
+    private GameObject closeDoorVolume;
+
     private void Awake()
     {
         doorAction = GetComponent<DoorAction>();
@@ -33,6 +35,11 @@ public class Door : MonoBehaviour
             if (doorInteractable == null)
                 Debug.LogError("DoorInteractable component not found on the Door object.");
         }
+    }
+
+    private void Start()
+    {
+        closeDoorVolume = transform.parent.Find("DoorCloseVolume")?.gameObject;
     }
 
     // Make a function to open the door in the inspector
@@ -74,6 +81,28 @@ public class Door : MonoBehaviour
         {
             Debug.LogError("DoorAction component is not assigned.");
             return false;
+        }
+    }
+
+    public void Update()
+    {
+        if (closeDoorVolume != null && CheckIfDoorIsOpened())
+        {
+            Collider[] colliders = Physics.OverlapBox(
+                closeDoorVolume.transform.position,
+                closeDoorVolume.transform.localScale / 2,
+                closeDoorVolume.transform.rotation
+            );
+
+            foreach (var collider in colliders)
+            {
+                Player collidedPlayer = collider.GetComponent<Player>();
+                if (collidedPlayer != null)
+                {
+                    doorAction.CloseDoor();
+                    break;
+                }
+            }
         }
     }
 }
