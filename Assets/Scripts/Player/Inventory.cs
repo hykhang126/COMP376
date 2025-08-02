@@ -3,6 +3,7 @@ using UnityEngine.InputSystem;
 using UnityEngine.UI;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 
 public class Inventory : MonoBehaviour
 {
@@ -19,6 +20,13 @@ public class Inventory : MonoBehaviour
     private TextMeshProUGUI itemNameText; // Reference to the TextMeshProUGUI for item name display 
 
     private Player player;
+
+    //Variables for item model preview
+    public Transform itemPreviewSpawnPoint { get; private set; }
+    public Camera inventoryCamera { get; private set; }
+
+    //private RawImage itemPreviewImage; // Optional if you want to toggle visibility
+    public GameObject currentItemPreview { get; private set; }
 
     [SerializeField] private PlayerInventorySO playerInventorySO;
 
@@ -51,6 +59,10 @@ public class Inventory : MonoBehaviour
         {
             Debug.LogError("PlayerInventorySO not found in Resources");
         }
+
+        inventoryCamera = transform.Find("InventoryCamera").gameObject?.GetComponent<Camera>();
+
+        itemPreviewSpawnPoint = transform.Find("ItemPreviewSpawnPoint").gameObject?.transform;
     }
 
     public void OnEnable()
@@ -97,17 +109,25 @@ public class Inventory : MonoBehaviour
         if (items.Count > 0)
         {
             itemNameText.text = items[currentItemIndex].itemName; // Update the item name text
+            ShowItemPreview();
         }
         else
         {
             itemNameText.text = ""; // Default text if no items
         }
+
+        
     }
 
     private void CloseInventory()
     {
         isInventoryOpen = false;
         // Hide the inventory UI
+        if (currentItemPreview != null)
+        {
+            Destroy(currentItemPreview);
+        }
+
         Debug.Log("Inventory closed");
         inventoryUI.SetActive(false);
         Cursor.visible = false; // Hide the cursor
@@ -126,7 +146,10 @@ public class Inventory : MonoBehaviour
 
         // Logic to cycle through items in the inventory
         if (items.Count > 0)
+        {
             itemNameText.text = items[currentItemIndex].itemName; // Update the item name text
+            ShowItemPreview();
+        }
 
         Debug.Log("Current item index after cycling: " + currentItemIndex);
     }
@@ -143,6 +166,8 @@ public class Inventory : MonoBehaviour
         playerInventorySO.currentItemIndex = currentItemIndex; // Update the current item index in the SO
         itemNameText.text = items[currentItemIndex].itemName; // Update the item name text
         Debug.Log("Next item selected: " + items[currentItemIndex].itemName);
+
+        ShowItemPreview();
     }
 
     public void Previous()
@@ -152,13 +177,17 @@ public class Inventory : MonoBehaviour
         playerInventorySO.currentItemIndex = currentItemIndex; // Update the current item index in the SO
         itemNameText.text = items[currentItemIndex].itemName; // Update the item name text
         Debug.Log("Previous item selected: " + items[currentItemIndex].itemName);
+
+        ShowItemPreview();
     }
 
-    public void AddItem(string itemName, int itemKey)
+    public void AddItem(string itemName, int itemKey,int itemListSO)
     {
         // Logic to add item to the inventory
+        if (itemListSO == -1) return;
         Debug.Log("Item added: " + itemName + " with key: " + itemKey);
-        items.Add(new Item(itemName, itemKey));
+        GameObject staticPrefab;
+        items.Add(new Item(itemName, itemKey,playerInventorySO.itemList[itemListSO]));
         // Add to Inventory ScriptableObject
         if (playerInventorySO != null)
         {
@@ -170,6 +199,24 @@ public class Inventory : MonoBehaviour
             Debug.LogWarning("PlayerInventorySO is null, cannot update inventory SO.");
         }
     }
+
+    // public void AddItem(string itemName, int itemKey, Item itemPrefab)
+    // {
+    //     // Logic to add item to the inventory
+    //     Debug.Log("Item added: " + itemName + " with key: " + itemKey);
+
+    //     items.Add(itemPrefab);
+    //     // Add to Inventory ScriptableObject
+    //     if (playerInventorySO != null)
+    //     {
+    //         playerInventorySO.items = items;
+    //         playerInventorySO.currentItemIndex = currentItemIndex;
+    //     }
+    //     else
+    //     {
+    //         Debug.LogWarning("PlayerInventorySO is null, cannot update inventory SO.");
+    //     }
+    // }
 
     public void RemoveItem()
     {
@@ -185,4 +232,39 @@ public class Inventory : MonoBehaviour
         //Check if the item key is the same as the itemKey of the interactable
         //if both checks pass, remove the item from the inventory and call the interactable's Interact method.
     }
+    
+    private void ShowItemPreview()
+    {
+        if (itemPreviewSpawnPoint == null || items.Count == 0)
+            return;
+
+        // Destroy existing preview
+        if (currentItemPreview != null)
+            Destroy(currentItemPreview);
+
+        Item currentItem = items[currentItemIndex];
+
+        if (currentItem.itemPrefab != null)
+        {
+            currentItemPreview = Instantiate(currentItem.itemPrefab, itemPreviewSpawnPoint.position, Quaternion.identity, itemPreviewSpawnPoint);
+            currentItemPreview.transform.localRotation = Quaternion.identity;
+
+            // Ensure it's on the correct layer so only the InventoryCamera sees it
+            SetLayerRecursively(currentItemPreview, LayerMask.NameToLayer("ItemLayer"));
+        }
+    }
+
+    // Utility function to set layer recursively
+    private void SetLayerRecursively(GameObject obj, int newLayer)
+    {
+        if (obj == null) return;
+
+        obj.layer = newLayer;
+        foreach (Transform child in obj.transform)
+        {
+            if (child != null)
+                SetLayerRecursively(child.gameObject, newLayer);
+        }
+    }
+
 }

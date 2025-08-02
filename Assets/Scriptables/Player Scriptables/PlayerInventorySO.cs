@@ -7,4 +7,6 @@ public class PlayerInventorySO : ScriptableObject
     public List<Item> items = new List<Item>();
 
     public int currentItemIndex = 0;
+
+    public List<GameObject> itemList = new List<GameObject>();
 }
