@@ -219,6 +219,8 @@ public class Inventory : MonoBehaviour
         if (items.Count > 0)
         {
             playerInventorySO.items.Remove(items[currentItemIndex]);
+            playerInventorySO.currentItemIndex = 0;
+            currentItemIndex = 0;
         }
     }
     
