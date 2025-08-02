@@ -2620,6 +2620,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0663e014ecf89544b1ad39b71ab7547, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  rb: {fileID: 0}
   carryJoint: {fileID: 0}
 --- !u!1 &481468671
 GameObject:
@@ -7053,6 +7054,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0663e014ecf89544b1ad39b71ab7547, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  rb: {fileID: 0}
   carryJoint: {fileID: 0}
 --- !u!54 &996066434
 Rigidbody:
@@ -8707,6 +8709,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1111886638}
     m_Modifications:
+    - target: {fileID: 2494021542815794598, guid: e1804b8358049cf43b88a519a4638425, type: 3}
+      propertyPath: playerInventorySO
+      value: 
+      objectReference: {fileID: 11400000, guid: 5028993a4a4a40f48a60d83aa1fe42c8, type: 2}
     - target: {fileID: 3939497732404726746, guid: e1804b8358049cf43b88a519a4638425, type: 3}
       propertyPath: m_Name
       value: Item (1)
@@ -10235,6 +10241,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Item
       objectReference: {fileID: 0}
+    - target: {fileID: 8499444605433232872, guid: c8e253294949a5244925297cd55788c5, type: 3}
+      propertyPath: playerInventorySO
+      value: 
+      objectReference: {fileID: 11400000, guid: 5028993a4a4a40f48a60d83aa1fe42c8, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -11301,6 +11311,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1111886638}
     m_Modifications:
+    - target: {fileID: 2142315009868660146, guid: afe992d7555670e46b03672c9bc7b7cc, type: 3}
+      propertyPath: playerInventorySO
+      value: 
+      objectReference: {fileID: 11400000, guid: 5028993a4a4a40f48a60d83aa1fe42c8, type: 2}
     - target: {fileID: 3748402301831518520, guid: afe992d7555670e46b03672c9bc7b7cc, type: 3}
       propertyPath: m_LocalPosition.x
       value: -1.99
@@ -21941,6 +21955,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0663e014ecf89544b1ad39b71ab7547, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  rb: {fileID: 0}
   carryJoint: {fileID: 0}
 --- !u!65 &2136743883
 BoxCollider:

@@ -15,9 +15,9 @@ MonoBehaviour:
   currentItemIndex: 0
   items: []
   itemList:
-  - Key: 1
+  - Key: 42
     Value: {fileID: 5764973781213522379, guid: 9262c36818250464ab1ecc5869083a66, type: 3}
-  - Key: 2
+  - Key: 69
     Value: {fileID: 1379830720837112018, guid: 10b6ea40ae20b7f4882edf2c1953674e, type: 3}
   - Key: 3
     Value: {fileID: 7896930749716505473, guid: c8e253294949a5244925297cd55788c5, type: 3}
