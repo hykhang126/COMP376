@@ -52,6 +52,7 @@ public class DoorInteractable : Interactable
                     if (player.inventory.items[player.inventory.GetCurrentItemIndex()].itemKey == itemKeysToOpenThisDoor[i])
                     {
                         OpenDoor(player);
+                        player.inventory.RemoveItem();
                         break;
                         //-------------------------------------------------------------------------------------
                     }

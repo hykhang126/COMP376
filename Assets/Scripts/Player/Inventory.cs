@@ -218,8 +218,7 @@ public class Inventory : MonoBehaviour
     {
         if (items.Count > 0)
         {
-            items.RemoveAt(currentItemIndex);
-            currentItemIndex--;
+            playerInventorySO.items.Remove(items[currentItemIndex]);
         }
     }
     
