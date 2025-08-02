@@ -3006,7 +3006,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 1443568508}
+    m_TransformParent: {fileID: 467806576}
     m_Modifications:
     - target: {fileID: 4843823420548424326, guid: eca1c14fa4f815e4d96961d241f47cfd, type: 3}
       propertyPath: m_LocalScale.x
@@ -3014,7 +3014,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4843823420548424326, guid: eca1c14fa4f815e4d96961d241f47cfd, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 2.91
+      value: 2.9100037
       objectReference: {fileID: 0}
     - target: {fileID: 4843823420548424326, guid: eca1c14fa4f815e4d96961d241f47cfd, type: 3}
       propertyPath: m_LocalPosition.y
@@ -3022,7 +3022,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4843823420548424326, guid: eca1c14fa4f815e4d96961d241f47cfd, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 16.35
+      value: -19.327133
       objectReference: {fileID: 0}
     - target: {fileID: 4843823420548424326, guid: eca1c14fa4f815e4d96961d241f47cfd, type: 3}
       propertyPath: m_LocalRotation.w
@@ -3101,8 +3101,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   doorAction: {fileID: 203394419}
-  isInteractable: 0
-  doorInteractable: {fileID: 0}
+  isInteractable: 1
+  doorInteractable: {fileID: 203394421}
   isTeleportable: 0
   teleportTarget: {fileID: 0}
 --- !u!114 &203394421
@@ -8306,7 +8306,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 1443568508}
+    m_TransformParent: {fileID: 892404165}
     m_Modifications:
     - target: {fileID: 4843823420548424326, guid: eca1c14fa4f815e4d96961d241f47cfd, type: 3}
       propertyPath: m_LocalScale.x
@@ -8314,15 +8314,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4843823420548424326, guid: eca1c14fa4f815e4d96961d241f47cfd, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 2.91
+      value: 2.9100037
       objectReference: {fileID: 0}
     - target: {fileID: 4843823420548424326, guid: eca1c14fa4f815e4d96961d241f47cfd, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.643
+      value: -0.64299965
       objectReference: {fileID: 0}
     - target: {fileID: 4843823420548424326, guid: eca1c14fa4f815e4d96961d241f47cfd, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 51.938
+      value: -19.36914
       objectReference: {fileID: 0}
     - target: {fileID: 4843823420548424326, guid: eca1c14fa4f815e4d96961d241f47cfd, type: 3}
       propertyPath: m_LocalRotation.w
@@ -8401,8 +8401,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   doorAction: {fileID: 412525472}
-  isInteractable: 0
-  doorInteractable: {fileID: 0}
+  isInteractable: 1
+  doorInteractable: {fileID: 412525474}
   isTeleportable: 0
   teleportTarget: {fileID: 0}
 --- !u!114 &412525474
@@ -9223,7 +9223,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 1443568508}
+    m_TransformParent: {fileID: 467806576}
     m_Modifications:
     - target: {fileID: 4843823420548424326, guid: eca1c14fa4f815e4d96961d241f47cfd, type: 3}
       propertyPath: m_LocalScale.x
@@ -9231,7 +9231,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4843823420548424326, guid: eca1c14fa4f815e4d96961d241f47cfd, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 8.372
+      value: 8.371994
       objectReference: {fileID: 0}
     - target: {fileID: 4843823420548424326, guid: eca1c14fa4f815e4d96961d241f47cfd, type: 3}
       propertyPath: m_LocalPosition.y
@@ -9239,7 +9239,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4843823420548424326, guid: eca1c14fa4f815e4d96961d241f47cfd, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 19.423
+      value: -16.254135
       objectReference: {fileID: 0}
     - target: {fileID: 4843823420548424326, guid: eca1c14fa4f815e4d96961d241f47cfd, type: 3}
       propertyPath: m_LocalRotation.w
@@ -9247,7 +9247,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4843823420548424326, guid: eca1c14fa4f815e4d96961d241f47cfd, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 4843823420548424326, guid: eca1c14fa4f815e4d96961d241f47cfd, type: 3}
       propertyPath: m_LocalRotation.y
@@ -9255,7 +9255,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4843823420548424326, guid: eca1c14fa4f815e4d96961d241f47cfd, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 4843823420548424326, guid: eca1c14fa4f815e4d96961d241f47cfd, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -9318,8 +9318,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   doorAction: {fileID: 459059624}
-  isInteractable: 0
-  doorInteractable: {fileID: 0}
+  isInteractable: 1
+  doorInteractable: {fileID: 459059626}
   isTeleportable: 0
   teleportTarget: {fileID: 0}
 --- !u!114 &459059626
@@ -9515,7 +9515,10 @@ Transform:
   m_LocalPosition: {x: -147.91231, y: 8.857453, z: 84.779495}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 1022804911}
+  - {fileID: 203394417}
+  - {fileID: 459059622}
   m_Father: {fileID: 379479890}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &480744468
@@ -16437,7 +16440,10 @@ Transform:
   m_LocalPosition: {x: -100.91231, y: 8.857453, z: 49.102364}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 1924193051}
+  - {fileID: 412525470}
+  - {fileID: 1743894451}
   m_Father: {fileID: 490786644}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &908613720
@@ -19048,7 +19054,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 1443568508}
+    m_TransformParent: {fileID: 467806576}
     m_Modifications:
     - target: {fileID: 4843823420548424326, guid: eca1c14fa4f815e4d96961d241f47cfd, type: 3}
       propertyPath: m_LocalScale.x
@@ -19056,7 +19062,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4843823420548424326, guid: eca1c14fa4f815e4d96961d241f47cfd, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 2.91
+      value: 2.9100037
       objectReference: {fileID: 0}
     - target: {fileID: 4843823420548424326, guid: eca1c14fa4f815e4d96961d241f47cfd, type: 3}
       propertyPath: m_LocalPosition.y
@@ -19064,7 +19070,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4843823420548424326, guid: eca1c14fa4f815e4d96961d241f47cfd, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -4.996
+      value: -40.67313
       objectReference: {fileID: 0}
     - target: {fileID: 4843823420548424326, guid: eca1c14fa4f815e4d96961d241f47cfd, type: 3}
       propertyPath: m_LocalRotation.w
@@ -19143,8 +19149,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   doorAction: {fileID: 1022804913}
-  isInteractable: 0
-  doorInteractable: {fileID: 0}
+  isInteractable: 1
+  doorInteractable: {fileID: 1022804915}
   isTeleportable: 0
   teleportTarget: {fileID: 0}
 --- !u!114 &1022804915
@@ -25585,13 +25591,7 @@ Transform:
   m_Children:
   - {fileID: 805433648}
   - {fileID: 1586872541}
-  - {fileID: 1022804911}
-  - {fileID: 203394417}
-  - {fileID: 1924193051}
-  - {fileID: 412525470}
   - {fileID: 1856757340}
-  - {fileID: 459059622}
-  - {fileID: 1743894451}
   m_Father: {fileID: 9212492}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1445096916
@@ -27884,8 +27884,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   doorAction: {fileID: 1580679052}
-  isInteractable: 0
-  doorInteractable: {fileID: 0}
+  isInteractable: 1
+  doorInteractable: {fileID: 1580679057}
   isTeleportable: 0
   teleportTarget: {fileID: 0}
 --- !u!114 &1580679057
@@ -30899,7 +30899,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 1443568508}
+    m_TransformParent: {fileID: 892404165}
     m_Modifications:
     - target: {fileID: 4843823420548424326, guid: eca1c14fa4f815e4d96961d241f47cfd, type: 3}
       propertyPath: m_LocalScale.x
@@ -30907,7 +30907,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4843823420548424326, guid: eca1c14fa4f815e4d96961d241f47cfd, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 8.372
+      value: 8.371994
       objectReference: {fileID: 0}
     - target: {fileID: 4843823420548424326, guid: eca1c14fa4f815e4d96961d241f47cfd, type: 3}
       propertyPath: m_LocalPosition.y
@@ -30915,7 +30915,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4843823420548424326, guid: eca1c14fa4f815e4d96961d241f47cfd, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 55.118
+      value: -16.189133
       objectReference: {fileID: 0}
     - target: {fileID: 4843823420548424326, guid: eca1c14fa4f815e4d96961d241f47cfd, type: 3}
       propertyPath: m_LocalRotation.w
@@ -30923,7 +30923,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4843823420548424326, guid: eca1c14fa4f815e4d96961d241f47cfd, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 4843823420548424326, guid: eca1c14fa4f815e4d96961d241f47cfd, type: 3}
       propertyPath: m_LocalRotation.y
@@ -30931,7 +30931,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4843823420548424326, guid: eca1c14fa4f815e4d96961d241f47cfd, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 4843823420548424326, guid: eca1c14fa4f815e4d96961d241f47cfd, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -30994,8 +30994,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   doorAction: {fileID: 1743894453}
-  isInteractable: 0
-  doorInteractable: {fileID: 0}
+  isInteractable: 1
+  doorInteractable: {fileID: 1743894455}
   isTeleportable: 0
   teleportTarget: {fileID: 0}
 --- !u!114 &1743894455
@@ -33668,8 +33668,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   doorAction: {fileID: 1856757342}
-  isInteractable: 0
-  doorInteractable: {fileID: 0}
+  isInteractable: 1
+  doorInteractable: {fileID: 1856757344}
   isTeleportable: 0
   teleportTarget: {fileID: 0}
 --- !u!114 &1856757344
@@ -33895,7 +33895,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 1443568508}
+    m_TransformParent: {fileID: 892404165}
     m_Modifications:
     - target: {fileID: 4843823420548424326, guid: eca1c14fa4f815e4d96961d241f47cfd, type: 3}
       propertyPath: m_LocalScale.x
@@ -33903,7 +33903,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4843823420548424326, guid: eca1c14fa4f815e4d96961d241f47cfd, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 2.91
+      value: 2.9100037
       objectReference: {fileID: 0}
     - target: {fileID: 4843823420548424326, guid: eca1c14fa4f815e4d96961d241f47cfd, type: 3}
       propertyPath: m_LocalPosition.y
@@ -33911,7 +33911,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4843823420548424326, guid: eca1c14fa4f815e4d96961d241f47cfd, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 30.61
+      value: -40.697136
       objectReference: {fileID: 0}
     - target: {fileID: 4843823420548424326, guid: eca1c14fa4f815e4d96961d241f47cfd, type: 3}
       propertyPath: m_LocalRotation.w
@@ -33990,8 +33990,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   doorAction: {fileID: 1924193053}
-  isInteractable: 0
-  doorInteractable: {fileID: 0}
+  isInteractable: 1
+  doorInteractable: {fileID: 1924193055}
   isTeleportable: 0
   teleportTarget: {fileID: 0}
 --- !u!114 &1924193055
@@ -34692,8 +34692,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   doorAction: {fileID: 1971876806}
-  isInteractable: 0
-  doorInteractable: {fileID: 0}
+  isInteractable: 1
+  doorInteractable: {fileID: 1971876811}
   isTeleportable: 0
   teleportTarget: {fileID: 0}
 --- !u!114 &1971876811
