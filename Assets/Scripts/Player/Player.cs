@@ -11,8 +11,6 @@ public class Player : MonoBehaviour
     [SerializeField] float movementSpeed = 5f;
     [SerializeField] bool isInverted = false;
 
-    [SerializeField] private float cameraSpeed = 100f; // Speed of camera rotation
-
     GameObject _camera;
 
     private float lookDeltaX = 0f;
@@ -52,6 +50,12 @@ public class Player : MonoBehaviour
     {
         playerInput = GetComponent<PlayerInput>();
 
+        playerInput.actions.FindActionMap("Player").Disable();
+
+    }
+
+    void Start()
+    {
         playerInput.actions["Move"].performed += OnMove;
         playerInput.actions["Move"].canceled += OnMove;
         playerInput.actions["Look"].performed += OnLook;
@@ -60,10 +64,8 @@ public class Player : MonoBehaviour
 
         playerInput.actions["Interact"].performed += ctx => OnInteract();
         playerInput.actions["RotateCarryObject"].performed += ctx => RotateCarryObject();
-    }
 
-    void Start()
-    {
+
         HUD = GameObject.Find("UI").transform.Find("HUD").GetComponent<HUD>();
         if (HUD == null)
         {
@@ -144,16 +146,19 @@ public class Player : MonoBehaviour
 
     public void OnMove(InputAction.CallbackContext context)
     {
+        if (PlayerState.instance.currentState == PlayerStateType.InMenu) return;
         movementInput = context.ReadValue<Vector2>();
     }
 
     public void OnLook(InputAction.CallbackContext context)
     {
+        if (PlayerState.instance.currentState == PlayerStateType.InMenu) return;
         lookInput = context.ReadValue<Vector2>();
     }
 
     public void OnInteract()
     {
+        if (PlayerState.instance.currentState == PlayerStateType.InMenu) return;
         Debug.Log("Interact button pressed");
         if (carriedObject != null && (PlayerState.instance.currentState == PlayerStateType.CarryingObject || PlayerState.instance.currentState == PlayerStateType.RotatingCarryObject))
         {

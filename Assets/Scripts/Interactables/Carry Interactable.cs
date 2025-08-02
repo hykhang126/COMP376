@@ -16,9 +16,6 @@ public class CarryInteractable : Interactable
 
     public FixedJoint carryJoint;
 
-    private bool isRotating = false;
-
-
     public void Start()
     {
         rb = GetComponent<Rigidbody>();

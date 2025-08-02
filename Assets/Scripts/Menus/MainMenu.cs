@@ -3,6 +3,7 @@ using SojaExiles;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.InputSystem.UI;
 using UnityEngine.ProBuilder.Shapes;
 using UnityEngine.UI;
 
@@ -14,13 +15,17 @@ public class MainMenu : MonoBehaviour
 
     [SerializeField] private GameObject door;
 
-    private Camera _camera;
+    private Player _player;
 
     private float distance;
 
     [SerializeField] private float cameraSpeed = 10f;
 
-    [SerializeField] private GameObject cameraEndLocation;
+    [SerializeField] private GameObject playerEndLocation;
+
+    private Pause pauseSystem;
+
+    private Inventory inventorySystem;
 
     public void Awake()
     {
@@ -39,12 +44,28 @@ public class MainMenu : MonoBehaviour
         }
 
         quit.onClick.AddListener(QuitGame);
+
+        _player = FindAnyObjectByType<Player>();
+
+        pauseSystem = FindAnyObjectByType<Pause>();
+
+        inventorySystem = FindAnyObjectByType<Inventory>();
+
+
     }
 
     public void Start()
     {
-        EventSystem.current.firstSelectedGameObject = start.gameObject;
-        _camera = FindAnyObjectByType<Camera>();
+        PlayerState.instance.TriggerTransition(PlayerStateType.InMenu);
+        StartCoroutine(MainMenuInit());
+    }
+
+    private IEnumerator MainMenuInit()
+    {
+        yield return null;
+        Cursor.lockState = CursorLockMode.None; // Unlock the cursor
+        Cursor.visible = true; // Make the cursor visible
+        EventSystem.current.SetSelectedGameObject(start.gameObject);
     }
 
     public void StartGame()
@@ -55,8 +76,7 @@ public class MainMenu : MonoBehaviour
         //Door Opens
         door.GetComponent<opencloseDoor>().OpenDoor();
         //camera moves until a certain point after the door
-        StartCoroutine(SceneTransition(_camera.transform.position, cameraEndLocation.transform.position, cameraSpeed));
-        //close the door
+        StartCoroutine(SceneTransition(_player.transform.position, playerEndLocation.transform.position, cameraSpeed));
         //Load the Game Scene
     }
 
@@ -69,26 +89,43 @@ public class MainMenu : MonoBehaviour
 
     public void Update()
     {
-        // If no UI element is selected or the selected is not interactable
-        /*if (EventSystem.current.currentSelectedGameObject == null ||
-            EventSystem.current.currentSelectedGameObject.GetComponent<Selectable>() == null)
+        if (EventSystem.current != null)
         {
-            // Reset to default button
-            EventSystem.current.SetSelectedGameObject(start.gameObject);
-        } */
+            if (EventSystem.current.currentSelectedGameObject == null)
+            {
+                if (EventSystem.current.GetComponent<InputSystemUIInputModule>().move.action.triggered)
+                {
+                    EventSystem.current.SetSelectedGameObject(start.gameObject);
+                }
+            }
+        }
     }
 
-    private IEnumerator SceneTransition(Vector3 cameraStartPos, Vector3 cameraEndPos, float timeToReach)
+    private IEnumerator SceneTransition(Vector3 playerStartPos, Vector3 playerEndPos, float timeToReach)
     {
+        start.interactable = false;
+        quit.interactable = false;
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
         float elapsed = 0f;
         while (elapsed < timeToReach)
         {
-            _camera.transform.position = Vector3.Lerp(cameraStartPos, cameraEndPos, elapsed / timeToReach);
+            _player.transform.position = Vector3.Lerp(playerStartPos, playerEndPos, elapsed / timeToReach);
             elapsed += Time.deltaTime;
             yield return null;
         }
-        _camera.transform.position = cameraEndPos;
+        _player.transform.position = playerEndPos;
 
         door.GetComponent<opencloseDoor>().CloseDoor();
+        _player.playerInput.enabled = true;
+        PlayerState.instance.TriggerTransition(PlayerStateType.Idle);
+        this.gameObject.SetActive(false);
+        Cursor.lockState = CursorLockMode.Locked; // Unlock the cursor
+        Cursor.visible = false; // Make the cursor visible
+        EventSystem.current.SetSelectedGameObject(null);
+        //Unlock other systems
+        pauseSystem.action.Enable();
+        inventorySystem.actions.Enable();
+
     }
 }
