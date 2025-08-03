@@ -112,7 +112,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   defaultIntensity: 1
-  isFlickering: 0
+  isFlickering: 1
 --- !u!114 &7497332158408241809
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -148,7 +148,7 @@ GameObject:
   - component: {fileID: 5215493639422840319}
   - component: {fileID: 7443813105009547441}
   m_Layer: 0
-  m_Name: Lamp_Wall_Apt_01
+  m_Name: Flickering_Lamp_Wall_Apt_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
