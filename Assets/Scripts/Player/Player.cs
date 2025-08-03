@@ -208,7 +208,7 @@ public class Player : MonoBehaviour
                 hit = new RaycastHit();
             }
             //Check if the object has an Interactable component, show UI prompt to tell the player they can interact.
-            if (hit.collider.gameObject.TryGetComponent(out Interactable interactable))
+            if (hit.collider != null && hit.collider.gameObject.GetComponent<Interactable>() != null)
             {
                 HUD.ShowInteractPrompt(true);
                 //Debug.Log("Press 'E' to interact");
