@@ -46,7 +46,7 @@ public class Player : MonoBehaviour
 
     [SerializeField] private float hitRange = 2f;
 
-    private AudioSource footstepAudioSource;
+    public AudioSource playerAudioSource { get; private set; }
     [SerializeField] private AudioClip footstepClip;
     [SerializeField] private float footstepInterval = 0.5f; // Adjust based on desired pacing
 
@@ -117,7 +117,7 @@ public class Player : MonoBehaviour
         carryRb.isKinematic = true;
 
         //Add footstep sounds
-        footstepAudioSource = gameObject.GetComponent<AudioSource>();
+        playerAudioSource = gameObject.GetComponent<AudioSource>();
 
     }
 
@@ -257,10 +257,10 @@ public class Player : MonoBehaviour
 
     private void PlayFootstepSound()
     {
-        if (footstepClip != null && footstepAudioSource != null)
+        if (footstepClip != null && playerAudioSource != null)
         {
-            footstepAudioSource.pitch = Random.Range(0.95f, 1.05f);
-            footstepAudioSource.PlayOneShot(footstepClip);
+            playerAudioSource.pitch = Random.Range(0.95f, 1.05f);
+            playerAudioSource.PlayOneShot(footstepClip);
         }
     }
 
