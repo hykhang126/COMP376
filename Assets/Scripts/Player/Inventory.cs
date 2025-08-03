@@ -296,7 +296,10 @@ public class Inventory : MonoBehaviour
         if (currentItem.itemPrefab != null)
         {
             currentItemPreview = Instantiate(currentItem.itemPrefab, itemPreviewSpawnPoint.position, Quaternion.identity, itemPreviewSpawnPoint);
-            // currentItemPreview.transform.localRotation = Quaternion.identity;
+            // Rotate 90 degress over Y and Z axis
+            currentItemPreview.transform.localRotation = Quaternion.Euler(0, 90, 90);
+            // Scale the preivew by 3 times
+            currentItemPreview.transform.localScale = new Vector3(3, 3, 3);
 
             // Ensure it's on the correct layer so only the InventoryCamera sees it
             SetupChildrenRecursively(currentItemPreview, LayerMask.NameToLayer("ItemLayer"));
