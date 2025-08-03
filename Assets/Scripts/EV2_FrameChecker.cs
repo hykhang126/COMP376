@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class EV2_FrameChecker : MonoBehaviour
 {
-    [SerializeField] private Material[] materialsToCheck;
+    [SerializeField] private Renderer[] materialsToCheck;
     [SerializeField] private Renderer[] frameRenderers;
 
     public bool isCorrectMaterial = false;
@@ -33,7 +33,7 @@ public class EV2_FrameChecker : MonoBehaviour
     {
         for (int i = 0; i < frameRenderers.Length; i++)
         {
-            if (frameRenderers[i].material != materialsToCheck[i])
+            if (frameRenderers[i].material.name != materialsToCheck[i].material.name)
             {
                 isCorrectMaterial = false; // If any material does not match
                 return;
