@@ -1,3 +1,4 @@
+using System.Collections;
 using NaughtyAttributes;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -43,6 +44,21 @@ public class Player : MonoBehaviour
     public GameObject carryPoint;
 
     [SerializeField] private float hitRange = 2f;
+
+    private AudioSource footstepAudioSource;
+    [SerializeField] private AudioClip footstepClip;
+    [SerializeField] private float footstepInterval = 0.5f; // Adjust based on desired pacing
+
+    private float footstepTimer = 0f;
+
+    private Coroutine footstepCoroutine;
+
+    private bool isFootstepPlaying = false;
+
+    private Vector3 lastPosition;
+    [SerializeField] private float movementThreshold = 0.01f; // Minimum movement to count as walking
+
+
 
     HUD HUD;
 
@@ -99,6 +115,10 @@ public class Player : MonoBehaviour
         Rigidbody carryRb = carryPoint.AddComponent<Rigidbody>();
         carryRb.useGravity = false;
         carryRb.isKinematic = true;
+
+        //Add footstep sounds
+        footstepAudioSource = gameObject.GetComponent<AudioSource>();
+        
     }
 
     public void RotateCarryObject()
@@ -238,7 +258,47 @@ public class Player : MonoBehaviour
         // Reset deltas after applying
         lookDeltaX = 0f;
         lookDeltaY = 0f;
+
+        //Footstep logic
+        // Footstep sound logic
+        // Check actual movement (to avoid false positives from short taps)
+        bool isMoving = Vector3.Distance(transform.position, lastPosition) > movementThreshold &&
+                        PlayerState.instance.currentState != PlayerStateType.InMenu;
+
+        if (isMoving && !isFootstepPlaying)
+        {
+            footstepCoroutine = StartCoroutine(FootstepRoutine());
+            isFootstepPlaying = true;
+        }
+        else if (!isMoving && isFootstepPlaying)
+        {
+            StopCoroutine(footstepCoroutine);
+            isFootstepPlaying = false;
+            footstepCoroutine = null;
+        }
+
+        lastPosition = transform.position;
+
     }
+
+    private IEnumerator FootstepRoutine()
+    {
+        // Initial delay before first step (so quick taps don’t trigger sound)
+        yield return new WaitForSeconds(footstepInterval);
+
+        while (true)
+        {
+            if (footstepClip != null && footstepAudioSource != null)
+            {
+                footstepAudioSource.pitch = Random.Range(0.95f, 1.05f);
+                footstepAudioSource.PlayOneShot(footstepClip);
+            }
+
+            yield return new WaitForSeconds(footstepInterval);
+        }
+    }
+
+
 
     void FixedUpdate()
     {
