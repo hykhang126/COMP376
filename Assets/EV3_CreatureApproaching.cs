@@ -3,41 +3,48 @@ using UnityEngine;
 
 public class EV3_CreatureApproaching : MonoBehaviour
 {
-    [SerializeField] private float moveSpeed = 5f; // Speed at which the creature approaches
     [SerializeField] private float approachDistance = 20f; // Distance at which the game ends
 
     [SerializeField] private float timeToEventEnd = 50f;
 
     [SerializeField] private bool isActivated = false;
 
+    [SerializeField] private Player player;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         isActivated = false;
         gameObject.SetActive(false);
+
+        if (player == null)
+        {
+            Debug.LogError("Player reference not set in EV3_CreatureApproaching.");
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (!isActivated) return;
+
         // Lerp the creature's position towards the player
-        if (isActivated)
-        {
-            // Lerp?
-        }
+        transform.position = Vector3.Lerp(transform.position, player.transform.position, timeToEventEnd);
     }
 
     [NaughtyAttributes.Button("Activate Creature")]
     public void ActivateCreature()
     {
-        this.gameObject.SetActive(true);
         isActivated = true;
+        gameObject.SetActive(true);
         // StartCoroutine(ApproachCreature());
     }
 
     [NaughtyAttributes.Button("Stop Creature")]
     public void StopCreature()
     {
+        isActivated = false;
+        gameObject.SetActive(false);
         StopCoroutine(ApproachCreature());
     }
     

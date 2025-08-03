@@ -69,6 +69,9 @@ public class EV1_DoorCloseManager : MonoBehaviour
         {
             tVInteractable.StartDemonEvent(player);
         }
+
+        // Turn off the trigger
+        EV1_Trigger.enabled = false;
     }
 
     IEnumerator CloseDoorsContinous(float waitTime = 0.5f)
@@ -94,8 +97,6 @@ public class EV1_DoorCloseManager : MonoBehaviour
             }
         }
 
-        // Turn off the trigger after closing doors
-        EV1_Trigger.enabled = false;
         yield return new WaitForSeconds(waitTime);
     }
 
