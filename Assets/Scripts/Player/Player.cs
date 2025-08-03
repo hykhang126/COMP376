@@ -24,6 +24,7 @@ public class Player : MonoBehaviour
     [SerializeField] private float maxY = 40f;   // Max vertical rotation angle
 
     private float currentXRotation = 0f;  // Track current pitch (vertical rotation)
+    private float targetYRotation = 0f;   // Track current yaw (horizontal rotation)
 
     [SerializeField] private float mouseSensitivity = 100f; // Mouse sensitivity multiplier
 
@@ -49,14 +50,14 @@ public class Player : MonoBehaviour
     [SerializeField] private AudioClip footstepClip;
     [SerializeField] private float footstepInterval = 0.5f; // Adjust based on desired pacing
 
-    private float footstepTimer = 0f;
-
     private Coroutine footstepCoroutine;
 
     private bool isFootstepPlaying = false;
 
     private Vector3 lastPosition;
-    [SerializeField] private float movementThreshold = 0.01f; // Minimum movement to count as walking
+    [SerializeField] private float movementThreshold = 0.02f; // Minimum movement to count as walking
+
+    private float footstepTimer = 0f;
 
 
 
@@ -118,7 +119,7 @@ public class Player : MonoBehaviour
 
         //Add footstep sounds
         footstepAudioSource = gameObject.GetComponent<AudioSource>();
-        
+
     }
 
     public void RotateCarryObject()
@@ -147,7 +148,7 @@ public class Player : MonoBehaviour
             Debug.Log("Player is not carrying an object to rotate.");
         }
 
-        
+
     }
 
     public void SetIsCarrying(bool result)
@@ -234,10 +235,7 @@ public class Player : MonoBehaviour
 
         // Movement
         Vector3 moveDirection = new Vector3(movementInput.x, 0, movementInput.y).normalized;
-        transform.Translate(moveDirection * movementSpeed * Time.deltaTime);
-
-        // Horizontal rotation (Player body)
-        transform.Rotate(Vector3.up * lookDeltaX);
+        targetYRotation += lookDeltaX;
 
         // Vertical rotation (Camera)
         if (!isInverted)
@@ -262,46 +260,54 @@ public class Player : MonoBehaviour
         //Footstep logic
         // Footstep sound logic
         // Check actual movement (to avoid false positives from short taps)
-        bool isMoving = Vector3.Distance(transform.position, lastPosition) > movementThreshold &&
-                        PlayerState.instance.currentState != PlayerStateType.InMenu;
 
-        if (isMoving && !isFootstepPlaying)
+        if (PlayerState.instance.currentState != PlayerStateType.InMenu)
         {
-            footstepCoroutine = StartCoroutine(FootstepRoutine());
-            isFootstepPlaying = true;
-        }
-        else if (!isMoving && isFootstepPlaying)
-        {
-            StopCoroutine(footstepCoroutine);
-            isFootstepPlaying = false;
-            footstepCoroutine = null;
+            bool isMoving = new Vector3(rb.linearVelocity.x, 0, rb.linearVelocity.z).magnitude > 0.1f;
+
+            if (isMoving)
+            {
+                footstepTimer += Time.deltaTime;
+
+                if (footstepTimer >= footstepInterval)
+                {
+                    PlayFootstepSound();
+                    footstepTimer = 0f;
+                }
+            }
+            else
+            {
+                footstepTimer = footstepInterval; // reset so next step plays instantly when moving again
+            }
         }
 
         lastPosition = transform.position;
 
     }
 
-    private IEnumerator FootstepRoutine()
+    private void PlayFootstepSound()
     {
-        // Initial delay before first step (so quick taps don’t trigger sound)
-        yield return new WaitForSeconds(footstepInterval);
-
-        while (true)
+        if (footstepClip != null && footstepAudioSource != null)
         {
-            if (footstepClip != null && footstepAudioSource != null)
-            {
-                footstepAudioSource.pitch = Random.Range(0.95f, 1.05f);
-                footstepAudioSource.PlayOneShot(footstepClip);
-            }
-
-            yield return new WaitForSeconds(footstepInterval);
+            footstepAudioSource.pitch = Random.Range(0.95f, 1.05f);
+            footstepAudioSource.PlayOneShot(footstepClip);
         }
     }
 
 
-
     void FixedUpdate()
     {
+        //Model translation
+        Vector3 moveDirection = new Vector3(movementInput.x, 0, movementInput.y).normalized;
+        Vector3 velocity = transform.TransformDirection(moveDirection) * movementSpeed;
+        rb.linearVelocity = new Vector3(velocity.x, rb.linearVelocity.y, velocity.z);
 
+        // Model rotation using Rigidbody
+        Quaternion deltaRotation = Quaternion.Euler(0f, targetYRotation, 0f);
+        rb.MoveRotation(rb.rotation * deltaRotation);
+
+        // Reset rotation after applying it
+        targetYRotation = 0f;
     }
+
 }
