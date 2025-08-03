@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 
 public class EV2_FrameChecker : MonoBehaviour
@@ -6,6 +7,10 @@ public class EV2_FrameChecker : MonoBehaviour
     [SerializeField] private Renderer[] frameRenderers;
 
     public bool isCorrectMaterial = false;
+
+    private GameObject keySpawner;
+
+    
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -24,6 +29,8 @@ public class EV2_FrameChecker : MonoBehaviour
                 return;
             }
         }
+
+        keySpawner = transform.Find("KeySpawner")?.gameObject;
 
         isCorrectMaterial = false;
     }
