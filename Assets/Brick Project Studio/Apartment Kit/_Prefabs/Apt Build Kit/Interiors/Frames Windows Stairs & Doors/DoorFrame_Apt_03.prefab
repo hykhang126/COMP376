@@ -234,6 +234,7 @@ MonoBehaviour:
   itemKeysToOpenThisDoor: 45000000
   isLockedByKeys: 1
   itemKeyToSceneNameSO: {fileID: 11400000, guid: 47b3a59a3ae1f3341aa6e890416d974d, type: 2}
+  lockedSound: {fileID: 8300000, guid: 32cd0f60e3930404d8f7b7965d2e4c6b, type: 3}
 --- !u!114 &3802638211443573809
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -363,6 +364,7 @@ MonoBehaviour:
   itemKeysToOpenThisDoor: 45000000
   isLockedByKeys: 1
   itemKeyToSceneNameSO: {fileID: 11400000, guid: 47b3a59a3ae1f3341aa6e890416d974d, type: 2}
+  lockedSound: {fileID: 0}
 --- !u!114 &2322426566055617513
 MonoBehaviour:
   m_ObjectHideFlags: 0
