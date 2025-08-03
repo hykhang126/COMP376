@@ -55,10 +55,6 @@ public class EV1_DoorCloseManager : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        StartCoroutine(CloseDoorsContinous(waitTime));
-        foreach (var itemFlood in keyfloodEvents)
-            StartCoroutine(SpawnKeys(itemFlood));
-
         // Start the creature approach event
         if (creatureEvent != null)
         {
@@ -69,6 +65,10 @@ public class EV1_DoorCloseManager : MonoBehaviour
         {
             tVInteractable.StartDemonEvent(player);
         }
+
+        StartCoroutine(CloseDoorsContinous(waitTime));
+        foreach (var itemFlood in keyfloodEvents)
+            StartCoroutine(SpawnKeys(itemFlood));
 
         // Turn off the trigger
         EV1_Trigger.enabled = false;
@@ -102,11 +102,10 @@ public class EV1_DoorCloseManager : MonoBehaviour
 
     private IEnumerator SpawnKeys(ItemFlood itemFlood)
     {
-        int counter = 0;
-        while (EV1_Trigger.enabled == true)
+        int counter = 50;
+        for (int i = 0; i < counter; i++)
         {
-            if(counter < 50)
-                itemFlood.SpawnKey();
+            itemFlood.SpawnKey();
             yield return new WaitForSeconds(0.01f);
         }
     }

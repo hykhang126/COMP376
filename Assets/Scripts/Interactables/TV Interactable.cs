@@ -95,6 +95,6 @@ public class TVInteractable : Interactable
         audioSource.clip = demonHeartBeat;
         audioSource.loop = true;
         audioSource.Play();
-        Interact(player);
+        StartCoroutine(WaitForVideoToStart());
     }
 }

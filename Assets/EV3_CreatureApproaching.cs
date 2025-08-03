@@ -5,31 +5,20 @@ public class EV3_CreatureApproaching : MonoBehaviour
 {
     [SerializeField] private float approachDistance = 20f; // Distance at which the game ends
 
-    [SerializeField] private float timeToEventEnd = 50f;
+    [SerializeField] private float timeToEventEnd = 60f;
 
     [SerializeField] private bool isActivated = false;
 
     [SerializeField] private Player player;
-
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        isActivated = false;
-        gameObject.SetActive(false);
-
-        if (player == null)
-        {
-            Debug.LogError("Player reference not set in EV3_CreatureApproaching.");
-        }
-    }
 
     // Update is called once per frame
     void Update()
     {
         if (!isActivated) return;
 
-        // Lerp the creature's position towards the player
-        transform.position = Vector3.Lerp(transform.position, player.transform.position, timeToEventEnd);
+        // Lerp the creature's position towards the player for a total duration of timeToEventEnd
+        float newZ = Vector3.Lerp(transform.position, player.transform.position, Time.deltaTime / timeToEventEnd).z;
+        transform.position = new Vector3(transform.position.x, transform.position.y, newZ);
     }
 
     [NaughtyAttributes.Button("Activate Creature")]
