@@ -1,8 +1,5 @@
-using SojaExiles;
 using TMPro;
-using UnityEditor.ProjectWindowCallback;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class HUD : MonoBehaviour
@@ -30,7 +27,7 @@ public class HUD : MonoBehaviour
         else
         {
             ShowInteractPrompt(false);
-            interactPrompt.text = "Press 'E' to interact";
+            interactPrompt.text = "Press to interact";
         }
 
         endGamePanel = transform.Find("EndGame")?.gameObject;
@@ -39,8 +36,6 @@ public class HUD : MonoBehaviour
         {
 #if UNITY_WEBGL
             quitGame.gameObject.SetActive(false); // Hide on WebGL
-#else
-            quitGame.onClick.AddListener(QuitGame); // Enable only on standalone
 #endif
         }
 
@@ -50,7 +45,8 @@ public class HUD : MonoBehaviour
         endGameVolume = GameObject.Find("End Game Volume");
     }
 
-    private void QuitGame() {
+    public void QuitGame() {
+        Debug.Log("QuitGame");
         Application.Quit();
     }
 

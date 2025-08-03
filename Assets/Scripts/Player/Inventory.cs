@@ -33,6 +33,8 @@ public class Inventory : MonoBehaviour
 
     [SerializeField] private PlayerInventorySO playerInventorySO;
 
+    PlayerStateType previousPlayerState;
+
     public void Awake()
     {
         actions = new InventoryAction();
@@ -106,6 +108,8 @@ public class Inventory : MonoBehaviour
 
     private void OpenInventory()
     {
+        if (PlayerState.instance.currentState == PlayerStateType.InMenu) return;
+        previousPlayerState = PlayerState.instance.currentState;
         isInventoryOpen = true;
         // Show the inventory UI
         Debug.Log("Inventory opened");
@@ -151,6 +155,7 @@ public class Inventory : MonoBehaviour
             player.playerInput.actions.Enable(); // Re-enable player input actions
         }
         pauseSystem.action.Enable();
+        PlayerState.instance.TriggerTransition(previousPlayerState);
     }
 
     public void CycleItems(InputAction.CallbackContext context)

@@ -19017,29 +19017,9 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1623679376}
     m_Modifications:
-    - target: {fileID: 1494043071907953206, guid: 8e23ad5e861473a49a957bc585721f7b, type: 3}
-      propertyPath: m_Mass
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 1494043071907953206, guid: 8e23ad5e861473a49a957bc585721f7b, type: 3}
-      propertyPath: m_UseGravity
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1494043071907953206, guid: 8e23ad5e861473a49a957bc585721f7b, type: 3}
-      propertyPath: m_CollisionDetection
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1494043071907953206, guid: 8e23ad5e861473a49a957bc585721f7b, type: 3}
-      propertyPath: m_ExcludeLayers.m_Bits
-      value: 256
-      objectReference: {fileID: 0}
     - target: {fileID: 2945875798731397007, guid: 8e23ad5e861473a49a957bc585721f7b, type: 3}
       propertyPath: m_Name
       value: Pot
-      objectReference: {fileID: 0}
-    - target: {fileID: 3466519510533395518, guid: 8e23ad5e861473a49a957bc585721f7b, type: 3}
-      propertyPath: m_LocalScale.y
-      value: 1.5071032
       objectReference: {fileID: 0}
     - target: {fileID: 3466519510533395518, guid: 8e23ad5e861473a49a957bc585721f7b, type: 3}
       propertyPath: m_LocalPosition.x
@@ -21158,7 +21138,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 665278553}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 916312409}
+        m_TargetAssemblyTypeName: HUD, Assembly-CSharp
+        m_MethodName: QuitGame
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &665278553
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -30352,6 +30344,58 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 8136687124933929416, guid: f3e82dc7c471ff447b3ca0e0bfded076, type: 3}
   m_PrefabInstance: {fileID: 981534185}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &990082946
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 990082947}
+  - component: {fileID: 990082948}
+  m_Layer: 0
+  m_Name: KeyFloodSpawner (3)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &990082947
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 990082946}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1.201, y: 1.6729996, z: -8.68}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1661616208}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &990082948
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 990082946}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5729d142d4500a346be38bf0446c493a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  keyPrefab: {fileID: 1379830720837112018, guid: 10b6ea40ae20b7f4882edf2c1953674e, type: 3}
+  despawnTime: 5
+  spawnRadius: 2
+  spawnHeight: 8
+  initialPoolSize: 50
+  maxKeyCount: 50
+  spawnInterval: 0.1
+  keyLifetime: 10
 --- !u!1001 &990608304
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -40404,6 +40448,18 @@ PrefabInstance:
       propertyPath: 'doors.Array.data[1]'
       value: 
       objectReference: {fileID: 1231261197}
+    - target: {fileID: 454286566515633056, guid: 7be8671ef5a6ddd49a9a34bdc7981b68, type: 3}
+      propertyPath: keyfloodEvents.Array.size
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 454286566515633056, guid: 7be8671ef5a6ddd49a9a34bdc7981b68, type: 3}
+      propertyPath: 'keyfloodEvents.Array.data[3]'
+      value: 
+      objectReference: {fileID: 990082948}
+    - target: {fileID: 454286566515633056, guid: 7be8671ef5a6ddd49a9a34bdc7981b68, type: 3}
+      propertyPath: 'keyfloodEvents.Array.data[4]'
+      value: 
+      objectReference: {fileID: 1392924760}
     - target: {fileID: 1292329663946993901, guid: 7be8671ef5a6ddd49a9a34bdc7981b68, type: 3}
       propertyPath: m_Name
       value: EV1_TriggerZone
@@ -40450,7 +40506,13 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 7551834523857586031, guid: 7be8671ef5a6ddd49a9a34bdc7981b68, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 990082947}
+    - targetCorrespondingSourceObject: {fileID: 7551834523857586031, guid: 7be8671ef5a6ddd49a9a34bdc7981b68, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1392924759}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7be8671ef5a6ddd49a9a34bdc7981b68, type: 3}
 --- !u!1001 &1283119352
@@ -46202,6 +46264,58 @@ MonoBehaviour:
   m_SelectedFaces: 
   m_SelectedEdges: []
   m_SelectedVertices: 
+--- !u!1 &1392924758
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1392924759}
+  - component: {fileID: 1392924760}
+  m_Layer: 0
+  m_Name: KeyFloodSpawner (4)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1392924759
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1392924758}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -6.9, y: 1.6729996, z: -5.13}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1661616208}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1392924760
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1392924758}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5729d142d4500a346be38bf0446c493a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  keyPrefab: {fileID: 1379830720837112018, guid: 10b6ea40ae20b7f4882edf2c1953674e, type: 3}
+  despawnTime: 5
+  spawnRadius: 2
+  spawnHeight: 8
+  initialPoolSize: 50
+  maxKeyCount: 50
+  spawnInterval: 0.1
+  keyLifetime: 10
 --- !u!1001 &1394431299
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -79594,7 +79708,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 208628007290521926, guid: a134cc40a117af44daa5d51a4d3e902a, type: 3}
       propertyPath: movementSpeed
-      value: 5
+      value: 2.5
       objectReference: {fileID: 0}
     - target: {fileID: 972639073029162981, guid: a134cc40a117af44daa5d51a4d3e902a, type: 3}
       propertyPath: m_Name

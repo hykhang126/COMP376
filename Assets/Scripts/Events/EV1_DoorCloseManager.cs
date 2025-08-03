@@ -47,32 +47,35 @@ public class EV1_DoorCloseManager : MonoBehaviour
             Debug.LogError("CreatureApproaching component not found on the EV1_DoorCloseManager object.");
         }
     }
-
-    public void Start()
-    {
         
-    }
-
     private void OnTriggerEnter(Collider other)
     {
-        // Start the creature approach event
+        if (!other.CompareTag("Player")) return;
+
         if (creatureEvent != null)
-        {
             creatureEvent.ActivateCreature();
-        }
-        // Start the TV interaction event
+
         if (tVInteractable != null)
-        {
             tVInteractable.StartDemonEvent(player);
-        }
 
         StartCoroutine(CloseDoorsContinous(waitTime));
-        foreach (var itemFlood in keyfloodEvents)
-            StartCoroutine(SpawnKeys(itemFlood));
 
-        // Turn off the trigger
+        foreach (var itemFlood in keyfloodEvents)
+            itemFlood.StartRainingKeys(); // Now handled independently!
+
         EV1_Trigger.enabled = false;
     }
+
+    private IEnumerator RainKeysForever(ItemFlood itemFlood)
+    {
+        while (true)
+        {
+            itemFlood.SpawnKey();
+            yield return new WaitForSeconds(0.1f); // Adjust for how fast you want the rain
+        }
+    }
+
+
 
     IEnumerator CloseDoorsContinous(float waitTime = 0.5f)
     {
@@ -100,13 +103,4 @@ public class EV1_DoorCloseManager : MonoBehaviour
         yield return new WaitForSeconds(waitTime);
     }
 
-    private IEnumerator SpawnKeys(ItemFlood itemFlood)
-    {
-        int counter = 50;
-        for (int i = 0; i < counter; i++)
-        {
-            itemFlood.SpawnKey();
-            yield return new WaitForSeconds(0.01f);
-        }
-    }
 }
