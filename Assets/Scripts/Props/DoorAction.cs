@@ -8,9 +8,21 @@ public class DoorAction : MonoBehaviour
 	public bool open;
 	public Transform Player;
 
+	[SerializeField] string openAnimation;
+
+	[SerializeField] string closeAnimation;
+
+	[SerializeField] AudioClip openSound;
+
+	[SerializeField] AudioClip closeSound;
+
+	private AudioSource doorAudioSource;
+
 	void Start()
 	{
 		open = false;
+
+		doorAudioSource = gameObject.GetComponent<AudioSource>();
 	}
 
 	void OnMouseOver()
@@ -72,7 +84,10 @@ public class DoorAction : MonoBehaviour
 	public IEnumerator opening(float waitTime = 0.5f)
 	{
 		print("you are opening the door");
-		openandclose.Play("Opening 1");
+		openandclose.Play(openAnimation);
+		doorAudioSource.clip = openSound;
+		doorAudioSource.pitch = Random.Range(0.9f, 1.1f);
+		doorAudioSource.Play();
 		open = true;
 		yield return new WaitForSeconds(waitTime);
 	}
@@ -80,7 +95,9 @@ public class DoorAction : MonoBehaviour
 	public IEnumerator closing(float waitTime = 0.5f)
 	{
 		print("you are closing the door");
-		openandclose.Play("Closing 1");
+		openandclose.Play(closeAnimation);
+		doorAudioSource.clip = closeSound;
+		doorAudioSource.Play();
 		open = false;
 		yield return new WaitForSeconds(waitTime);
 	}
