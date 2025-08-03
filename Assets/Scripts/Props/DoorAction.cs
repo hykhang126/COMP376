@@ -69,19 +69,19 @@ public class DoorAction : MonoBehaviour
 		}
 	}
 
-	IEnumerator opening()
+	public IEnumerator opening(float waitTime = 0.5f)
 	{
 		print("you are opening the door");
 		openandclose.Play("Opening 1");
 		open = true;
-		yield return new WaitForSeconds(.5f);
+		yield return new WaitForSeconds(waitTime);
 	}
 
-	IEnumerator closing()
+	public IEnumerator closing(float waitTime = 0.5f)
 	{
 		print("you are closing the door");
 		openandclose.Play("Closing 1");
 		open = false;
-		yield return new WaitForSeconds(.5f);
+		yield return new WaitForSeconds(waitTime);
 	}
 }
