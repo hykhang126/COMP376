@@ -11,6 +11,12 @@ public class EV1_DoorCloseManager : MonoBehaviour
 
     [SerializeField] private float waitTime = 0.5f;
 
+    [SerializeField] private EV3_CreatureApproaching creatureEvent;
+
+    [SerializeField] private TVInteractable tVInteractable;
+
+    [SerializeField] Player player;
+
     public ItemFlood[] keyfloodEvents;
 
     private void Awake()
@@ -25,6 +31,21 @@ public class EV1_DoorCloseManager : MonoBehaviour
             // Find trigger in children 
             EV1_Trigger = GetComponentInChildren<BoxCollider>();
         }
+
+        if (EV1_Trigger == null)
+        {
+            Debug.LogError("Trigger component not found on the EV1_DoorCloseManager object.");
+        }
+
+        if (tVInteractable == null)
+        {
+            Debug.LogError("TVInteractable component not found on the EV1_DoorCloseManager object.");
+        }
+
+        if (creatureEvent == null)
+        {
+            Debug.LogError("CreatureApproaching component not found on the EV1_DoorCloseManager object.");
+        }
     }
 
     public void Start()
@@ -35,8 +56,19 @@ public class EV1_DoorCloseManager : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         StartCoroutine(CloseDoorsContinous(waitTime));
-        foreach(var itemFlood in keyfloodEvents)
+        foreach (var itemFlood in keyfloodEvents)
             StartCoroutine(SpawnKeys(itemFlood));
+
+        // Start the creature approach event
+        if (creatureEvent != null)
+        {
+            creatureEvent.ActivateCreature();
+        }
+        // Start the TV interaction event
+        if (tVInteractable != null)
+        {
+            tVInteractable.Interact(player);
+        }
     }
 
     IEnumerator CloseDoorsContinous(float waitTime = 0.5f)
