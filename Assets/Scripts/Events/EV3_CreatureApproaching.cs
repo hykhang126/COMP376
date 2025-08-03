@@ -5,7 +5,7 @@ public class EV3_CreatureApproaching : MonoBehaviour
 {
     [SerializeField] private float approachDistance = 2f; // Distance at which the game ends
 
-    [SerializeField] private float timeToEventEnd = 60f;
+    [SerializeField] private float timeToEventEnd = 25f;
 
     [SerializeField] private bool isActivated = false;
 

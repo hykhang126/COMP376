@@ -5,9 +5,6 @@ using UnityEngine;
 public class ItemFlood : MonoBehaviour
 {
     [SerializeField] private GameObject keyPrefab;
-    [SerializeField] private float despawnTime = 5f;
-    [SerializeField] private float spawnRadius = 3f;
-    [SerializeField] private float spawnHeight = 8f;
     [SerializeField] private int initialPoolSize = 50;
 
     private Coroutine rainCoroutine;
