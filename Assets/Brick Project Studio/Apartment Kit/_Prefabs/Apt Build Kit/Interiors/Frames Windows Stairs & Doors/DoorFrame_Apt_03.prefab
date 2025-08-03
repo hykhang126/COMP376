@@ -79,6 +79,8 @@ GameObject:
   - component: {fileID: 3870171792900498484}
   - component: {fileID: 3802638211443573809}
   - component: {fileID: 2387963038558417326}
+  - component: {fileID: 1415622725867392596}
+  - component: {fileID: 2322426566055617513}
   m_Layer: 0
   m_Name: Door.001
   m_TagString: Untagged
@@ -229,7 +231,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b60947823d0c46edaa00b7decd55896b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemKeysToOpenThisDoor: 2a000000
+  itemKeysToOpenThisDoor: 45000000
   isLockedByKeys: 1
   itemKeyToSceneNameSO: {fileID: 11400000, guid: 47b3a59a3ae1f3341aa6e890416d974d, type: 2}
 --- !u!114 &3802638211443573809
@@ -306,7 +308,7 @@ AudioSource:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0
+      value: 1
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -346,6 +348,38 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &1415622725867392596
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4929668019831370948}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b60947823d0c46edaa00b7decd55896b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemKeysToOpenThisDoor: 45000000
+  isLockedByKeys: 1
+  itemKeyToSceneNameSO: {fileID: 11400000, guid: 47b3a59a3ae1f3341aa6e890416d974d, type: 2}
+--- !u!114 &2322426566055617513
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4929668019831370948}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97ad85d967dc835449a5de81e9e61854, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  doorAction: {fileID: 4929668019831370810}
+  isInteractable: 1
+  doorInteractable: {fileID: 1415622725867392596}
+  isTeleportable: 0
+  teleportTarget: {fileID: 0}
 --- !u!1 &9090885670013408196
 GameObject:
   m_ObjectHideFlags: 0
