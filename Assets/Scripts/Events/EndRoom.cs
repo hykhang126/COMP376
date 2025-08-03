@@ -15,6 +15,10 @@ public class EndRoom : MonoBehaviour
 
     [SerializeField] private Door exitDoor;
 
+    private AudioSource jumpScareSource;
+
+    [SerializeField] private AudioClip jumpScareClip;
+
     private bool isDemonRetreating = false;
 
     public static EndRoom instance;
@@ -44,6 +48,12 @@ public class EndRoom : MonoBehaviour
         {
             Debug.LogError("Exit Door is not assigned in the EndRoom script.");
         }
+    }
+
+    void Start()
+    {
+        jumpScareSource = gameObject.GetComponent<AudioSource>();
+        jumpScareSource.spatialBlend = 0; 
     }
 
     // Update is called once per frame
@@ -79,6 +89,10 @@ public class EndRoom : MonoBehaviour
         if (player != null && demon != null)
         {
             // Disable player controls
+
+            jumpScareSource.pitch = Random.Range(0.95f, 1.1f);
+            jumpScareSource.PlayOneShot(jumpScareClip);
+
             player.playerInput.actions.Disable();
             player.playerInput.enabled = false;
 
