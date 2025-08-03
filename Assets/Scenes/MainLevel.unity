@@ -79531,7 +79531,7 @@ PrefabInstance:
       objectReference: {fileID: 1927331512}
     - target: {fileID: 873784938882269113, guid: af35802e37b35f245a88a7f11aca5c94, type: 3}
       propertyPath: m_VersionIndex
-      value: 3199
+      value: 3202
       objectReference: {fileID: 0}
     - target: {fileID: 1141834707002876125, guid: af35802e37b35f245a88a7f11aca5c94, type: 3}
       propertyPath: m_Mesh
@@ -79547,7 +79547,7 @@ PrefabInstance:
       objectReference: {fileID: 1077218833}
     - target: {fileID: 1479592595741952706, guid: af35802e37b35f245a88a7f11aca5c94, type: 3}
       propertyPath: m_VersionIndex
-      value: 92
+      value: 95
       objectReference: {fileID: 0}
     - target: {fileID: 2795317088564300896, guid: af35802e37b35f245a88a7f11aca5c94, type: 3}
       propertyPath: m_Mesh
@@ -79587,7 +79587,7 @@ PrefabInstance:
       objectReference: {fileID: 917906152}
     - target: {fileID: 5414389005335113565, guid: af35802e37b35f245a88a7f11aca5c94, type: 3}
       propertyPath: m_VersionIndex
-      value: 92
+      value: 95
       objectReference: {fileID: 0}
     - target: {fileID: 5561456855346714453, guid: af35802e37b35f245a88a7f11aca5c94, type: 3}
       propertyPath: player
@@ -79627,7 +79627,7 @@ PrefabInstance:
       objectReference: {fileID: 1352500814}
     - target: {fileID: 6467158733106779873, guid: af35802e37b35f245a88a7f11aca5c94, type: 3}
       propertyPath: m_VersionIndex
-      value: 92
+      value: 95
       objectReference: {fileID: 0}
     - target: {fileID: 7218327619785902300, guid: af35802e37b35f245a88a7f11aca5c94, type: 3}
       propertyPath: m_Mesh
@@ -79635,7 +79635,7 @@ PrefabInstance:
       objectReference: {fileID: 1967547290}
     - target: {fileID: 7218327619785902300, guid: af35802e37b35f245a88a7f11aca5c94, type: 3}
       propertyPath: m_VersionIndex
-      value: 2412
+      value: 2415
       objectReference: {fileID: 0}
     - target: {fileID: 7513366284317469596, guid: af35802e37b35f245a88a7f11aca5c94, type: 3}
       propertyPath: m_LocalPosition.y
@@ -79659,7 +79659,7 @@ PrefabInstance:
       objectReference: {fileID: 441279347}
     - target: {fileID: 8522110140011252277, guid: af35802e37b35f245a88a7f11aca5c94, type: 3}
       propertyPath: m_VersionIndex
-      value: 3199
+      value: 3202
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:
@@ -79822,10 +79822,6 @@ PrefabInstance:
     - target: {fileID: 1606666909934791913, guid: cf059d38f6323db49b0595b38c9925b7, type: 3}
       propertyPath: m_Name
       value: Creature
-      objectReference: {fileID: 0}
-    - target: {fileID: 1606666909934791913, guid: cf059d38f6323db49b0595b38c9925b7, type: 3}
-      propertyPath: m_IsActive
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7578509273894922475, guid: cf059d38f6323db49b0595b38c9925b7, type: 3}
       propertyPath: player

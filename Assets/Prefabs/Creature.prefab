@@ -16,7 +16,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1199777316812530502
 Transform:
   m_ObjectHideFlags: 0
@@ -46,10 +46,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0eff267a19b67b4498cb3984f98d63e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 5
   approachDistance: 20
-  timeToEventEnd: 50
+  timeToEventEnd: 25
   isActivated: 0
+  player: {fileID: 0}
 --- !u!1 &6678622995667678986
 GameObject:
   m_ObjectHideFlags: 0
