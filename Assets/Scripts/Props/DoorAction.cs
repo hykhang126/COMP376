@@ -16,7 +16,7 @@ public class DoorAction : MonoBehaviour
 
 	[SerializeField] AudioClip closeSound;
 
-	private AudioSource doorAudioSource;
+	public AudioSource doorAudioSource { get; private set; }
 
 	void Start()
 	{

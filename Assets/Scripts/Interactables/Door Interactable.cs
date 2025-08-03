@@ -17,6 +17,10 @@ public class DoorInteractable : Interactable
     [SerializeField] private ItemKeyToSceneNameSO itemKeyToSceneNameSO;
     private Dictionary<int, string> itemKeyToSceneName;
 
+    private DoorAction doorAction;
+
+    [SerializeField] private AudioClip lockedSound;
+
     void Awake()
     {
         door = GetComponent<Door>();
@@ -32,6 +36,7 @@ public class DoorInteractable : Interactable
     void Start()
     {
         itemKeyToSceneName = itemKeyToSceneNameSO.itemKeyToSceneName;
+        doorAction = gameObject.GetComponent<DoorAction>();
     }
 
     public override void Interact(Player player)
@@ -58,7 +63,7 @@ public class DoorInteractable : Interactable
                     }
                     else
                     {
-                        Debug.Log("Player doesn't have the correct item equipped in their inventory!");
+                        doorAction.doorAudioSource.PlayOneShot(lockedSound);
                     }
                 }
             }

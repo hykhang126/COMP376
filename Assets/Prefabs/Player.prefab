@@ -130,8 +130,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   movementSpeed: 3.5
   isInverted: 0
-  minY: -40
-  maxY: 40
+  minY: -60
+  maxY: 60
   mouseSensitivity: 100
   gamepadSensitivity: 100
   carriedObject: {fileID: 0}
