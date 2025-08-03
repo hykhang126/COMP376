@@ -8,6 +8,10 @@ public class DoorAction : MonoBehaviour
 	public bool open;
 	public Transform Player;
 
+	[SerializeField] string openAnimation;
+
+	[SerializeField] string closeAnimation;
+
 	void Start()
 	{
 		open = false;
@@ -72,7 +76,7 @@ public class DoorAction : MonoBehaviour
 	IEnumerator opening()
 	{
 		print("you are opening the door");
-		openandclose.Play("Opening 1");
+		openandclose.Play(openAnimation);
 		open = true;
 		yield return new WaitForSeconds(.5f);
 	}
@@ -80,7 +84,7 @@ public class DoorAction : MonoBehaviour
 	IEnumerator closing()
 	{
 		print("you are closing the door");
-		openandclose.Play("Closing 1");
+		openandclose.Play(closeAnimation);
 		open = false;
 		yield return new WaitForSeconds(.5f);
 	}
