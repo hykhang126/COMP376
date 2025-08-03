@@ -45,6 +45,10 @@ public class MainMenu : MonoBehaviour
             Debug.LogError("Quit button not found");
         }
 
+        #if UNITY_WEBGL
+                quit.SetActive(false);
+        #endif
+
         quit.onClick.AddListener(QuitGame);
 
         _player = FindAnyObjectByType<Player>();
