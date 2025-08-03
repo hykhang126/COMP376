@@ -29,6 +29,8 @@ public class Inventory : MonoBehaviour
     //private RawImage itemPreviewImage; // Optional if you want to toggle visibility
     public GameObject currentItemPreview { get; private set; }
 
+    [SerializeField] private AudioClip pickUpAudioClip;
+
     [SerializeField] private PlayerInventorySO playerInventorySO;
 
     public void Awake()
@@ -73,7 +75,7 @@ public class Inventory : MonoBehaviour
         {
             itemPreviewSpawnPoint = inventoryCamera.transform.Find("ItemPreviewSpawnPoint").gameObject?.transform;
         }
-        
+
     }
 
     public void OnEnable()
@@ -128,7 +130,7 @@ public class Inventory : MonoBehaviour
         }
         pauseSystem.action.Disable();
 
-        
+
     }
 
     private void CloseInventory()
@@ -170,8 +172,8 @@ public class Inventory : MonoBehaviour
     {
         currentItemIndex = index;
         Debug.Log("Current item index set to: " + currentItemIndex);
-    }    
-    
+    }
+
     public int GetCurrentItemIndex()
     {
         return currentItemIndex;
@@ -207,6 +209,8 @@ public class Inventory : MonoBehaviour
         {
             playerInventorySO.items.Add(newItem);
             playerInventorySO.currentItemIndex = currentItemIndex;
+            player.playerAudioSource.pitch = Random.Range(0.9f, 1.1f);
+            player.playerAudioSource.PlayOneShot(pickUpAudioClip);
         }
         else
         {
@@ -223,7 +227,7 @@ public class Inventory : MonoBehaviour
             currentItemIndex = 0;
         }
     }
-    
+
     public bool RemoveItemAtIndex(int ItemIndex)
     {
         if (items.Count > 0 && ItemIndex >= 0 && ItemIndex < items.Count)
@@ -242,8 +246,8 @@ public class Inventory : MonoBehaviour
         {
             if (items[i].itemKey == itemKey)
             {
-               Item FoundItem = items[i];
-               return i;
+                Item FoundItem = items[i];
+                return i;
             }
         }
         Debug.Log("Item not found");
@@ -259,7 +263,7 @@ public class Inventory : MonoBehaviour
 
         return -1;
     }
-    
+
     public bool UseItemByItemKey(int itemKey)
     {
         int itemIndex = currentItemIndex;
@@ -272,7 +276,7 @@ public class Inventory : MonoBehaviour
         }
         return false;
     }
-    
+
     public bool UseCurrentItem()
     {
         //TODO:
@@ -281,7 +285,7 @@ public class Inventory : MonoBehaviour
         //if both checks pass, remove the item from the inventory and call the interactable's Interact method.
         return true;
     }
-    
+
     private void ShowItemPreview()
     {
         if (itemPreviewSpawnPoint == null || items.Count == 0)
