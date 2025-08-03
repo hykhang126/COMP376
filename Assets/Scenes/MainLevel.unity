@@ -6919,7 +6919,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 968292777417071141, guid: 56a93cd127ed0184982c13ec0a61cfa5, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 10.22
+      value: 10.72
       objectReference: {fileID: 0}
     - target: {fileID: 968292777417071141, guid: 56a93cd127ed0184982c13ec0a61cfa5, type: 3}
       propertyPath: m_LocalPosition.z
@@ -6953,14 +6953,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1796867294629831881, guid: 56a93cd127ed0184982c13ec0a61cfa5, type: 3}
-      propertyPath: isCameraFeed
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1796867294629831881, guid: 56a93cd127ed0184982c13ec0a61cfa5, type: 3}
-      propertyPath: TVCameraFeedMaterial
-      value: 
-      objectReference: {fileID: 2100000, guid: 341aae9f4642bd540a4bf395ae764f90, type: 2}
     - target: {fileID: 8890821166399119553, guid: 56a93cd127ed0184982c13ec0a61cfa5, type: 3}
       propertyPath: m_Name
       value: TV_Apt_01
@@ -26527,6 +26519,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0eff267a19b67b4498cb3984f98d63e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveSpeed: 5
+  approachDistance: 20
+  timeToEventEnd: 50
+  isActivated: 0
 --- !u!1001 &882771017
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -36706,7 +36702,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1165290897}
   - component: {fileID: 1165290900}
-  - component: {fileID: 1165290899}
   - component: {fileID: 1165290898}
   m_Layer: 0
   m_Name: DemonCamera
@@ -36774,14 +36769,6 @@ MonoBehaviour:
     m_MipBias: 0
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
---- !u!81 &1165290899
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1165290896}
-  m_Enabled: 1
 --- !u!20 &1165290900
 Camera:
   m_ObjectHideFlags: 0

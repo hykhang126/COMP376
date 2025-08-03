@@ -67,7 +67,7 @@ public class EV1_DoorCloseManager : MonoBehaviour
         // Start the TV interaction event
         if (tVInteractable != null)
         {
-            tVInteractable.Interact(player);
+            tVInteractable.StartDemonEvent(player);
         }
     }
 
