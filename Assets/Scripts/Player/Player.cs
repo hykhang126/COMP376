@@ -50,14 +50,13 @@ public class Player : MonoBehaviour
     [SerializeField] private AudioClip footstepClip;
     [SerializeField] private float footstepInterval = 0.5f; // Adjust based on desired pacing
 
-    private Coroutine footstepCoroutine;
-
-    private bool isFootstepPlaying = false;
-
     private Vector3 lastPosition;
-    [SerializeField] private float movementThreshold = 0.02f; // Minimum movement to count as walking
 
     private float footstepTimer = 0f;
+
+    private float continuousMovementTime = 0f;
+    [SerializeField] private float minMovementDuration = 0.2f; // Require 0.1 seconds of movement before footsteps
+
 
 
 
@@ -261,11 +260,13 @@ public class Player : MonoBehaviour
         // Footstep sound logic
         // Check actual movement (to avoid false positives from short taps)
 
-        if (PlayerState.instance.currentState != PlayerStateType.InMenu)
-        {
-            bool isMoving = new Vector3(rb.linearVelocity.x, 0, rb.linearVelocity.z).magnitude > 0.1f;
+        bool isMoving = new Vector3(rb.linearVelocity.x, 0, rb.linearVelocity.z).magnitude > 0.1f;
 
-            if (isMoving)
+        if (isMoving)
+        {
+            continuousMovementTime += Time.deltaTime;
+
+            if (continuousMovementTime >= minMovementDuration)
             {
                 footstepTimer += Time.deltaTime;
 
@@ -275,11 +276,13 @@ public class Player : MonoBehaviour
                     footstepTimer = 0f;
                 }
             }
-            else
-            {
-                footstepTimer = footstepInterval; // reset so next step plays instantly when moving again
-            }
         }
+        else
+        {
+            continuousMovementTime = 0f;
+            footstepTimer = footstepInterval; // Ready to play again when movement resumes
+        }
+
 
         lastPosition = transform.position;
 
