@@ -25,7 +25,7 @@ public class EV3_CreatureApproaching : MonoBehaviour
         {
             Debug.Log("Creature has approached the player. Game Over!");
             // GAME OVER LOGIC HERE
-
+            EndRoom.instance.StartEndRoomEvent();
         }
     }
 

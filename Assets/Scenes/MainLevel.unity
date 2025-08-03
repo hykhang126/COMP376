@@ -34024,6 +34024,11 @@ Mesh:
     offset: 0
     size: 0
     path: 
+--- !u!4 &1076151060 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1123528215009476301, guid: 0b553d3e1ec866341913adb8358dbc5e, type: 3}
+  m_PrefabInstance: {fileID: 1683960181}
+  m_PrefabAsset: {fileID: 0}
 --- !u!43 &1077218833
 Mesh:
   m_ObjectHideFlags: 0
@@ -34189,11 +34194,6 @@ Mesh:
     offset: 0
     size: 0
     path: 
---- !u!4 &1076151060 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 1123528215009476301, guid: 0b553d3e1ec866341913adb8358dbc5e, type: 3}
-  m_PrefabInstance: {fileID: 1683960181}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1077975652
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -79267,7 +79267,7 @@ PrefabInstance:
       objectReference: {fileID: 1967547290}
     - target: {fileID: 554072422604579553, guid: af35802e37b35f245a88a7f11aca5c94, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -286.16
+      value: -293.59
       objectReference: {fileID: 0}
     - target: {fileID: 554072422604579553, guid: af35802e37b35f245a88a7f11aca5c94, type: 3}
       propertyPath: m_LocalPosition.y

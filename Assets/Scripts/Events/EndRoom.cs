@@ -17,6 +17,35 @@ public class EndRoom : MonoBehaviour
 
     private bool isDemonRetreating = false;
 
+    public static EndRoom instance;
+
+    private void Awake()
+    {
+        if (instance == null)
+        {
+            instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+
+        if (player == null)
+        {
+            player = FindAnyObjectByType<Player>();
+        }
+
+        if (demon == null)
+        {
+            Debug.LogError("Demon GameObject is not assigned in the EndRoom script.");
+        }
+
+        if (exitDoor == null)
+        {
+            Debug.LogError("Exit Door is not assigned in the EndRoom script.");
+        }
+    }
+
     // Update is called once per frame
     void Update()
     {
