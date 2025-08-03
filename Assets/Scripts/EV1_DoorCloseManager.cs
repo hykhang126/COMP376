@@ -11,6 +11,8 @@ public class EV1_DoorCloseManager : MonoBehaviour
 
     [SerializeField] private float waitTime = 0.5f;
 
+    public ItemFlood[] keyfloodEvents;
+
     private void Awake()
     {
         if (doors == null)
@@ -25,9 +27,16 @@ public class EV1_DoorCloseManager : MonoBehaviour
         }
     }
 
+    public void Start()
+    {
+        
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         StartCoroutine(CloseDoorsContinous(waitTime));
+        foreach(var itemFlood in keyfloodEvents)
+            StartCoroutine(SpawnKeys(itemFlood));
     }
 
     IEnumerator CloseDoorsContinous(float waitTime = 0.5f)
@@ -48,11 +57,24 @@ public class EV1_DoorCloseManager : MonoBehaviour
                 {
                     yield return StartCoroutine(door.doorAction.closing(waitTime));
                 }
+
+
             }
         }
 
         // Turn off the trigger after closing doors
         EV1_Trigger.enabled = false;
         yield return new WaitForSeconds(waitTime);
+    }
+
+    private IEnumerator SpawnKeys(ItemFlood itemFlood)
+    {
+        int counter = 0;
+        while (EV1_Trigger.enabled == true)
+        {
+            if(counter < 50)
+                itemFlood.SpawnKey();
+            yield return new WaitForSeconds(0.01f);
+        }
     }
 }
