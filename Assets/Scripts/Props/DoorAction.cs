@@ -81,7 +81,7 @@ public class DoorAction : MonoBehaviour
 		}
 	}
 
-	IEnumerator opening()
+	public IEnumerator opening(float waitTime = 0.5f)
 	{
 		print("you are opening the door");
 		openandclose.Play(openAnimation);
@@ -89,16 +89,16 @@ public class DoorAction : MonoBehaviour
 		doorAudioSource.pitch = Random.Range(0.9f, 1.1f);
 		doorAudioSource.Play();
 		open = true;
-		yield return new WaitForSeconds(.5f);
+		yield return new WaitForSeconds(waitTime);
 	}
 
-	IEnumerator closing()
+	public IEnumerator closing(float waitTime = 0.5f)
 	{
 		print("you are closing the door");
 		openandclose.Play(closeAnimation);
 		doorAudioSource.clip = closeSound;
 		doorAudioSource.Play();
 		open = false;
-		yield return new WaitForSeconds(.5f);
+		yield return new WaitForSeconds(waitTime);
 	}
 }
