@@ -125,7 +125,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f19ddf3e40219db42830353d1479e177, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemName: Hallway key 42
+  itemName: Hallway key
   itemKey: 42
   playerInventorySO: {fileID: 11400000, guid: 5028993a4a4a40f48a60d83aa1fe42c8, type: 2}
   itemPrefab: {fileID: 5764973781213522379}

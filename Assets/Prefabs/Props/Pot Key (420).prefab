@@ -80,6 +80,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: 74f1bfc8e7376f243b13c4b914c937e5, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 8426d3b6591048d418f59722f6f514d2, type: 2}
     - target: {fileID: 919132149155446097, guid: 74f1bfc8e7376f243b13c4b914c937e5, type: 3}
       propertyPath: m_Name
       value: Key6
@@ -169,7 +173,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f19ddf3e40219db42830353d1479e177, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemName: Pot key 420
+  itemName: Pot key
   itemKey: 420
   playerInventorySO: {fileID: 11400000, guid: 5028993a4a4a40f48a60d83aa1fe42c8, type: 2}
   itemPrefab: {fileID: 5764973781213522379}
