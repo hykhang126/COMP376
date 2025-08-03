@@ -219,42 +219,9 @@ public class Player : MonoBehaviour
             HUD.ShowInteractPrompt(false);
         }
 
-        if (Gamepad.current != null && Gamepad.current.wasUpdatedThisFrame)
-        {
-            // Analog stick sensitivity multiplier
-            lookDeltaX += lookInput.x * gamepadSensitivity * Time.deltaTime;
-            lookDeltaY += lookInput.y * gamepadSensitivity * Time.deltaTime;
-        }
-        else if (Gamepad.current == null)
-        {
-            // Mouse input (already in delta)
-            lookDeltaX += lookInput.x * mouseSensitivity * Time.deltaTime;
-            lookDeltaY += lookInput.y * mouseSensitivity * Time.deltaTime;
-        }
-
         // Movement
         Vector3 moveDirection = new Vector3(movementInput.x, 0, movementInput.y).normalized;
         targetYRotation += lookDeltaX;
-
-        // Vertical rotation (Camera)
-        if (!isInverted)
-        {
-            currentXRotation -= lookDeltaY;  // Inverted vertical rotation
-        }
-        else
-        {
-            currentXRotation += lookDeltaY;  // Normal vertical rotation
-        }
-
-        // Clamp the vertical rotation to the desired limits
-        currentXRotation = Mathf.Clamp(currentXRotation, minY, maxY);
-
-        // Apply the clamped vertical rotation to the camera
-        _camera.transform.localRotation = Quaternion.Euler(currentXRotation, 0, 0);
-
-        // Reset deltas after applying
-        lookDeltaX = 0f;
-        lookDeltaY = 0f;
 
         //Footstep logic
         // Footstep sound logic
@@ -300,17 +267,42 @@ public class Player : MonoBehaviour
 
     void FixedUpdate()
     {
-        //Model translation
+        // Movement
         Vector3 moveDirection = new Vector3(movementInput.x, 0, movementInput.y).normalized;
         Vector3 velocity = transform.TransformDirection(moveDirection) * movementSpeed;
         rb.linearVelocity = new Vector3(velocity.x, rb.linearVelocity.y, velocity.z);
-
-        // Model rotation using Rigidbody
-        Quaternion deltaRotation = Quaternion.Euler(0f, targetYRotation, 0f);
-        rb.MoveRotation(rb.rotation * deltaRotation);
-
-        // Reset rotation after applying it
-        targetYRotation = 0f;
     }
+
+
+    void LateUpdate()
+    {
+        if (Gamepad.current != null && Gamepad.current.wasUpdatedThisFrame)
+        {
+            lookDeltaX += lookInput.x * gamepadSensitivity * Time.deltaTime;
+            lookDeltaY += lookInput.y * gamepadSensitivity * Time.deltaTime;
+        }
+        else if (Gamepad.current == null)
+        {
+            lookDeltaX += lookInput.x * mouseSensitivity * Time.deltaTime;
+            lookDeltaY += lookInput.y * mouseSensitivity * Time.deltaTime;
+        }
+
+        // Horizontal rotation (player)
+        transform.Rotate(Vector3.up * lookDeltaX); // Apply horizontal rotation here!
+
+        // Vertical rotation (camera)
+        if (!isInverted)
+            currentXRotation -= lookDeltaY;
+        else
+            currentXRotation += lookDeltaY;
+
+        currentXRotation = Mathf.Clamp(currentXRotation, minY, maxY);
+        _camera.transform.localRotation = Quaternion.Euler(currentXRotation, 0, 0);
+
+        // Reset deltas
+        lookDeltaX = 0f;
+        lookDeltaY = 0f;
+    }
+
 
 }

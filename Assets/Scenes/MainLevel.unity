@@ -77822,6 +77822,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 394989092}
     m_Modifications:
     - target: {fileID: 208628007290521926, guid: a134cc40a117af44daa5d51a4d3e902a, type: 3}
+      propertyPath: maxY
+      value: 40
+      objectReference: {fileID: 0}
+    - target: {fileID: 208628007290521926, guid: a134cc40a117af44daa5d51a4d3e902a, type: 3}
       propertyPath: footstepClip
       value: 
       objectReference: {fileID: 8300000, guid: 9a774d143428a004f86c9f86e4c4282c, type: 3}
