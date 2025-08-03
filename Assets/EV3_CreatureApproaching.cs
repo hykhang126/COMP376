@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class EV3_CreatureApproaching : MonoBehaviour
 {
-    [SerializeField] private float approachDistance = 20f; // Distance at which the game ends
+    [SerializeField] private float approachDistance = 2f; // Distance at which the game ends
 
     [SerializeField] private float timeToEventEnd = 60f;
 
@@ -19,6 +19,14 @@ public class EV3_CreatureApproaching : MonoBehaviour
         // Lerp the creature's position towards the player for a total duration of timeToEventEnd
         float newZ = Vector3.Lerp(transform.position, player.transform.position, Time.deltaTime / timeToEventEnd).z;
         transform.position = new Vector3(transform.position.x, transform.position.y, newZ);
+
+        // Check if the creature is close enough to the player
+        if (Vector3.Distance(transform.position, player.transform.position) < approachDistance)
+        {
+            Debug.Log("Creature has approached the player. Game Over!");
+            // GAME OVER LOGIC HERE
+
+        }
     }
 
     [NaughtyAttributes.Button("Activate Creature")]
