@@ -1,4 +1,3 @@
-using System.Collections;
 using NaughtyAttributes;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -12,6 +11,8 @@ public class Player : MonoBehaviour
     [SerializeField] float movementSpeed = 5f;
     [SerializeField] bool isInverted = false;
 
+    [SerializeField] private float cameraSpeed = 100f; // Speed of camera rotation
+
     GameObject _camera;
 
     private float lookDeltaX = 0f;
@@ -19,12 +20,13 @@ public class Player : MonoBehaviour
 
     Rigidbody rb;
 
+    private float targetYRotation = 0f; // Used for model rotation in FixedUpdate
+
     // Clamp angles for vertical look (Y-axis rotation)
     [SerializeField] private float minY = -40f;  // Min vertical rotation angle
     [SerializeField] private float maxY = 40f;   // Max vertical rotation angle
 
     private float currentXRotation = 0f;  // Track current pitch (vertical rotation)
-    private float targetYRotation = 0f;   // Track current yaw (horizontal rotation)
 
     [SerializeField] private float mouseSensitivity = 100f; // Mouse sensitivity multiplier
 
@@ -46,32 +48,12 @@ public class Player : MonoBehaviour
 
     [SerializeField] private float hitRange = 2f;
 
-    public AudioSource playerAudioSource { get; private set; }
-    [SerializeField] private AudioClip footstepClip;
-    [SerializeField] private float footstepInterval = 0.5f; // Adjust based on desired pacing
-
-    private Vector3 lastPosition;
-
-    private float footstepTimer = 0f;
-
-    private float continuousMovementTime = 0f;
-    [SerializeField] private float minMovementDuration = 0.2f; // Require 0.1 seconds of movement before footsteps
-
-
-
-
     HUD HUD;
 
     public void Awake()
     {
         playerInput = GetComponent<PlayerInput>();
 
-        playerInput.actions.FindActionMap("Player").Disable();
-
-    }
-
-    void Start()
-    {
         playerInput.actions["Move"].performed += OnMove;
         playerInput.actions["Move"].canceled += OnMove;
         playerInput.actions["Look"].performed += OnLook;
@@ -80,8 +62,10 @@ public class Player : MonoBehaviour
 
         playerInput.actions["Interact"].performed += ctx => OnInteract();
         playerInput.actions["RotateCarryObject"].performed += ctx => RotateCarryObject();
+    }
 
-
+    void Start()
+    {
         HUD = GameObject.Find("UI").transform.Find("HUD").GetComponent<HUD>();
         if (HUD == null)
         {
@@ -115,10 +99,6 @@ public class Player : MonoBehaviour
         Rigidbody carryRb = carryPoint.AddComponent<Rigidbody>();
         carryRb.useGravity = false;
         carryRb.isKinematic = true;
-
-        //Add footstep sounds
-        playerAudioSource = gameObject.GetComponent<AudioSource>();
-
     }
 
     public void RotateCarryObject()
@@ -140,14 +120,11 @@ public class Player : MonoBehaviour
             playerInput.actions["Look"].performed -= carriedObject.GetComponent<CarryInteractable>().RotateObject;
             playerInput.actions["Look"].performed += OnLook;
             carriedObject.GetComponent<CarryInteractable>().EnableFixedJoint();
-
         }
         else
         {
             Debug.Log("Player is not carrying an object to rotate.");
         }
-
-
     }
 
     public void SetIsCarrying(bool result)
@@ -169,19 +146,16 @@ public class Player : MonoBehaviour
 
     public void OnMove(InputAction.CallbackContext context)
     {
-        if (PlayerState.instance.currentState == PlayerStateType.InMenu) return;
         movementInput = context.ReadValue<Vector2>();
     }
 
     public void OnLook(InputAction.CallbackContext context)
     {
-        if (PlayerState.instance.currentState == PlayerStateType.InMenu) return;
         lookInput = context.ReadValue<Vector2>();
     }
 
     public void OnInteract()
     {
-        if (PlayerState.instance.currentState == PlayerStateType.InMenu) return;
         Debug.Log("Interact button pressed");
         if (carriedObject != null && (PlayerState.instance.currentState == PlayerStateType.CarryingObject || PlayerState.instance.currentState == PlayerStateType.RotatingCarryObject))
         {
@@ -202,13 +176,8 @@ public class Player : MonoBehaviour
         Debug.DrawRay(_camera.transform.position, _camera.transform.forward * hitRange, Color.red);
         if (Physics.Raycast(_camera.transform.position, _camera.transform.forward, out hit, hitRange))
         {
-            // Pierce through the player layer to allow interaction
-            if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Player"))
-            {
-                hit = new RaycastHit();
-            }
             //Check if the object has an Interactable component, show UI prompt to tell the player they can interact.
-            if (hit.collider != null && hit.collider.gameObject.GetComponent<Interactable>() != null)
+            if (hit.collider.gameObject.TryGetComponent(out Interactable interactable))
             {
                 HUD.ShowInteractPrompt(true);
                 //Debug.Log("Press 'E' to interact");
@@ -219,90 +188,59 @@ public class Player : MonoBehaviour
             HUD.ShowInteractPrompt(false);
         }
 
-        // Movement
-        Vector3 moveDirection = new Vector3(movementInput.x, 0, movementInput.y).normalized;
-        targetYRotation += lookDeltaX;
+        lookInput = lookInput.normalized;
 
-        //Footstep logic
-        // Footstep sound logic
-        // Check actual movement (to avoid false positives from short taps)
-
-        bool isMoving = new Vector3(rb.linearVelocity.x, 0, rb.linearVelocity.z).magnitude > 0.1f;
-
-        if (isMoving)
-        {
-            continuousMovementTime += Time.deltaTime;
-
-            if (continuousMovementTime >= minMovementDuration)
-            {
-                footstepTimer += Time.deltaTime;
-
-                if (footstepTimer >= footstepInterval)
-                {
-                    PlayFootstepSound();
-                    footstepTimer = 0f;
-                }
-            }
-        }
-        else
-        {
-            continuousMovementTime = 0f;
-            footstepTimer = footstepInterval; // Ready to play again when movement resumes
-        }
-
-
-        lastPosition = transform.position;
-
-    }
-
-    private void PlayFootstepSound()
-    {
-        if (footstepClip != null && playerAudioSource != null)
-        {
-            playerAudioSource.pitch = Random.Range(0.95f, 1.05f);
-            playerAudioSource.PlayOneShot(footstepClip);
-        }
-    }
-
-
-    void FixedUpdate()
-    {
-        // Movement
-        Vector3 moveDirection = new Vector3(movementInput.x, 0, movementInput.y).normalized;
-        Vector3 velocity = transform.TransformDirection(moveDirection) * movementSpeed;
-        rb.linearVelocity = new Vector3(velocity.x, rb.linearVelocity.y, velocity.z);
-    }
-
-
-    void LateUpdate()
-    {
         if (Gamepad.current != null && Gamepad.current.wasUpdatedThisFrame)
         {
+            // Analog stick sensitivity multiplier
             lookDeltaX += lookInput.x * gamepadSensitivity * Time.deltaTime;
             lookDeltaY += lookInput.y * gamepadSensitivity * Time.deltaTime;
         }
         else if (Gamepad.current == null)
         {
+            // Mouse input (already in delta)
             lookDeltaX += lookInput.x * mouseSensitivity * Time.deltaTime;
             lookDeltaY += lookInput.y * mouseSensitivity * Time.deltaTime;
         }
 
-        // Horizontal rotation (player)
-        transform.Rotate(Vector3.up * lookDeltaX); // Apply horizontal rotation here!
+        // Movement
+        Vector3 moveDirection = new Vector3(movementInput.x, 0, movementInput.y).normalized;
+        targetYRotation += lookDeltaX;
 
-        // Vertical rotation (camera)
+        // Vertical rotation (Camera)
         if (!isInverted)
-            currentXRotation -= lookDeltaY;
+        {
+            currentXRotation -= lookDeltaY;  // Inverted vertical rotation
+        }
         else
-            currentXRotation += lookDeltaY;
+        {
+            currentXRotation += lookDeltaY;  // Normal vertical rotation
+        }
 
+        // Clamp the vertical rotation to the desired limits
         currentXRotation = Mathf.Clamp(currentXRotation, minY, maxY);
+
+        // Apply the clamped vertical rotation to the camera
         _camera.transform.localRotation = Quaternion.Euler(currentXRotation, 0, 0);
 
-        // Reset deltas
+        // Reset deltas after applying
         lookDeltaX = 0f;
         lookDeltaY = 0f;
     }
 
+    void FixedUpdate()
+    {
+        //Model translation
+        Vector3 moveDirection = new Vector3(movementInput.x, 0, movementInput.y).normalized;
+        Vector3 velocity = transform.TransformDirection(moveDirection) * movementSpeed;
+        rb.linearVelocity = new Vector3(velocity.x, rb.linearVelocity.y, velocity.z);
 
-}
+        // Model rotation using Rigidbody
+        Quaternion deltaRotation = Quaternion.Euler(0f, targetYRotation, 0f);
+        rb.MoveRotation(rb.rotation * deltaRotation);
+
+        // Reset rotation after applying it
+        targetYRotation = 0f;   
+    }
+
+    }
