@@ -9,7 +9,8 @@ public enum PlayerStateType
     Jumping,
     Falling,
     CarryingObject,
-    RotatingCarryObject
+    RotatingCarryObject,
+    InMenu
 }
 
 public class PlayerStateMachine : StateMachine<PlayerStateType>
@@ -29,8 +30,6 @@ public class PlayerTransition : Transition<PlayerStateType>
 
 public class PlayerState : MonoBehaviour
 {
-    [SerializeField] private Player player;
-
     private PlayerStateMachine stateMachine;
 
     public PlayerStateType currentState;
@@ -47,29 +46,26 @@ public class PlayerState : MonoBehaviour
         {
             Destroy(gameObject);
         }
-    }
-
-    public void Start()
-    {
-        player = GetComponent<Player>();
-        if (player == null)
-        {
-            Debug.LogError("Player component not found on this GameObject.");
-            return;
-        }
 
         // Initialize the player state machine
         stateMachine = new PlayerStateMachine();
         currentState = PlayerStateType.Idle;
+        stateMachine.AddState(PlayerStateType.InMenu, onEnter: State => UpdateState(PlayerStateType.InMenu));
         stateMachine.AddState(PlayerStateType.Idle, onEnter: state => UpdateState(PlayerStateType.Idle));
         stateMachine.AddState(PlayerStateType.CarryingObject, onEnter: state => UpdateState(PlayerStateType.CarryingObject));
         stateMachine.AddState(PlayerStateType.RotatingCarryObject, onEnter: state => UpdateState(PlayerStateType.RotatingCarryObject));
 
+        stateMachine.AddTriggerTransitionFromAny("OnInMenu", new PlayerTransition(PlayerStateType.InMenu, PlayerStateType.InMenu));
         stateMachine.AddTriggerTransitionFromAny("OnIdle", new PlayerTransition(PlayerStateType.Idle, PlayerStateType.Idle));
         stateMachine.AddTriggerTransitionFromAny("OnCarryingObject", new PlayerTransition(PlayerStateType.CarryingObject, PlayerStateType.CarryingObject));
         stateMachine.AddTriggerTransition("OnRotatingCarryObject", new PlayerTransition(PlayerStateType.CarryingObject, PlayerStateType.RotatingCarryObject));
 
         stateMachine.Init();
+    }
+
+    public void Start()
+    {
+        
     }
 
     private void UpdateState(PlayerStateType state)
@@ -86,6 +82,9 @@ public class PlayerState : MonoBehaviour
                 break;
             case PlayerStateType.RotatingCarryObject:
                 // Handle rotating carry object logic
+                break;
+            case PlayerStateType.InMenu:
+                //Handle Menu Changing Logic
                 break;
             default:
                 Debug.LogWarning("Unhandled player state: " + state);

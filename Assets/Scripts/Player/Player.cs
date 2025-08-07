@@ -9,15 +9,17 @@ public class Player : MonoBehaviour
     Vector2 movementInput;
 
     [SerializeField] float movementSpeed = 5f;
+    
     [SerializeField] bool isInverted = false;
 
-    [SerializeField] private float cameraSpeed = 100f; // Speed of camera rotation
-
     GameObject _camera;
-    private float xRotation = 0f;
-    private float yRotation = 0f;
+
+    private float lookDeltaX = 0f;
+    private float lookDeltaY = 0f;
 
     Rigidbody rb;
+
+    private float targetYRotation = 0f; // Used for model rotation in FixedUpdate
 
     // Clamp angles for vertical look (Y-axis rotation)
     [SerializeField] private float minY = -40f;  // Min vertical rotation angle
@@ -27,7 +29,9 @@ public class Player : MonoBehaviour
 
     [SerializeField] private float mouseSensitivity = 100f; // Mouse sensitivity multiplier
 
-    [SerializeField] private float gamepadSensitivity = 100f; // Gamepad analog stick sensitivity multiplier
+    [SerializeField] private float gamepadSensitivity = 5f; // Gamepad analog stick sensitivity multiplier
+
+    private Vector2 lookInput;
 
     public PlayerInput playerInput { get; private set; }
 
@@ -43,7 +47,9 @@ public class Player : MonoBehaviour
 
     [SerializeField] private float hitRange = 2f;
 
-    HUD HUD;
+    private HUD HUD;
+
+    public AudioSource playerAudioSource;
 
     public void Awake()
     {
@@ -94,6 +100,14 @@ public class Player : MonoBehaviour
         Rigidbody carryRb = carryPoint.AddComponent<Rigidbody>();
         carryRb.useGravity = false;
         carryRb.isKinematic = true;
+
+        // Audio Source
+        playerAudioSource = GetComponent<AudioSource>();
+        if (playerAudioSource == null)
+        {
+            playerAudioSource = gameObject.AddComponent<AudioSource>();
+            playerAudioSource.playOnAwake = false;
+        }
     }
 
     public void RotateCarryObject()
@@ -146,21 +160,7 @@ public class Player : MonoBehaviour
 
     public void OnLook(InputAction.CallbackContext context)
     {
-
-        Vector2 lookInput = context.ReadValue<Vector2>();
-
-        if (Gamepad.current != null && Gamepad.current.wasUpdatedThisFrame)
-        {
-            // Analog stick sensitivity multiplier
-            xRotation = lookInput.x * 100f; // Tweak multiplier as needed
-            yRotation = lookInput.y * 100f;
-        }
-        else
-        {
-            // Mouse input (already in delta)
-            xRotation = lookInput.x * 100f;
-            yRotation = lookInput.y * 100f;
-        }
+        lookInput = context.ReadValue<Vector2>();
     }
 
     public void OnInteract()
@@ -196,24 +196,34 @@ public class Player : MonoBehaviour
         {
             HUD.ShowInteractPrompt(false);
         }
-    }
 
-    void FixedUpdate()
-    {
+        lookInput = lookInput.normalized;
+
+        if (Gamepad.current != null && Gamepad.current.wasUpdatedThisFrame)
+        {
+            // Analog stick sensitivity multiplier
+            lookDeltaX += lookInput.x * gamepadSensitivity * Time.deltaTime;
+            lookDeltaY += lookInput.y * gamepadSensitivity * Time.deltaTime;
+        }
+        else if (Gamepad.current == null)
+        {
+            // Mouse input (already in delta)
+            lookDeltaX += lookInput.x * mouseSensitivity * Time.deltaTime;
+            lookDeltaY += lookInput.y * mouseSensitivity * Time.deltaTime;
+        }
+
         // Movement
         Vector3 moveDirection = new Vector3(movementInput.x, 0, movementInput.y).normalized;
-        transform.Translate(moveDirection * movementSpeed * Time.deltaTime);
-        // Horizontal rotation (Player body)
-        transform.Rotate(Vector3.up * xRotation * Time.deltaTime);
+        targetYRotation += lookDeltaX;
 
         // Vertical rotation (Camera)
         if (!isInverted)
         {
-            currentXRotation -= yRotation * Time.deltaTime;  // Inverted vertical rotation
+            currentXRotation -= lookDeltaY;  // Inverted vertical rotation
         }
         else
         {
-            currentXRotation += yRotation * Time.deltaTime;  // Normal vertical rotation
+            currentXRotation += lookDeltaY;  // Normal vertical rotation
         }
 
         // Clamp the vertical rotation to the desired limits
@@ -221,5 +231,25 @@ public class Player : MonoBehaviour
 
         // Apply the clamped vertical rotation to the camera
         _camera.transform.localRotation = Quaternion.Euler(currentXRotation, 0, 0);
+
+        // Reset deltas after applying
+        lookDeltaX = 0f;
+        lookDeltaY = 0f;
     }
-}
+
+    void FixedUpdate()
+    {
+        //Model translation
+        Vector3 moveDirection = new Vector3(movementInput.x, 0, movementInput.y).normalized;
+        Vector3 velocity = transform.TransformDirection(moveDirection) * movementSpeed;
+        rb.linearVelocity = new Vector3(velocity.x, rb.linearVelocity.y, velocity.z);
+
+        // Model rotation using Rigidbody
+        Quaternion deltaRotation = Quaternion.Euler(0f, targetYRotation, 0f);
+        rb.MoveRotation(rb.rotation * deltaRotation);
+
+        // Reset rotation after applying it
+        targetYRotation = 0f;   
+    }
+
+    }
