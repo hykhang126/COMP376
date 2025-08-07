@@ -76,6 +76,7 @@ public class MainMenu : MonoBehaviour
         Cursor.lockState = CursorLockMode.None; // Unlock the cursor
         Cursor.visible = true; // Make the cursor visible
         EventSystem.current.SetSelectedGameObject(start.gameObject);
+        _player.playerInput.enabled = false; // Disable player input
     }
 
     public void StartGame()
