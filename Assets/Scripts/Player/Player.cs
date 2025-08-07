@@ -9,9 +9,8 @@ public class Player : MonoBehaviour
     Vector2 movementInput;
 
     [SerializeField] float movementSpeed = 5f;
+    
     [SerializeField] bool isInverted = false;
-
-    [SerializeField] private float cameraSpeed = 100f; // Speed of camera rotation
 
     GameObject _camera;
 
@@ -48,7 +47,9 @@ public class Player : MonoBehaviour
 
     [SerializeField] private float hitRange = 2f;
 
-    HUD HUD;
+    private HUD HUD;
+
+    public AudioSource playerAudioSource;
 
     public void Awake()
     {
@@ -99,6 +100,14 @@ public class Player : MonoBehaviour
         Rigidbody carryRb = carryPoint.AddComponent<Rigidbody>();
         carryRb.useGravity = false;
         carryRb.isKinematic = true;
+
+        // Audio Source
+        playerAudioSource = GetComponent<AudioSource>();
+        if (playerAudioSource == null)
+        {
+            playerAudioSource = gameObject.AddComponent<AudioSource>();
+            playerAudioSource.playOnAwake = false;
+        }
     }
 
     public void RotateCarryObject()
