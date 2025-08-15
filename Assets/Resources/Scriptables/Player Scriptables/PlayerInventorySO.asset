@@ -16,18 +16,18 @@ MonoBehaviour:
   items: []
   itemList:
   - Key: 42
-    Value: {fileID: 5764973781213522379, guid: 9262c36818250464ab1ecc5869083a66, type: 3}
+    Value: {fileID: 0}
   - Key: 69
-    Value: {fileID: 1379830720837112018, guid: 10b6ea40ae20b7f4882edf2c1953674e, type: 3}
+    Value: {fileID: 0}
   - Key: 3
-    Value: {fileID: 7896930749716505473, guid: c8e253294949a5244925297cd55788c5, type: 3}
+    Value: {fileID: 0}
   - Key: 4
-    Value: {fileID: 3939497732404726746, guid: e1804b8358049cf43b88a519a4638425, type: 3}
+    Value: {fileID: 0}
   - Key: 5
-    Value: {fileID: 3915423515084001710, guid: afe992d7555670e46b03672c9bc7b7cc, type: 3}
+    Value: {fileID: 0}
   - Key: 420
-    Value: {fileID: 5764973781213522379, guid: eb90aedca764c5f4ab1ad1a1cd3de70a, type: 3}
+    Value: {fileID: 0}
   - Key: 0
-    Value: {fileID: 5764973781213522379, guid: 503a9ec3566f74b4782d72a349ead21c, type: 3}
+    Value: {fileID: 0}
   - Key: 360
-    Value: {fileID: 5764973781213522379, guid: a412f5cdb75f0d849a29b5a4b9c25d88, type: 3}
+    Value: {fileID: 0}

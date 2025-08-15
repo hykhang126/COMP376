@@ -35,5 +35,7 @@ public class GraphicTogglesGroup : MonoBehaviour
         {
             graphicsQualityToggles[(int)graphicsQuality].isOn = true;
         }
+        // Change the quality settings in the game
+        QualitySettings.SetQualityLevel((int)graphicsQuality);
     }
 }
