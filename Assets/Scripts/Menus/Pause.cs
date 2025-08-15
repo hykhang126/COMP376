@@ -17,11 +17,15 @@ public class Pause : MonoBehaviour
 
     [SerializeField] private Button quitButton;
 
+    [SerializeField] private Toggle[] graphicsQualityToggles;
+
     [SerializeField] private Player playerController;
 
     private Inventory inventorySystem;
 
-    PlayerStateType previousPlayerState;
+    private PlayerStateType previousPlayerState;
+
+    private GameSettingsSO gameSettingsSO;
 
 
 
@@ -39,6 +43,11 @@ public class Pause : MonoBehaviour
 
         action.Disable();
         inventorySystem = FindAnyObjectByType<Inventory>();
+
+        // Set game settings SO
+        gameSettingsSO = Resources.Load<GameSettingsSO>("Scriptable Objects/GameSettingsSO");
+
+        GraphicsQuality graphicsQuality = gameSettingsSO.GraphicsQuality;
     }
 
     public void Update()
