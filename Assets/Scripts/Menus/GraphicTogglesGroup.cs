@@ -1,0 +1,38 @@
+using UnityEngine;
+using UnityEngine.UI;
+
+public class GraphicTogglesGroup : MonoBehaviour
+{
+    [SerializeField] private Toggle[] graphicsQualityToggles;
+
+    [SerializeField] private GameSettingsSO gameSettingsSO;
+
+    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    void Start()
+    {
+        // Set game settings SO
+        if (!gameSettingsSO)
+            gameSettingsSO = Resources.Load<GameSettingsSO>("Scriptable Objects/GameSettingsSO");
+
+        for (int i = 0; i < graphicsQualityToggles.Length; i++)
+        {
+            int index = i; // Capture the current index
+            graphicsQualityToggles[i].onValueChanged.AddListener((isOn) =>
+            {
+                if (isOn)
+                {
+                    SetGraphicsQuality((GraphicsQuality)index);
+                }
+            });
+        }
+    }
+
+    public void SetGraphicsQuality(GraphicsQuality graphicsQuality)
+    {
+        gameSettingsSO.graphicsQuality = graphicsQuality;
+        if (!graphicsQualityToggles[(int)graphicsQuality].isOn)
+        {
+            graphicsQualityToggles[(int)graphicsQuality].isOn = true;
+        }
+    }
+}

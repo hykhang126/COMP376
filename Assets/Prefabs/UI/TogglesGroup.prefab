@@ -187,7 +187,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 263.35785, y: 6.7999887}
+  m_AnchoredPosition: {x: 283.61572, y: 6.7999773}
   m_SizeDelta: {x: 160, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &6556340365728672234
@@ -233,11 +233,11 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2021996112085025627}
   toggleTransition: 1
   graphic: {fileID: 8449709890453331127}
-  m_Group: {fileID: 0}
+  m_Group: {fileID: 6576665231587025260}
   onValueChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_IsOn: 1
+  m_IsOn: 0
 --- !u!1 &3395530684374012603
 GameObject:
   m_ObjectHideFlags: 0
@@ -249,8 +249,10 @@ GameObject:
   - component: {fileID: 7200011645061840935}
   - component: {fileID: 8616946667145238421}
   - component: {fileID: 7555589978892086089}
+  - component: {fileID: 6576665231587025260}
+  - component: {fileID: 697689291514740719}
   m_Layer: 0
-  m_Name: Toggles
+  m_Name: TogglesGroup
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -377,6 +379,33 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &6576665231587025260
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3395530684374012603}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2fafe2cfe61f6974895a912c3755e8f1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_AllowSwitchOff: 0
+--- !u!114 &697689291514740719
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3395530684374012603}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f70b8a7d8a5e4824ba0bcbf106f6d594, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  graphicsQualityToggles: []
+  gameSettingsSO: {fileID: 0}
 --- !u!1 &3506153142620563701
 GameObject:
   m_ObjectHideFlags: 0
@@ -517,7 +546,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: High
+  m_text: Low
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: dff1be8dacee5c040b8b31518db84763, type: 2}
   m_sharedMaterial: {fileID: 8278849493587900065, guid: dff1be8dacee5c040b8b31518db84763, type: 2}
@@ -623,7 +652,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 628.0003, y: 6.799986}
+  m_AnchoredPosition: {x: 688.774, y: 6.7999806}
   m_SizeDelta: {x: 160, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &6928821258981663879
@@ -669,11 +698,11 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 6445735657383250107}
   toggleTransition: 1
   graphic: {fileID: 8680810377224718867}
-  m_Group: {fileID: 0}
+  m_Group: {fileID: 6576665231587025260}
   onValueChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_IsOn: 1
+  m_IsOn: 0
 --- !u!1 &5402872246548022913
 GameObject:
   m_ObjectHideFlags: 0
@@ -709,7 +738,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 445.67908, y: 6.7999873}
+  m_AnchoredPosition: {x: 465.93695, y: 6.799976}
   m_SizeDelta: {x: 160, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2806327962872948216
@@ -755,7 +784,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 3127015439481174517}
   toggleTransition: 1
   graphic: {fileID: 5342269464484107692}
-  m_Group: {fileID: 0}
+  m_Group: {fileID: 6576665231587025260}
   onValueChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -825,7 +854,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: High
+  m_text: Medium
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: dff1be8dacee5c040b8b31518db84763, type: 2}
   m_sharedMaterial: {fileID: 8278849493587900065, guid: dff1be8dacee5c040b8b31518db84763, type: 2}

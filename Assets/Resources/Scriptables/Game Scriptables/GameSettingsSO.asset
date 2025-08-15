@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b43e41596a804874295511c11dd094fb, type: 3}
   m_Name: GameSettingsSO
   m_EditorClassIdentifier: 
-  graphicsQuality: 0
+  graphicsQuality: 2

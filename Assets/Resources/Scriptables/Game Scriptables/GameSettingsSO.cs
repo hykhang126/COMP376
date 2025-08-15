@@ -8,9 +8,14 @@ public enum GraphicsQuality
 }
 
 [CreateAssetMenu(fileName = "GameSettingsSO", menuName = "Scriptable Objects/GameSettingsSO")]
-public class GameSettingsSO : ScriptableObject
+public class GameSettingsSO : MyScriptables
 {
-    [SerializeField] private GraphicsQuality graphicsQuality;
+    public GraphicsQuality graphicsQuality;
 
-    public GraphicsQuality GraphicsQuality => graphicsQuality;
+    [NaughtyAttributes.Button("Clear All Data")]
+    public override void ClearAllData()
+    {
+        base.ClearAllData();
+        graphicsQuality = GraphicsQuality.Medium;
+    }
 }
