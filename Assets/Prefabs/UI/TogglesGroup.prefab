@@ -404,8 +404,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f70b8a7d8a5e4824ba0bcbf106f6d594, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  graphicsQualityToggles: []
-  gameSettingsSO: {fileID: 0}
+  graphicsQualityToggles:
+  - {fileID: 6928821258981663879}
+  - {fileID: 2806327962872948216}
+  - {fileID: 6556340365728672234}
+  gameSettingsSO: {fileID: 11400000, guid: a3efab0d2fded724c87672e1bdd84afb, type: 2}
 --- !u!1 &3506153142620563701
 GameObject:
   m_ObjectHideFlags: 0

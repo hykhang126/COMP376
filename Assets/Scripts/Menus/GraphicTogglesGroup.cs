@@ -13,6 +13,7 @@ public class GraphicTogglesGroup : MonoBehaviour
         // Set game settings SO
         if (!gameSettingsSO)
             gameSettingsSO = Resources.Load<GameSettingsSO>("Scriptable Objects/GameSettingsSO");
+        SetGraphicsQuality(gameSettingsSO.graphicsQuality);
 
         for (int i = 0; i < graphicsQualityToggles.Length; i++)
         {
