@@ -27,7 +27,7 @@ public class Player : MonoBehaviour
 
     private float currentXRotation = 0f;  // Track current pitch (vertical rotation)
 
-    [SerializeField] private float mouseSensitivityMultiplier = 500f; // Mouse sensitivity multiplier
+    [SerializeField] private float mouseSensitivityMultiplier = 200f; // Mouse sensitivity multiplier
 
     [SerializeField] private float gamepadSensitivityMultiplier = 5f; // Gamepad analog stick sensitivity multiplier
 
