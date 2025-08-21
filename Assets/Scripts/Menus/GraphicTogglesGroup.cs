@@ -22,13 +22,13 @@ public class GraphicTogglesGroup : MonoBehaviour
             {
                 if (isOn)
                 {
-                    SetGraphicsQuality((GraphicsQuality)index);
+                    SetGraphicsQuality((GameSettingsSO.GraphicsQuality)index);
                 }
             });
         }
     }
 
-    public void SetGraphicsQuality(GraphicsQuality graphicsQuality)
+    private void SetGraphicsQuality(GameSettingsSO.GraphicsQuality graphicsQuality)
     {
         gameSettingsSO.graphicsQuality = graphicsQuality;
         if (!graphicsQualityToggles[(int)graphicsQuality].isOn)
