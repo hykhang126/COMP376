@@ -10,15 +10,21 @@ public class FullscreenToggle : MonoBehaviour
 
     void Start()
     {
-        fullscreenToggle = GetComponent<Toggle>();
-        fullscreenToggle.isOn = gameSettingsSO.isFullscreen;
-        fullscreenToggle.onValueChanged.AddListener(ToggleFullscreen);
-
         // Null check
         if (!gameSettingsSO)
         {
             gameSettingsSO = Resources.Load<GameSettingsSO>("Scriptable Objects/GameSettingsSO");
         }
+
+        if (!fullscreenToggle)
+        {
+            fullscreenToggle = GetComponent<Toggle>();
+        }
+
+        // Initialize UI
+        fullscreenToggle.isOn = gameSettingsSO.isFullscreen;
+
+        fullscreenToggle.onValueChanged.AddListener(ToggleFullscreen);
     }
 
     // Toggle fullscreen

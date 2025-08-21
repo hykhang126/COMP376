@@ -11,18 +11,21 @@ public class ResolutionDropdown : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        resolutionDropdown = GetComponent<TMP_Dropdown>();
-
-        // Screen class to populate the dropdown
-        resolutionDropdown.ClearOptions();
-        PopulateResolutionDropdown();
-        resolutionDropdown.onValueChanged.AddListener(SetResolution);
-
         // Null check
         if (!gameSettingsSO)
         {
             gameSettingsSO = Resources.Load<GameSettingsSO>("Scriptable Objects/GameSettingsSO");
         }
+
+        if (!resolutionDropdown)
+        {
+            resolutionDropdown = GetComponent<TMP_Dropdown>();
+        }
+
+        // Screen class to populate the dropdown
+        resolutionDropdown.ClearOptions();
+        PopulateResolutionDropdown();
+        resolutionDropdown.onValueChanged.AddListener(SetResolution);
     }
 
     private void PopulateResolutionDropdown()

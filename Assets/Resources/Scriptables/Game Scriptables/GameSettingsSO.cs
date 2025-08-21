@@ -3,6 +3,10 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "GameSettingsSO", menuName = "Scriptable Objects/GameSettingsSO")]
 public class GameSettingsSO : MyScriptables
 {
+    public float masterVolume = 1f;
+
+    public float mouseSensitivity = 1f;
+
     public GraphicsQuality graphicsQuality;
 
     public bool isFullscreen = true;
@@ -13,6 +17,8 @@ public class GameSettingsSO : MyScriptables
     public override void ClearAllData()
     {
         base.ClearAllData();
+        masterVolume = 1f;
+        mouseSensitivity = 1f;
         graphicsQuality = GraphicsQuality.Medium;
         isFullscreen = true;
         resolution = Resolution.R_1920x1080;

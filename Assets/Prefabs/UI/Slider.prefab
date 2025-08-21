@@ -196,8 +196,9 @@ GameObject:
   m_Component:
   - component: {fileID: 1105309992215450651}
   - component: {fileID: 915230938975911344}
+  - component: {fileID: 8575383549104152258}
   m_Layer: 0
-  m_Name: VolumeSlider
+  m_Name: MouseSlider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -276,6 +277,20 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &8575383549104152258
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4725471023548164238}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bfe6287489cf68e44b2d159549786556, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mouseSlider: {fileID: 915230938975911344}
+  gameSettingsSO: {fileID: 11400000, guid: a3efab0d2fded724c87672e1bdd84afb, type: 2}
 --- !u!1 &6123061081324811298
 GameObject:
   m_ObjectHideFlags: 0
@@ -342,7 +357,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Volume
+  m_text: Mouse Sensitivity
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: dff1be8dacee5c040b8b31518db84763, type: 2}
   m_sharedMaterial: {fileID: 8278849493587900065, guid: dff1be8dacee5c040b8b31518db84763, type: 2}
@@ -407,7 +422,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_margin: {x: 0, y: 0, z: -65.46733, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0

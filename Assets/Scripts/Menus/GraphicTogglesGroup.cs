@@ -10,10 +10,17 @@ public class GraphicTogglesGroup : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        // Set game settings SO
+        // Null check
         if (!gameSettingsSO)
+        {
             gameSettingsSO = Resources.Load<GameSettingsSO>("Scriptable Objects/GameSettingsSO");
-        SetGraphicsQuality(gameSettingsSO.graphicsQuality);
+        }
+
+        // Initialize UI
+        for (int i = 0; i < graphicsQualityToggles.Length; i++)
+        {
+            graphicsQualityToggles[i].isOn = i == (int)gameSettingsSO.graphicsQuality;
+        }
 
         for (int i = 0; i < graphicsQualityToggles.Length; i++)
         {
