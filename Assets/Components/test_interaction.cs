@@ -9,12 +9,10 @@ public class test_interaction : MonoBehaviour
         ic.interactionTriggered.AddListener(OnInteractionTriggered);
     }
 
-    void OnInteractionTriggered() {
-        Debug.Log("Interaction Triggered!");
-    }
-    // Update is called once per frame
-    void Update()
+    void OnInteractionTriggered()
     {
+        Debug.Log("Interaction Triggered!");
         
     }
+
 }
