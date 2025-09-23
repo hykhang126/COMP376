@@ -17,7 +17,6 @@ public class State
 {
     public String stateName;
     // Each state now owns its outgoing transitions
-    [Header("Transitions")]
     [Tooltip("List of Transitions starting from this State")]
     public List<Transition> transitions;
     // Efficient lookup for this state's transitions: triggerEvent -> toStateName
@@ -51,6 +50,7 @@ public class State
     }
 }
 
+[DisallowMultipleComponent]
 public class StateMachine : MonoBehaviour
 {
     [SerializeField, Tooltip("List of states for this StateMachine. First State assumed to be initial State.")]
