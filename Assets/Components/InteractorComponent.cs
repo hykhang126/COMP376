@@ -56,14 +56,17 @@ public class InteractorComponent : MonoBehaviour
             if (_interactable_component != null)
             {
                 canInteractorTrigger = true;   
+                _interactable_component.interactionEntered.Invoke();
             }
         }
     }
 
     void OnTriggerExit(Collider other)
     {
-        if(other.GetComponentInParent<InteractableComponent>() != null && canInteractorTrigger)
+        _interactable_component = other.gameObject.GetComponent<InteractableComponent>();
+        if (_interactable_component != null && canInteractorTrigger)
         {
+            _interactable_component.interactionExited.Invoke();
             _interactable_component = null;
             canInteractorTrigger = false;
         }

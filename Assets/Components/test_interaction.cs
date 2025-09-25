@@ -7,8 +7,19 @@ public class test_interaction : MonoBehaviour
     {
         InteractableComponent ic = GetComponent<InteractableComponent>();
         ic.interactionTriggered.AddListener(OnInteractionTriggered);
+        ic.interactionEntered.AddListener(OnInteractionEntered);
+        ic.interactionExited.AddListener(OnInteractionExited);
     }
 
+    void OnInteractionEntered()
+    {
+        Debug.Log("Interaction Entered");
+    }
+
+    void OnInteractionExited()
+    {
+        Debug.Log("Interaction Exited");
+    }
     void OnInteractionTriggered()
     {
         Debug.Log("Interaction Triggered!");

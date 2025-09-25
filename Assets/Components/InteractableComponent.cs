@@ -13,7 +13,9 @@ using UnityEditor.SceneManagement;
 public class InteractableComponent : MonoBehaviour
 {
     public UnityEvent interactionTriggered = new UnityEvent();
-
+    public UnityEvent interactionEntered = new UnityEvent();
+    public UnityEvent interactionExited = new UnityEvent();
+    
     [SerializeField] private Collider _collider;
     [SerializeField] public float cooldown = 1.0f;
     [SerializeField] public bool isOneShot = false;
