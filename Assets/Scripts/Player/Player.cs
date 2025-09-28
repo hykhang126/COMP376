@@ -60,8 +60,6 @@ public class Player : MonoBehaviour
 
     public PlayerInput playerInput { get; private set; }
 
-    private RaycastHit hit;
-
     public Inventory inventory { get; private set; }
 
     public bool ToggleRotation { get; private set; } = false;
@@ -106,15 +104,16 @@ public class Player : MonoBehaviour
 
     void Start()
     {
+        // Set currentYaw value to starting transform forward direction
         currentYaw = transform.rotation.y;
-        if (_inputMode == INPUT_MODE.MOUSE_KEYBOARD)
-        {
+        // Set starting sensitivity based on initial _inputMode
+        if (_inputMode == INPUT_MODE.MOUSE_KEYBOARD){
             sensitivity = mouseSensitivityMultiplier;
         }
-        else
-        {
+        else{
             sensitivity = gamepadSensitivityMultiplier;
         }
+
         HUD = GameObject.Find("UI").transform.Find("HUD").GetComponent<HUD>();
         if (HUD == null)
         {
@@ -124,13 +123,8 @@ public class Player : MonoBehaviour
         _camera = GameObject.Find("camera");
         rb = GetComponent<Rigidbody>();
 
-    // Disable Rigidbody rotation on X and Z so manual Y rotation is allowed
-    rb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
-
         // Initialize camera rotation
         _camera.transform.localRotation = Quaternion.Euler(0, 0, 0);
-
-        hit = new RaycastHit();
 
         //Connect to Inventory System
         inventory = FindAnyObjectByType<Inventory>();
