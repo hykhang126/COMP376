@@ -72,7 +72,7 @@ public class Player : MonoBehaviour
 
     [SerializeField] private float hitRange = 2f;
 
-    private HUD HUD;
+    [SerializeField] private HUD HUD;
 
     public AudioSource playerAudioSource;
 
@@ -119,7 +119,7 @@ public class Player : MonoBehaviour
             sensitivity = gamepadSensitivityMultiplier;
         }
 
-        HUD = GameObject.Find("UI").transform.Find("HUD").GetComponent<HUD>();
+        // Connect to HUD
         if (HUD == null)
         {
             Debug.LogError("HUD not found");
