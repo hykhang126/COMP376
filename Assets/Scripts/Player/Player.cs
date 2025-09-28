@@ -70,8 +70,6 @@ public class Player : MonoBehaviour
 
     public GameObject carryPoint;
 
-    [SerializeField] private float hitRange = 2f;
-
     private HUD HUD;
 
     public AudioSource playerAudioSource;
