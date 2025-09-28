@@ -15,7 +15,7 @@ public class InteractableComponent : MonoBehaviour
     public UnityEvent interactionTriggered = new UnityEvent();
     public UnityEvent interactionEntered = new UnityEvent();
     public UnityEvent interactionExited = new UnityEvent();
-    
+
     [SerializeField] private Collider _collider;
     [SerializeField] public float cooldown = 1.0f;
     [SerializeField] public bool isOneShot = false;
@@ -38,7 +38,7 @@ public class InteractableComponent : MonoBehaviour
             interactionTriggered.Invoke();
             StartCoroutine(CooldownCoroutine());
         }
-    
+
 
     }
     void OnInteractionTriggered()
@@ -61,5 +61,14 @@ public class InteractableComponent : MonoBehaviour
         }
         isCoolingDown = false;
 
+    }
+
+    void OnValidate()
+    {
+        // If no collider is set, grab the first available 
+        if (_collider == null)
+        {
+            _collider = GetComponent<Collider>();
+        }
     }
 }
