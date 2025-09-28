@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 7803028597270645323}
   - component: {fileID: 208628007290521926}
   - component: {fileID: 383616103278508239}
+  - component: {fileID: 6419870049198850795}
   - component: {fileID: 7025571321497782876}
   - component: {fileID: 2397821621807915758}
   - component: {fileID: 2156201757411810303}
@@ -154,6 +155,100 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentState: 0
+--- !u!114 &6419870049198850795
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 972639073029162981}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b698efcfc9e2de99e9846d04c9cb85d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  states:
+  - stateName: Idle
+    transitions: []
+    stateEnter:
+      m_PersistentCalls:
+        m_Calls: []
+    stateExit:
+      m_PersistentCalls:
+        m_Calls: []
+    stateUpdate:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 208628007290521926}
+          m_TargetAssemblyTypeName: Player, Assembly-CSharp
+          m_MethodName: IdleUpdate
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+    stateFixedUpdate:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 208628007290521926}
+          m_TargetAssemblyTypeName: Player, Assembly-CSharp
+          m_MethodName: IdleFixedUpdate
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - stateName: InMenu
+    transitions:
+    - triggerEvent: toIdle
+      toState: Idle
+    stateEnter:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 208628007290521926}
+          m_TargetAssemblyTypeName: Player, Assembly-CSharp
+          m_MethodName: InMenuEnter
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+    stateExit:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 208628007290521926}
+          m_TargetAssemblyTypeName: Player, Assembly-CSharp
+          m_MethodName: InMenuExit
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+    stateUpdate:
+      m_PersistentCalls:
+        m_Calls: []
+    stateFixedUpdate:
+      m_PersistentCalls:
+        m_Calls: []
+  globalTransitions:
+  - triggerEvent: toInMenu
+    toState: InMenu
 --- !u!114 &7025571321497782876
 MonoBehaviour:
   m_ObjectHideFlags: 0

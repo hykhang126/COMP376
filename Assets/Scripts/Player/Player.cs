@@ -9,7 +9,7 @@ public class Player : MonoBehaviour
 {
     // Global Player reference
     public static Player InstanceReference { get; private set; }
-    
+
     Vector2 movementInput;
 
     [SerializeField] float movementSpeed = 5f;
@@ -24,7 +24,7 @@ public class Player : MonoBehaviour
     [SerializeField] private float minY = -40f;  // Min vertical rotation angle
     [SerializeField] private float maxY = 40f;   // Max vertical rotation angle
 
-    [SerializeField][Range(0f,1f)] private float cameraSmoothing = 0.5f;
+    [SerializeField][Range(0f, 1f)] private float cameraSmoothing = 0.5f;
 
     private float currentPitch = 0f;  // Track current pitch (vertical rotation)
     private float currentYaw = 0f;
@@ -48,15 +48,17 @@ public class Player : MonoBehaviour
             }
         }
     }
-    public enum INPUT_MODE{MOUSE_KEYBOARD, GAMEPAD};
+    public enum INPUT_MODE { MOUSE_KEYBOARD, GAMEPAD };
 
     [SerializeField] private float mouseSensitivityMultiplier = 5f; // Mouse sensitivity multiplier
 
     [SerializeField] private float gamepadSensitivityMultiplier = 5f; // Gamepad analog stick sensitivity multiplier
 
-    private float sensitivity = 5f; 
-    
+    private float sensitivity = 5f;
+
     private Vector2 lookInput;
+
+    public StateMachine stateMachine { get; private set; }
 
     public PlayerInput playerInput { get; private set; }
 
@@ -80,6 +82,7 @@ public class Player : MonoBehaviour
     {
 
         playerInput = GetComponent<PlayerInput>();
+        stateMachine = GetComponent<StateMachine>();
 
         playerInput.actions["Move"].performed += OnMove;
         playerInput.actions["Move"].canceled += OnMove;
@@ -107,10 +110,12 @@ public class Player : MonoBehaviour
         // Set currentYaw value to starting transform forward direction
         currentYaw = transform.rotation.y;
         // Set starting sensitivity based on initial _inputMode
-        if (_inputMode == INPUT_MODE.MOUSE_KEYBOARD){
+        if (_inputMode == INPUT_MODE.MOUSE_KEYBOARD)
+        {
             sensitivity = mouseSensitivityMultiplier;
         }
-        else{
+        else
+        {
             sensitivity = gamepadSensitivityMultiplier;
         }
 
@@ -212,7 +217,9 @@ public class Player : MonoBehaviour
         currentYaw += lookInput.x * sensitivity * Time.deltaTime;
         currentPitch += lookInput.y * sensitivity * Time.deltaTime;
     }
-    void Update()
+
+    #region Idle State Callbacks
+    public void IdleUpdate()
     {
         // Clamp pitch camera (local)
         currentPitch = Mathf.Clamp(currentPitch, minY, maxY);
@@ -221,17 +228,17 @@ public class Player : MonoBehaviour
         Quaternion curretnPitchRotation = _camera.transform.localRotation;
         Quaternion tragetPitchRotation = Quaternion.Euler(currentPitch, 0f, 0f);
         // Slerp from current pitch to target pitch using cameraSmoothing
-        _camera.transform.localRotation = Quaternion.Slerp(curretnPitchRotation,tragetPitchRotation,1f- cameraSmoothing);
+        _camera.transform.localRotation = Quaternion.Slerp(curretnPitchRotation, tragetPitchRotation, 1f - cameraSmoothing);
 
     }
 
-    void FixedUpdate()
+    public void IdleFixedUpdate()
     {
         // Rotate Body
         Quaternion currentBodyRotation = rb.transform.rotation;
         Quaternion targetBodyRotation = Quaternion.Euler(0f, currentYaw, 0f);
         // Slerp from current yaw yaw to target yaw using cameraSmoothing
-        rb.transform.rotation = Quaternion.Slerp(currentBodyRotation,targetBodyRotation,1f - cameraSmoothing);
+        rb.transform.rotation = Quaternion.Slerp(currentBodyRotation, targetBodyRotation, 1f - cameraSmoothing);
 
         // Move player
         Vector3 moveDelta = new Vector3(movementInput.x, 0, movementInput.y).normalized;
@@ -239,6 +246,20 @@ public class Player : MonoBehaviour
         rb.linearVelocity = new Vector3(velocity.x, rb.linearVelocity.y, velocity.z);
 
     }
-    
+    #endregion
+    #region InMenu State Callbacks
+    public void InMenuEnter()
+    {
+        playerInput.actions["Move"].performed -= OnMove;
+        playerInput.actions["Look"].performed -= OnLook;
+    }
+
+    public void InMenuExit()
+    {
+        playerInput.actions["Move"].performed += OnMove;
+        playerInput.actions["Look"].performed += OnLook;
+        
+    }
+    #endregion
 
 }
