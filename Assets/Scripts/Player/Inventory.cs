@@ -66,8 +66,6 @@ public class Inventory : MonoBehaviour
         {
             Debug.LogError("PlayerInventorySO not found in Resources");
         }
-
-        actions.Disable();
         pauseSystem = FindAnyObjectByType<Pause>();
         /*inventoryCamera = transform.Find("InventoryCamera").gameObject?.GetComponent<Camera>();
 
