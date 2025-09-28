@@ -2401,7 +2401,7 @@ GameObject:
   - component: {fileID: 1402381015}
   - component: {fileID: 1402381019}
   - component: {fileID: 1402381020}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: Animation Interactable
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2723,6 +2723,14 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 9
       objectReference: {fileID: 0}
+    - target: {fileID: 7267870738331943138, guid: 9262c36818250464ab1ecc5869083a66, type: 3}
+      propertyPath: _collider
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 8821435692638421680, guid: 9262c36818250464ab1ecc5869083a66, type: 3}
+      propertyPath: m_IncludeLayers.m_Bits
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 8904555833995852464, guid: 9262c36818250464ab1ecc5869083a66, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -2763,7 +2771,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 7279299023824360765, guid: 9262c36818250464ab1ecc5869083a66, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -3207,6 +3216,18 @@ PrefabInstance:
     - target: {fileID: 972639073029162981, guid: a134cc40a117af44daa5d51a4d3e902a, type: 3}
       propertyPath: m_Name
       value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 2684391216001221328, guid: a134cc40a117af44daa5d51a4d3e902a, type: 3}
+      propertyPath: length
+      value: 2.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3692463945112656143, guid: a134cc40a117af44daa5d51a4d3e902a, type: 3}
+      propertyPath: m_Height
+      value: 2.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3692463945112656143, guid: a134cc40a117af44daa5d51a4d3e902a, type: 3}
+      propertyPath: m_Center.z
+      value: 1.25
       objectReference: {fileID: 0}
     - target: {fileID: 7724768560626574633, guid: a134cc40a117af44daa5d51a4d3e902a, type: 3}
       propertyPath: m_LocalPosition.x
