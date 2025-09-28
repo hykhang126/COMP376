@@ -1,11 +1,15 @@
+using System;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-[DisallowMultipleComponent, RequireComponent(typeof(Rigidbody),typeof(CapsuleCollider),typeof(PlayerInput))]
+[DisallowMultipleComponent, RequireComponent(typeof(CapsuleCollider))]
 public class InteractorComponent : MonoBehaviour
 {
+
+    [SerializeField] private PlayerInput playerInput;
+
     [Header("Forward probe (local Z)")]
     [SerializeField]
     float length = 2f;       // how far forward the probe reaches
@@ -16,23 +20,30 @@ public class InteractorComponent : MonoBehaviour
 
     [SerializeField,HideInInspector]
     private CapsuleCollider probe;
-    private InteractableComponent _interactable_component; 
+    private InteractableComponent _interactable_component;
+
+    void Awake()
+    {
+        if (playerInput == null)
+        {
+            Debug.LogError("Must assign playerInput in InteractorCOmponent!");
+            return;
+        }
+        else
+        {
+            playerInput.actions["Interact"].performed += OnInteractTriggered;
+        }
+    }
+
+
 
     void Start()
     {
+        
         reset_probe();
     }
 
-    public void OnInteract()
-    {
-        // Check which action was triggered by its name
-        if (canInteractorTrigger)
-        {
-            // Invoke trigger event in InteractableComponent
-            _interactable_component.AttempyTriggerInteraction();
-        }
 
-    }
     private void reset_probe()
     {
         probe = GetComponent<CapsuleCollider>();
@@ -48,6 +59,17 @@ public class InteractorComponent : MonoBehaviour
         probe.includeLayers = LayerMask.GetMask("Interact");
 
     }
+
+    private void OnInteractTriggered(InputAction.CallbackContext context)
+    {
+        // Check which action was triggered by its name
+        if (canInteractorTrigger)
+        {
+            // Invoke trigger event in InteractableComponent
+            _interactable_component.AttempyTriggerInteraction();
+        }
+    }
+
     void OnTriggerEnter(Collider other)
     {
         if (other.GetComponentInParent<InteractableComponent>() != null && !canInteractorTrigger)
