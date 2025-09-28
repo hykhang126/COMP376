@@ -69,13 +69,13 @@ public class Inventory : MonoBehaviour
 
         actions.Disable();
         pauseSystem = FindAnyObjectByType<Pause>();
-        inventoryCamera = transform.Find("InventoryCamera").gameObject?.GetComponent<Camera>();
+        /*inventoryCamera = transform.Find("InventoryCamera").gameObject?.GetComponent<Camera>();
 
         // find in children of InventoryCamera
         if (itemPreviewSpawnPoint == null)
         {
             itemPreviewSpawnPoint = inventoryCamera.transform.Find("ItemPreviewSpawnPoint").gameObject?.transform;
-        }
+        }*/
 
     }
 

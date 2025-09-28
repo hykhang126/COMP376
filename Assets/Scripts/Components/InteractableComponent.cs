@@ -16,7 +16,7 @@ public class InteractableComponent : MonoBehaviour
     public UnityEvent interactionEntered = new UnityEvent();
     public UnityEvent interactionExited = new UnityEvent();
 
-    [SerializeField] private Collider _collider;
+    private Collider _collider;
     [SerializeField] public float cooldown = 1.0f;
     [SerializeField] public bool isOneShot = false;
 
@@ -25,6 +25,8 @@ public class InteractableComponent : MonoBehaviour
     void Start()
     {
         interactionTriggered.AddListener(OnInteractionTriggered);
+
+        _collider = GetComponent<Collider>();
     }
 
     public void AttempyTriggerInteraction()
