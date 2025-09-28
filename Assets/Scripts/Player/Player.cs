@@ -7,6 +7,9 @@ using UnityEngine.UI;
 [RequireComponent(typeof(PlayerInput))]
 public class Player : MonoBehaviour
 {
+    // Global Player reference
+    public static Player InstanceReference { get; private set; }
+    
     Vector2 movementInput;
 
     [SerializeField] float movementSpeed = 5f;
@@ -14,9 +17,6 @@ public class Player : MonoBehaviour
     [SerializeField] bool isInverted = false;
 
     GameObject _camera;
-
-    private float lookDeltaX = 0f;
-    private float lookDeltaY = 0f;
 
     Rigidbody rb;
 
@@ -80,15 +80,28 @@ public class Player : MonoBehaviour
 
     public void Awake()
     {
+
         playerInput = GetComponent<PlayerInput>();
 
         playerInput.actions["Move"].performed += OnMove;
         playerInput.actions["Move"].canceled += OnMove;
         playerInput.actions["Look"].performed += OnLook;
         playerInput.actions["Look"].canceled += OnLook;
-        //playerInput.actions["Scroll"].performed += inventory.CycleItems;
 
         playerInput.actions["RotateCarryObject"].performed += ctx => RotateCarryObject();
+
+        // Set payer instance reference on init and remove any old refrences
+        if (InstanceReference != null && InstanceReference != this)
+        {
+            // Makes sure no duplicate instances can exsit
+            Debug.LogError($"Destroying duplicate Player instance '{gameObject}'");
+            Destroy(gameObject);
+            return;
+        }
+        InstanceReference = this;
+        // Keep object loaded between scene loads. Not required 
+        //DontDestroyOnLoad(gameObject);
+
     }
 
     void Start()
@@ -187,11 +200,6 @@ public class Player : MonoBehaviour
         {
             PlayerState.instance.TriggerTransition(PlayerStateType.Idle);
         }
-    }
-
-    public RaycastHit GetRaycastHit()
-    {
-        return hit;
     }
 
     public void OnMove(InputAction.CallbackContext context)
