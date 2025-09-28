@@ -6,9 +6,9 @@ public class HUD : MonoBehaviour
 {
     TextMeshProUGUI interactPrompt;
 
-    public GameObject endGamePanel{ get; private set; }
+    public GameObject EndGamePanel{ get; private set; }
 
-    public GameObject endGameVolume { get; private set; }
+    public GameObject EndGameVolume { get; private set; }
 
     private Button quitGame;
 
@@ -30,7 +30,7 @@ public class HUD : MonoBehaviour
             interactPrompt.text = "Press to interact";
         }
 
-        endGamePanel = transform.Find("EndGame")?.gameObject;
+        EndGamePanel = transform.Find("EndGame")?.gameObject;
 
         if (quitGame != null)
         {
@@ -39,10 +39,10 @@ public class HUD : MonoBehaviour
 #endif
         }
 
-    if (endGamePanel != null)
-            endGamePanel.SetActive(false);
+    if (EndGamePanel != null)
+            EndGamePanel.SetActive(false);
         
-        endGameVolume = GameObject.Find("End Game Volume");
+        EndGameVolume = GameObject.Find("End Game Volume");
     }
     
     
@@ -67,7 +67,7 @@ public class HUD : MonoBehaviour
         PlayerState.instance.TriggerTransition(PlayerStateType.InMenu);
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
-        endGamePanel.SetActive(true);
+        EndGamePanel.SetActive(true);
         if (quitGame != null)
         {
         #if UNITY_WEBGL

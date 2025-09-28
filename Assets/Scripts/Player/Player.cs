@@ -72,7 +72,7 @@ public class Player : MonoBehaviour
 
     [SerializeField] private float hitRange = 2f;
 
-    [SerializeField] private HUD HUD;
+    private HUD HUD;
 
     public AudioSource playerAudioSource;
 
@@ -120,6 +120,7 @@ public class Player : MonoBehaviour
         }
 
         // Connect to HUD
+        HUD = FindAnyObjectByType<HUD>();
         if (HUD == null)
         {
             Debug.LogError("HUD not found");
