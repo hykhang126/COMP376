@@ -34,7 +34,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -1.8985789, y: 2.60525, z: 0.9103668}
-  m_LocalScale: {x: 1, y: 1.3279784, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7293616561641714550}
@@ -132,7 +132,9 @@ MonoBehaviour:
   isInverted: 0
   minY: -60
   maxY: 60
-  mouseSensitivityMultiplier: 100
+  cameraSmoothing: 0.75
+  _inputMode: 0
+  mouseSensitivityMultiplier: 7.5
   gamepadSensitivityMultiplier: 5
   carriedObject: {fileID: 0}
   carryPoint: {fileID: 0}
