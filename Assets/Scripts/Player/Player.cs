@@ -93,6 +93,7 @@ public class Player : MonoBehaviour
 
     void Start()
     {
+        currentYaw = transform.rotation.y;
         if (_inputMode == INPUT_MODE.MOUSE_KEYBOARD)
         {
             sensitivity = mouseSensitivityMultiplier;
@@ -220,15 +221,16 @@ public class Player : MonoBehaviour
         // Slerp from current pitch to target pitch using cameraSmoothing
         _camera.transform.localRotation = Quaternion.Slerp(curretnPitchRotation,tragetPitchRotation,1f- cameraSmoothing);
 
+    }
+
+    void FixedUpdate()
+    {
         // Rotate Body
         Quaternion currentBodyRotation = rb.transform.rotation;
         Quaternion targetBodyRotation = Quaternion.Euler(0f, currentYaw, 0f);
         // Slerp from current yaw yaw to target yaw using cameraSmoothing
         rb.transform.rotation = Quaternion.Slerp(currentBodyRotation,targetBodyRotation,1f - cameraSmoothing);
-    }
 
-    void FixedUpdate()
-    {
         // Move player
         Vector3 moveDelta = new Vector3(movementInput.x, 0, movementInput.y).normalized;
         Vector3 velocity = transform.TransformDirection(moveDelta) * movementSpeed;
