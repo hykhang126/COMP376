@@ -1990,7 +1990,7 @@ GameObject:
   - component: {fileID: 2203012047413542481}
   - component: {fileID: 839059334213882848}
   m_Layer: 0
-  m_Name: UI
+  m_Name: OLD_UI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
