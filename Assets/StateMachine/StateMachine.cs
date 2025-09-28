@@ -59,7 +59,7 @@ public class StateMachine : MonoBehaviour
     [SerializeField, Tooltip("List of transitions that can be executed from any State")]
     public List<Transition> globalTransitions;
 
-    private State currentState;
+    public State currentState { get; private set; }
 
     // GlobalTransitions Dictionary for efficient lookup using state event
     private Dictionary<string, State> globalTransitionsDictionary;
@@ -191,9 +191,23 @@ public class StateMachine : MonoBehaviour
         return null;
     }
 
+    public State GetCurrentState()
+    {
+        return currentState;
+    }
+    public String GetCurrentStateName()
+    {
+        return currentState.stateName;
+    }
+
     public State GetPreviousState()
     {
         return previousState;
+    }
+
+    public String GetPreviousStateName()
+    {
+        return previousState.stateName;
     }
 
 }
