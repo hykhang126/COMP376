@@ -2400,6 +2400,7 @@ GameObject:
   - component: {fileID: 1402381016}
   - component: {fileID: 1402381015}
   - component: {fileID: 1402381019}
+  - component: {fileID: 1402381020}
   m_Layer: 0
   m_Name: Animation Interactable
   m_TagString: Untagged
@@ -2508,6 +2509,66 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ffcc19e1f234a80409f0d675c991600d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1402381020
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1402381014}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec0db2d74fc68d141b7083fe24cfb009, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  interactionTriggered:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1402381019}
+        m_TargetAssemblyTypeName: AnimationInteractable, Assembly-CSharp
+        m_MethodName: Interact
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 840569747}
+          m_ObjectArgumentAssemblyTypeName: Player, Assembly-CSharp
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  interactionEntered:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 232315578}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+  interactionExited:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 232315578}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  _collider: {fileID: 1402381015}
+  cooldown: 1
+  isOneShot: 0
 --- !u!4 &1450159660 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3748402301831518520, guid: afe992d7555670e46b03672c9bc7b7cc, type: 3}
@@ -3093,6 +3154,26 @@ PrefabInstance:
     - target: {fileID: 972639073029162981, guid: a134cc40a117af44daa5d51a4d3e902a, type: 3}
       propertyPath: m_Name
       value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 2684391216001221328, guid: a134cc40a117af44daa5d51a4d3e902a, type: 3}
+      propertyPath: length
+      value: 5.84
+      objectReference: {fileID: 0}
+    - target: {fileID: 2684391216001221328, guid: a134cc40a117af44daa5d51a4d3e902a, type: 3}
+      propertyPath: radius
+      value: 0.59
+      objectReference: {fileID: 0}
+    - target: {fileID: 3692463945112656143, guid: a134cc40a117af44daa5d51a4d3e902a, type: 3}
+      propertyPath: m_Height
+      value: 5.84
+      objectReference: {fileID: 0}
+    - target: {fileID: 3692463945112656143, guid: a134cc40a117af44daa5d51a4d3e902a, type: 3}
+      propertyPath: m_Radius
+      value: 0.59
+      objectReference: {fileID: 0}
+    - target: {fileID: 3692463945112656143, guid: a134cc40a117af44daa5d51a4d3e902a, type: 3}
+      propertyPath: m_Center.z
+      value: 2.92
       objectReference: {fileID: 0}
     - target: {fileID: 7724768560626574633, guid: a134cc40a117af44daa5d51a4d3e902a, type: 3}
       propertyPath: m_LocalPosition.x

@@ -140,7 +140,7 @@ MonoBehaviour:
   carriedObject: {fileID: 0}
   carryPoint: {fileID: 0}
   hitRange: 2.5
-  playerAudioSource: {fileID: 0}
+  playerAudioSource: {fileID: 2156201757411810303}
   gameSettingsSO: {fileID: 11400000, guid: a3efab0d2fded724c87672e1bdd84afb, type: 2}
 --- !u!114 &383616103278508239
 MonoBehaviour:
@@ -645,10 +645,10 @@ CapsuleCollider:
   m_ProvidesContacts: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.05
-  m_Height: 2
+  m_Radius: 0.59
+  m_Height: 5.84
   m_Direction: 2
-  m_Center: {x: 0, y: 0, z: 1}
+  m_Center: {x: 0, y: 0, z: 2.92}
 --- !u!114 &2684391216001221328
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -662,6 +662,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerInput: {fileID: 7025571321497782876}
-  length: 2
-  radius: 0.05
+  length: 5.84
+  radius: 0.59
   probe: {fileID: 3692463945112656143}
