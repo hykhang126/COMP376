@@ -42,8 +42,7 @@ public class Pause : MonoBehaviour
         pauseMenu.SetActive(false); // Ensure the pause menu is hidden at start
         resumeButton.onClick.AddListener(ResumeGame);
         quitButton.onClick.AddListener(QuitGame);
-
-        action.Disable();
+        
         inventorySystem = FindAnyObjectByType<Inventory>();
 
         if (!gameSettingsSO)
