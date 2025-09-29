@@ -1,5 +1,8 @@
 using System;
 using NaughtyAttributes;
+using Unity.Mathematics;
+using Unity.VisualScripting;
+using UnityEditor.Rendering.LookDev;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
@@ -13,6 +16,8 @@ public class Player : MonoBehaviour
     Vector2 movementInput;
 
     [SerializeField] float movementSpeed = 5f;
+    [SerializeField] float sprintingSpeed = 7f;
+    [SerializeField][Range(0f, 1f)] float sprintAcceleration = 0.15f;
 
     [SerializeField] bool isInverted = false;
 
@@ -86,6 +91,8 @@ public class Player : MonoBehaviour
         playerInput.actions["Move"].canceled += OnMove;
         playerInput.actions["Look"].performed += OnLook;
         playerInput.actions["Look"].canceled += OnLook;
+        playerInput.actions["Sprint"].performed += OnSprint;
+        playerInput.actions["Sprint"].canceled += OnSprint;
 
         playerInput.actions["RotateCarryObject"].performed += ctx => RotateCarryObject();
 
@@ -217,6 +224,17 @@ public class Player : MonoBehaviour
         currentPitch += lookInput.y * sensitivity * Time.deltaTime;
     }
 
+    public void OnSprint(InputAction.CallbackContext context)
+    {
+        bool isSprinting = context.ReadValueAsButton();
+        if (isSprinting && movementInput.y > float.Epsilon) // Only sprint if forward move input is held
+            stateMachine.InvokeStateEvent("toSprinting");
+        else
+        {
+            stateMachine.InvokeStateEvent("toIdle");
+        }
+    }
+
     #region Idle State Callbacks
     public void IdleUpdate()
     {
@@ -246,6 +264,43 @@ public class Player : MonoBehaviour
 
     }
     #endregion
+    #region  Sprinting State Callbacks
+
+    public void SprintingUpdate()
+    {
+        // Clamp pitch camera (local)
+        currentPitch = Mathf.Clamp(currentPitch, minY, maxY);
+
+        // Rotate camera
+        Quaternion curretnPitchRotation = _camera.transform.localRotation;
+        Quaternion tragetPitchRotation = Quaternion.Euler(currentPitch, 0f, 0f);
+        // Slerp from current pitch to target pitch using cameraSmoothing
+        _camera.transform.localRotation = Quaternion.Slerp(curretnPitchRotation, tragetPitchRotation, 1f - cameraSmoothing);
+    }
+
+    public void SprintingFixedUpdate()
+    {
+        // Return to Idle state if player is not moving or has stopped pressing movemnet input
+        if (math.abs(movementInput.magnitude) <= float.Epsilon || math.abs(rb.linearVelocity.magnitude) <= float.Epsilon)
+        {
+            stateMachine.InvokeStateEvent("toIdle");
+        }
+
+        // Rotate Body
+        Quaternion currentBodyRotation = rb.transform.rotation;
+        Quaternion targetBodyRotation = Quaternion.Euler(0f, currentYaw, 0f);
+        // Slerp from current yaw yaw to target yaw using cameraSmoothing
+        rb.transform.rotation = Quaternion.Slerp(currentBodyRotation, targetBodyRotation, 1f - cameraSmoothing);
+
+        // Move player
+        Vector3 moveDelta = new Vector3(movementInput.x, 0, movementInput.y).normalized;
+        Vector3 currentVelocity = rb.linearVelocity;
+        Vector3 targetVelocity = transform.TransformDirection(moveDelta) * sprintingSpeed;
+        // Lerp to accelerate to sprinting speed
+        Vector3 velocity = Vector3.Lerp(currentVelocity, targetVelocity, sprintAcceleration);
+        rb.linearVelocity = new Vector3(velocity.x, rb.linearVelocity.y, velocity.z);        
+    }
+    #endregion
     #region InMenu State Callbacks
     public void InMenuEnter()
     {
@@ -257,7 +312,7 @@ public class Player : MonoBehaviour
     {
         playerInput.actions["Move"].performed += OnMove;
         playerInput.actions["Look"].performed += OnLook;
-        
+
     }
     #endregion
 
