@@ -26,7 +26,7 @@ public class Pause : MonoBehaviour
 
     private Inventory inventorySystem;
 
-    private PlayerStateType previousPlayerState;
+    private string previousPlayerState;
 
 
 
@@ -80,9 +80,11 @@ public class Pause : MonoBehaviour
     }
     public void PauseGame()
     {
-        if (PlayerState.instance.currentState == PlayerStateType.InMenu) return;
-        previousPlayerState = PlayerState.instance.currentState;
-        PlayerState.instance.TriggerTransition(PlayerStateType.InMenu);
+        // State handler
+        if (Player.InstanceReference.stateMachine.GetCurrentStateName() == PlayerStateType.InMenu.ToString()) return;
+        previousPlayerState = Player.InstanceReference.stateMachine.GetCurrentStateName();
+        Player.InstanceReference.stateMachine.InvokeStateEvent(PlayerStateType.InMenu.ToString());
+
         Time.timeScale = 0f; // Pause the game
         paused = true;
         pauseMenu.SetActive(true); // Show the pause menu
@@ -113,7 +115,8 @@ public class Pause : MonoBehaviour
 
         //Might cause a bug where if you pause when you were carrying before
 
-        PlayerState.instance.TriggerTransition(previousPlayerState);
+        // Reset to previous state
+        Player.InstanceReference.stateMachine.InvokeStateEvent(previousPlayerState);
     }
 
     public void QuitGame()

@@ -62,7 +62,7 @@ public class MainMenu : MonoBehaviour
 
     public void Start()
     {
-        PlayerState.instance.TriggerTransition(PlayerStateType.InMenu);
+        Player.InstanceReference.stateMachine.InvokeStateEvent(PlayerStateType.InMenu.ToString());
         StartCoroutine(MainMenuInit());
 
         blackVoid = GameObject.Find("BlackQuitVoid");
@@ -130,8 +130,10 @@ public class MainMenu : MonoBehaviour
 
         door.GetComponent<DoorAction>().CloseDoor();
         _player.playerInput.enabled = true;
-        PlayerState.instance.TriggerTransition(PlayerStateType.Idle);
-        this.gameObject.SetActive(false);
+
+        Player.InstanceReference.stateMachine.InvokeStateEvent(PlayerStateType.Idle.ToString());
+
+        gameObject.SetActive(false);
         Cursor.lockState = CursorLockMode.Locked; // Unlock the cursor
         Cursor.visible = false; // Make the cursor visible
         EventSystem.current.SetSelectedGameObject(null);
