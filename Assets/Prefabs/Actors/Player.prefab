@@ -136,7 +136,7 @@ MonoBehaviour:
   maxY: 60
   cameraSmoothing: 0.75
   _inputMode: 0
-  mouseSensitivityMultiplier: 7.5
+  mouseSensitivityMultiplier: 1
   gamepadSensitivityMultiplier: 5
   carriedObject: {fileID: 0}
   carryPoint: {fileID: 0}

@@ -171,19 +171,19 @@ public class Player : MonoBehaviour
 
     public void RotateCarryObject()
     {
-        if (PlayerState.instance.currentState == PlayerStateType.CarryingObject)
+        if (Player.InstanceReference.stateMachine.GetCurrentStateName() == PlayerStateType.CarryingObject.ToString())
         {
             Debug.Log("Player is rotating the carried object.");
-            PlayerState.instance.TriggerTransition(PlayerStateType.RotatingCarryObject);
+            stateMachine.InvokeStateEvent(PlayerStateType.RotatingCarryObject.ToString());
             playerInput.actions["Move"].performed -= OnMove;
             playerInput.actions["Look"].performed -= OnLook;
             playerInput.actions["Look"].performed += carriedObject.GetComponent<CarryInteractable>().RotateObject;
             carriedObject.GetComponent<CarryInteractable>().DisableFixedJoint();
         }
-        else if (PlayerState.instance.currentState == PlayerStateType.RotatingCarryObject)
+        else if (Player.InstanceReference.stateMachine.GetCurrentStateName() == PlayerStateType.RotatingCarryObject.ToString())
         {
             Debug.Log("Player is not rotating the carried object.");
-            PlayerState.instance.TriggerTransition(PlayerStateType.CarryingObject);
+            stateMachine.InvokeStateEvent(PlayerStateType.CarryingObject.ToString());
             playerInput.actions["Move"].performed += OnMove;
             playerInput.actions["Look"].performed -= carriedObject.GetComponent<CarryInteractable>().RotateObject;
             playerInput.actions["Look"].performed += OnLook;
@@ -199,11 +199,11 @@ public class Player : MonoBehaviour
     {
         if (result)
         {
-            PlayerState.instance.TriggerTransition(PlayerStateType.CarryingObject);
+            Player.InstanceReference.stateMachine.InvokeStateEvent(PlayerStateType.CarryingObject.ToString());
         }
         else
         {
-            PlayerState.instance.TriggerTransition(PlayerStateType.Idle);
+            Player.InstanceReference.stateMachine.InvokeStateEvent(PlayerStateType.Idle.ToString());
         }
     }
 

@@ -23,7 +23,7 @@ public class CarryInteractable : Interactable
 
     public override void Interact(Player player)
     {
-        if (PlayerState.instance.currentState == PlayerStateType.CarryingObject
+        if (Player.InstanceReference.stateMachine.GetCurrentStateName() == PlayerStateType.CarryingObject.ToString()
             && !isCarried)
         {
             Debug.Log("Player is already carrying an object.");
@@ -43,7 +43,7 @@ public class CarryInteractable : Interactable
     {
         Debug.Log("Player is dropping the carried object.");
 
-        if (PlayerState.instance.currentState == PlayerStateType.RotatingCarryObject)
+        if (Player.InstanceReference.stateMachine.GetCurrentStateName() == PlayerStateType.RotatingCarryObject.ToString())
         {
             player.RotateCarryObject();
         }
