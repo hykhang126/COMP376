@@ -666,7 +666,7 @@ ParticleSystem:
     enabled: 1
     type: 8
     angle: 25
-    length: 4
+    length: 6
     boxThickness: {x: 0, y: 0, z: 0}
     radiusThickness: 1
     donutRadius: 0.2
@@ -870,7 +870,7 @@ ParticleSystem:
     rateOverTime:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 30
+      scalar: 50
       minScalar: 10
       maxCurve:
         serializedVersion: 2
@@ -995,13 +995,13 @@ ParticleSystem:
           inWeight: 0
           outWeight: 0
         - serializedVersion: 3
-          time: 0.4996376
+          time: 0.28900528
           value: 1
-          inSlope: 0.0000011964285
-          outSlope: 0.0000011964285
+          inSlope: 0.15182945
+          outSlope: 0.15182945
           tangentMode: 0
           weightedMode: 0
-          inWeight: 0.1994198
+          inWeight: 0.30797115
           outWeight: 0.33333334
         - serializedVersion: 3
           time: 1
