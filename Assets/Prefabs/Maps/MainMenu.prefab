@@ -9044,6 +9044,7 @@ MonoBehaviour:
   door: {fileID: 5203407389992926411}
   cameraSpeed: 5
   playerEndLocation: {fileID: 7165141470981679831}
+  blackVoid: {fileID: 8514991736040096152}
 --- !u!1 &3250041261276270302
 GameObject:
   m_ObjectHideFlags: 0

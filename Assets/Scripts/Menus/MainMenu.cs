@@ -22,12 +22,12 @@ public class MainMenu : MonoBehaviour
     [SerializeField] private float cameraSpeed = 10f;
 
     [SerializeField] private GameObject playerEndLocation;
+    [SerializeField] private GameObject blackVoid;
 
     private Pause pauseSystem;
 
     private Inventory inventorySystem;
 
-    private GameObject blackVoid;
 
     public void Awake()
     {
@@ -65,12 +65,7 @@ public class MainMenu : MonoBehaviour
         PlayerState.instance.TriggerTransition(PlayerStateType.InMenu);
         StartCoroutine(MainMenuInit());
 
-        blackVoid = GameObject.Find("BlackQuitVoid");
-        if (blackVoid == null)
-        {
-            Debug.LogError("CANNOT FIND VOID");
-        }
-        blackVoid.SetActive(false);
+
 
 
     }
@@ -137,7 +132,10 @@ public class MainMenu : MonoBehaviour
         _player.playerInput.enabled = true;
         // Transition player to Idle state after game start
         Player.InstanceReference.stateMachine.InvokeStateEvent("toIdle");
-
+        if (blackVoid != null)
+        {
+            blackVoid.SetActive(false);
+        }
         this.gameObject.SetActive(false);
         Cursor.lockState = CursorLockMode.Locked; // Unlock the cursor
         Cursor.visible = false; // Make the cursor visible
