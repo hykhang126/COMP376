@@ -66,8 +66,13 @@ public class MainMenu : MonoBehaviour
         StartCoroutine(MainMenuInit());
 
         blackVoid = GameObject.Find("BlackQuitVoid");
-
+        if (blackVoid == null)
+        {
+            Debug.LogError("CANNOT FIND VOID");
+        }
         blackVoid.SetActive(false);
+
+
     }
 
     private IEnumerator MainMenuInit()
@@ -130,7 +135,9 @@ public class MainMenu : MonoBehaviour
 
         door.GetComponent<DoorAction>().CloseDoor();
         _player.playerInput.enabled = true;
-        PlayerState.instance.TriggerTransition(PlayerStateType.Idle);
+        // Transition player to Idle state after game start
+        Player.InstanceReference.stateMachine.InvokeStateEvent("toIdle");
+
         this.gameObject.SetActive(false);
         Cursor.lockState = CursorLockMode.Locked; // Unlock the cursor
         Cursor.visible = false; // Make the cursor visible
