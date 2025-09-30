@@ -1,4 +1,8 @@
+using System;
 using NaughtyAttributes;
+using Unity.Mathematics;
+using Unity.VisualScripting;
+using UnityEditor.Rendering.LookDev;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
@@ -6,36 +10,62 @@ using UnityEngine.UI;
 [RequireComponent(typeof(PlayerInput))]
 public class Player : MonoBehaviour
 {
+    // Global Player reference
+    public static Player InstanceReference { get; private set; }
+
     Vector2 movementInput;
 
     [SerializeField] float movementSpeed = 5f;
-    
+    [SerializeField] float sprintingSpeed = 7f;
+    [SerializeField][Range(0f, 1f)] float sprintAcceleration = 0.15f;
+
     [SerializeField] bool isInverted = false;
 
     GameObject _camera;
 
-    private float lookDeltaX = 0f;
-    private float lookDeltaY = 0f;
-
     Rigidbody rb;
-
-    private float targetYRotation = 0f; // Used for model rotation in FixedUpdate
 
     // Clamp angles for vertical look (Y-axis rotation)
     [SerializeField] private float minY = -40f;  // Min vertical rotation angle
     [SerializeField] private float maxY = 40f;   // Max vertical rotation angle
 
-    private float currentXRotation = 0f;  // Track current pitch (vertical rotation)
+    [SerializeField][Range(0f, 1f)] private float cameraSmoothing = 0.5f;
 
-    [SerializeField] private float mouseSensitivityMultiplier = 200f; // Mouse sensitivity multiplier
+    private float currentPitch = 0f;  // Track current pitch (vertical rotation)
+    private float currentYaw = 0f;
+
+    //Set sensitivity whenever inputMode is updated
+    [SerializeField]
+    private INPUT_MODE _inputMode = INPUT_MODE.MOUSE_KEYBOARD;
+    public INPUT_MODE InputMode
+    {
+        get { return _inputMode; }
+        set
+        {
+            _inputMode = value;
+            if (value == INPUT_MODE.GAMEPAD)
+            {
+                sensitivity = gamepadSensitivityMultiplier;
+            }
+            else
+            {
+                sensitivity = mouseSensitivityMultiplier;
+            }
+        }
+    }
+    public enum INPUT_MODE { MOUSE_KEYBOARD, GAMEPAD };
+
+    [SerializeField] private float mouseSensitivityMultiplier = 5f; // Mouse sensitivity multiplier
 
     [SerializeField] private float gamepadSensitivityMultiplier = 5f; // Gamepad analog stick sensitivity multiplier
 
+    private float sensitivity = 5f;
+
     private Vector2 lookInput;
 
-    public PlayerInput playerInput { get; private set; }
+    public StateMachine stateMachine { get; private set; }
 
-    private RaycastHit hit;
+    public PlayerInput playerInput { get; private set; }
 
     public Inventory inventory { get; private set; }
 
@@ -47,7 +77,7 @@ public class Player : MonoBehaviour
 
     [SerializeField] private float hitRange = 2f;
 
-    private HUD HUD;
+    [SerializeField] private HUD HUD;
 
     public AudioSource playerAudioSource;
 
@@ -55,21 +85,48 @@ public class Player : MonoBehaviour
 
     public void Awake()
     {
+
         playerInput = GetComponent<PlayerInput>();
+        stateMachine = GetComponent<StateMachine>();
 
         playerInput.actions["Move"].performed += OnMove;
         playerInput.actions["Move"].canceled += OnMove;
         playerInput.actions["Look"].performed += OnLook;
         playerInput.actions["Look"].canceled += OnLook;
-        //playerInput.actions["Scroll"].performed += inventory.CycleItems;
+        playerInput.actions["Sprint"].performed += OnSprint;
+        playerInput.actions["Sprint"].canceled += OnSprint;
 
-        playerInput.actions["Interact"].performed += ctx => OnInteract();
         playerInput.actions["RotateCarryObject"].performed += ctx => RotateCarryObject();
+
+        // Set payer instance reference on init and remove any old refrences
+        if (InstanceReference != null && InstanceReference != this)
+        {
+            // Makes sure no duplicate instances can exsit
+            Debug.LogError($"Destroying duplicate Player instance '{gameObject}'");
+            Destroy(gameObject);
+            return;
+        }
+        InstanceReference = this;
+        // Keep object loaded between scene loads. Not required 
+        //DontDestroyOnLoad(gameObject);
+
     }
 
     void Start()
     {
-        HUD = GameObject.Find("UI").transform.Find("HUD").GetComponent<HUD>();
+        // Set currentYaw value to starting transform forward direction
+        currentYaw = transform.rotation.y;
+        // Set starting sensitivity based on initial _inputMode
+        if (_inputMode == INPUT_MODE.MOUSE_KEYBOARD)
+        {
+            sensitivity = mouseSensitivityMultiplier;
+        }
+        else
+        {
+            sensitivity = gamepadSensitivityMultiplier;
+        }
+
+        // Connect to HUD
         if (HUD == null)
         {
             Debug.LogError("HUD not found");
@@ -78,13 +135,8 @@ public class Player : MonoBehaviour
         _camera = GameObject.Find("camera");
         rb = GetComponent<Rigidbody>();
 
-        // Disable Rigidbody rotation so manual rotation doesn't conflict
-        rb.freezeRotation = true;
-
         // Initialize camera rotation
         _camera.transform.localRotation = Quaternion.Euler(0, 0, 0);
-
-        hit = new RaycastHit();
 
         //Connect to Inventory System
         inventory = FindAnyObjectByType<Inventory>();
@@ -156,11 +208,6 @@ public class Player : MonoBehaviour
         }
     }
 
-    public RaycastHit GetRaycastHit()
-    {
-        return hit;
-    }
-
     public void OnMove(InputAction.CallbackContext context)
     {
         movementInput = context.ReadValue<Vector2>();
@@ -169,97 +216,105 @@ public class Player : MonoBehaviour
     public void OnLook(InputAction.CallbackContext context)
     {
         lookInput = context.ReadValue<Vector2>();
-    }
-
-    public void OnInteract()
-    {
-        Debug.Log("Interact button pressed");
-        if (carriedObject != null && (PlayerState.instance.currentState == PlayerStateType.CarryingObject || PlayerState.instance.currentState == PlayerStateType.RotatingCarryObject))
-        {
-            // If the player is carrying an object, drop it
-            carriedObject.GetComponent<CarryInteractable>().Interact(this);
-            return;
-        }
-        if (hit.collider != null && hit.collider.gameObject.GetComponent<Interactable>() != null)
-        {
-            // Call the Interact method on the Interactable component
-            hit.collider.GetComponent<Interactable>().Interact(this);
-        }
-    }
-
-    void Update()
-    {
-        // Draw a ray for debugging purposes
-        Debug.DrawRay(_camera.transform.position, _camera.transform.forward * hitRange, Color.red);
-        if (Physics.Raycast(_camera.transform.position, _camera.transform.forward, out hit, hitRange))
-        {
-            //Check if the object has an Interactable component, show UI prompt to tell the player they can interact.
-            if (hit.collider.gameObject.TryGetComponent(out Interactable interactable))
-            {
-                HUD.ShowInteractPrompt(true);
-                //Debug.Log("Press 'E' to interact");
-            }
-        }
-        else
-        {
-            HUD.ShowInteractPrompt(false);
-        }
-
-        lookInput = lookInput.normalized;
-        float gamepadSensitivity = gameSettingsSO.mouseSensitivity * gamepadSensitivityMultiplier;
-        float mouseSensitivity = gameSettingsSO.mouseSensitivity * mouseSensitivityMultiplier;
-
-        if (Gamepad.current != null && Gamepad.current.wasUpdatedThisFrame)
-        {
-            // Analog stick sensitivity multiplier
-            lookDeltaX += lookInput.x * gamepadSensitivity * Time.deltaTime;
-            lookDeltaY += lookInput.y * gamepadSensitivity * Time.deltaTime;
-        }
-        else if (Gamepad.current == null)
-        {
-            // Mouse input (already in delta)
-            lookDeltaX += lookInput.x * mouseSensitivity * Time.deltaTime;
-            lookDeltaY += lookInput.y * mouseSensitivity * Time.deltaTime;
-        }
-
-        // Movement
-        Vector3 moveDirection = new Vector3(movementInput.x, 0, movementInput.y).normalized;
-        targetYRotation += lookDeltaX;
-
-        // Vertical rotation (Camera)
         if (!isInverted)
         {
-            currentXRotation -= lookDeltaY;  // Inverted vertical rotation
+            //Invert to adjust for inverted camera input
+            lookInput.y *= -1f;
         }
+        currentYaw += lookInput.x * sensitivity * Time.deltaTime;
+        currentPitch += lookInput.y * sensitivity * Time.deltaTime;
+    }
+
+    public void OnSprint(InputAction.CallbackContext context)
+    {
+        bool isSprinting = context.ReadValueAsButton();
+        if (isSprinting && movementInput.y > float.Epsilon) // Only sprint if forward move input is held
+            stateMachine.InvokeStateEvent("toSprinting");
         else
         {
-            currentXRotation += lookDeltaY;  // Normal vertical rotation
+            stateMachine.InvokeStateEvent("toIdle");
         }
-
-        // Clamp the vertical rotation to the desired limits
-        currentXRotation = Mathf.Clamp(currentXRotation, minY, maxY);
-
-        // Apply the clamped vertical rotation to the camera
-        _camera.transform.localRotation = Quaternion.Euler(currentXRotation, 0, 0);
-
-        // Reset deltas after applying
-        lookDeltaX = 0f;
-        lookDeltaY = 0f;
     }
 
-    void FixedUpdate()
+    #region Idle State Callbacks
+    public void IdleUpdate()
     {
-        //Model translation
-        Vector3 moveDirection = new Vector3(movementInput.x, 0, movementInput.y).normalized;
-        Vector3 velocity = transform.TransformDirection(moveDirection) * movementSpeed;
+        // Clamp pitch camera (local)
+        currentPitch = Mathf.Clamp(currentPitch, minY, maxY);
+
+        // Rotate camera
+        Quaternion curretnPitchRotation = _camera.transform.localRotation;
+        Quaternion tragetPitchRotation = Quaternion.Euler(currentPitch, 0f, 0f);
+        // Slerp from current pitch to target pitch using cameraSmoothing
+        _camera.transform.localRotation = Quaternion.Slerp(curretnPitchRotation, tragetPitchRotation, 1f - cameraSmoothing);
+
+    }
+
+    public void IdleFixedUpdate()
+    {
+        // Rotate Body
+        Quaternion currentBodyRotation = rb.transform.rotation;
+        Quaternion targetBodyRotation = Quaternion.Euler(0f, currentYaw, 0f);
+        // Slerp from current yaw yaw to target yaw using cameraSmoothing
+        rb.transform.rotation = Quaternion.Slerp(currentBodyRotation, targetBodyRotation, 1f - cameraSmoothing);
+
+        // Move player
+        Vector3 moveDelta = new Vector3(movementInput.x, 0, movementInput.y).normalized;
+        Vector3 velocity = transform.TransformDirection(moveDelta) * movementSpeed;
         rb.linearVelocity = new Vector3(velocity.x, rb.linearVelocity.y, velocity.z);
 
-        // Model rotation using Rigidbody
-        Quaternion deltaRotation = Quaternion.Euler(0f, targetYRotation, 0f);
-        rb.MoveRotation(rb.rotation * deltaRotation);
+    }
+    #endregion
+    #region  Sprinting State Callbacks
 
-        // Reset rotation after applying it
-        targetYRotation = 0f;   
+    public void SprintingUpdate()
+    {
+        // Clamp pitch camera (local)
+        currentPitch = Mathf.Clamp(currentPitch, minY, maxY);
+
+        // Rotate camera
+        Quaternion curretnPitchRotation = _camera.transform.localRotation;
+        Quaternion tragetPitchRotation = Quaternion.Euler(currentPitch, 0f, 0f);
+        // Slerp from current pitch to target pitch using cameraSmoothing
+        _camera.transform.localRotation = Quaternion.Slerp(curretnPitchRotation, tragetPitchRotation, 1f - cameraSmoothing);
     }
 
+    public void SprintingFixedUpdate()
+    {
+        // Return to Idle state if player is not moving or has stopped pressing movemnet input
+        if (math.abs(movementInput.magnitude) <= float.Epsilon || math.abs(rb.linearVelocity.magnitude) <= float.Epsilon)
+        {
+            stateMachine.InvokeStateEvent("toIdle");
+        }
+
+        // Rotate Body
+        Quaternion currentBodyRotation = rb.transform.rotation;
+        Quaternion targetBodyRotation = Quaternion.Euler(0f, currentYaw, 0f);
+        // Slerp from current yaw yaw to target yaw using cameraSmoothing
+        rb.transform.rotation = Quaternion.Slerp(currentBodyRotation, targetBodyRotation, 1f - cameraSmoothing);
+
+        // Move player
+        Vector3 moveDelta = new Vector3(movementInput.x, 0, movementInput.y).normalized;
+        Vector3 currentVelocity = rb.linearVelocity;
+        Vector3 targetVelocity = transform.TransformDirection(moveDelta) * sprintingSpeed;
+        // Lerp to accelerate to sprinting speed
+        Vector3 velocity = Vector3.Lerp(currentVelocity, targetVelocity, sprintAcceleration);
+        rb.linearVelocity = new Vector3(velocity.x, rb.linearVelocity.y, velocity.z);        
     }
+    #endregion
+    #region InMenu State Callbacks
+    public void InMenuEnter()
+    {
+        playerInput.actions["Move"].performed -= OnMove;
+        playerInput.actions["Look"].performed -= OnLook;
+    }
+
+    public void InMenuExit()
+    {
+        playerInput.actions["Move"].performed += OnMove;
+        playerInput.actions["Look"].performed += OnLook;
+
+    }
+    #endregion
+
+}

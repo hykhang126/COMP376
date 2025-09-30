@@ -22,12 +22,12 @@ public class MainMenu : MonoBehaviour
     [SerializeField] private float cameraSpeed = 10f;
 
     [SerializeField] private GameObject playerEndLocation;
+    [SerializeField] private GameObject blackVoid;
 
     private Pause pauseSystem;
 
     private Inventory inventorySystem;
 
-    private GameObject blackVoid;
 
     public void Awake()
     {
@@ -65,9 +65,9 @@ public class MainMenu : MonoBehaviour
         PlayerState.instance.TriggerTransition(PlayerStateType.InMenu);
         StartCoroutine(MainMenuInit());
 
-        blackVoid = GameObject.Find("BlackQuitVoid");
 
-        blackVoid.SetActive(false);
+
+
     }
 
     private IEnumerator MainMenuInit()
@@ -76,7 +76,7 @@ public class MainMenu : MonoBehaviour
         Cursor.lockState = CursorLockMode.None; // Unlock the cursor
         Cursor.visible = true; // Make the cursor visible
         EventSystem.current.SetSelectedGameObject(start.gameObject);
-        _player.playerInput.enabled = false; // Disable player input
+        // _player.playerInput.enabled = false; // Disable player input
     }
 
     public void StartGame()
@@ -130,7 +130,12 @@ public class MainMenu : MonoBehaviour
 
         door.GetComponent<DoorAction>().CloseDoor();
         _player.playerInput.enabled = true;
-        PlayerState.instance.TriggerTransition(PlayerStateType.Idle);
+        // Transition player to Idle state after game start
+        Player.InstanceReference.stateMachine.InvokeStateEvent("toIdle");
+        if (blackVoid != null)
+        {
+            blackVoid.SetActive(false);
+        }
         this.gameObject.SetActive(false);
         Cursor.lockState = CursorLockMode.Locked; // Unlock the cursor
         Cursor.visible = false; // Make the cursor visible
