@@ -122,7 +122,7 @@ public class Inventory : MonoBehaviour
         //Set the item name text to the last item seen before closing the inventory
         if (items.Count > 0)
         {
-            itemNameText.text = items[currentItemIndex].itemName; // Update the item name text
+            itemNameText.text = items[currentItemIndex].itemContractSO.Name; // Update the item name text
             ShowItemPreview();
         }
         else
@@ -164,7 +164,7 @@ public class Inventory : MonoBehaviour
         // Logic to cycle through items in the inventory
         if (items.Count > 0)
         {
-            itemNameText.text = items[currentItemIndex].itemName; // Update the item name text
+            itemNameText.text = items[currentItemIndex].itemContractSO.Name; // Update the item name text
             ShowItemPreview();
         }
 
@@ -186,8 +186,8 @@ public class Inventory : MonoBehaviour
         if (items.Count == 0 || !isInventoryOpen) return; // No items to cycle through
         currentItemIndex = (currentItemIndex + 1) % items.Count;
         playerInventorySO.currentItemIndex = currentItemIndex; // Update the current item index in the SO
-        itemNameText.text = items[currentItemIndex].itemName; // Update the item name text
-        Debug.Log("Next item selected: " + items[currentItemIndex].itemName);
+        itemNameText.text = items[currentItemIndex].itemContractSO.Name; // Update the item name text
+        Debug.Log("Next item selected: " + items[currentItemIndex].itemContractSO.Name);
 
         ShowItemPreview();
     }
@@ -197,19 +197,18 @@ public class Inventory : MonoBehaviour
         if (items.Count == 0 || !isInventoryOpen) return; // No items to cycle through
         currentItemIndex = (currentItemIndex - 1 + items.Count) % items.Count;
         playerInventorySO.currentItemIndex = currentItemIndex; // Update the current item index in the SO
-        itemNameText.text = items[currentItemIndex].itemName; // Update the item name text
-        Debug.Log("Previous item selected: " + items[currentItemIndex].itemName);
+        itemNameText.text = items[currentItemIndex].itemContractSO.Name; // Update the item name text
+        Debug.Log("Previous item selected: " + items[currentItemIndex].itemContractSO.Name);
 
         ShowItemPreview();
     }
 
-    public void AddItem(string itemName, int itemKey, GameObject itemPrefab = null)
+    public void AddItem(Item item)
     {
-        Item newItem = new(itemName, itemKey, itemPrefab);
 
         if (playerInventorySO != null)
         {
-            playerInventorySO.items.Add(newItem);
+            playerInventorySO.items.Add(item);
             playerInventorySO.currentItemIndex = currentItemIndex;
             player.playerAudioSource.pitch = Random.Range(0.9f, 1.1f);
             player.playerAudioSource.PlayOneShot(pickUpAudioClip);
@@ -242,11 +241,11 @@ public class Inventory : MonoBehaviour
         return false;
     }
 
-    public int GetItemIndex(int itemKey)
+    public int GetItemIndex(string itemiD)
     {
         for (int i = 0; i < items.Count; i++)
         {
-            if (items[i].itemKey == itemKey)
+            if (items[i].itemContractSO.Id == itemiD)
             {
                 Item FoundItem = items[i];
                 return i;
@@ -256,14 +255,14 @@ public class Inventory : MonoBehaviour
         return -1;
     }
 
-    public int GetEquippedItemKey()
+    public string GetEquippedItemKey()
     {
         if (items.Count > 0 && currentItemIndex >= 0 && currentItemIndex < items.Count)
         {
-            return items[currentItemIndex].itemKey;
+            return items[currentItemIndex].itemContractSO.Id;
         }
 
-        return -1;
+        return null;
     }
 
     public bool UseItemByItemKey(int itemKey)
@@ -299,21 +298,12 @@ public class Inventory : MonoBehaviour
 
         Item currentItem = items[currentItemIndex];
 
-        if (currentItem.itemPrefab != null)
-        {
-            currentItemPreview = Instantiate(currentItem.itemPrefab, itemPreviewSpawnPoint.position, Quaternion.identity, itemPreviewSpawnPoint);
-            // Rotate 90 degress over Y and Z axis
-            currentItemPreview.transform.localRotation = Quaternion.Euler(0, 90, 90);
-            // Scale the preivew by 3 times
-            currentItemPreview.transform.localScale = new Vector3(3, 3, 3);
-
-            // Ensure it's on the correct layer so only the InventoryCamera sees it
-            SetupChildrenRecursively(currentItemPreview, LayerMask.NameToLayer("ItemLayer"));
-        }
+        //Will have an item prefab already in position
+        //Change the mesh of the prefab to the current item's mesh
     }
 
     // Utility function to set layer recursively
-    private void SetupChildrenRecursively(GameObject obj, int newLayer)
+    /*private void SetupChildrenRecursively(GameObject obj, int newLayer)
     {
         if (obj == null) return;
 
@@ -332,6 +322,6 @@ public class Inventory : MonoBehaviour
                 SetupChildrenRecursively(child.gameObject, newLayer);
             }
         }
-    }
+    }*/
 
 }
