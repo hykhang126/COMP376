@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 8904555833995852464}
   - component: {fileID: 6481338856768031983}
   - component: {fileID: 7267870738331943138}
+  - component: {fileID: 970169419218756911}
   m_Layer: 0
   m_Name: Hallway Key (42)
   m_TagString: Untagged
@@ -91,9 +92,29 @@ MonoBehaviour:
   interactionExited:
     m_PersistentCalls:
       m_Calls: []
-  _collider: {fileID: 8821435692638421680}
   cooldown: 1
   isOneShot: 0
+--- !u!65 &970169419218756911
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5764973781213522379}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.6937408, y: 0.07835388, z: 0.21252063}
+  m_Center: {x: 0.15312946, y: -0.022823334, z: -0.034099374}
 --- !u!1001 &6163418850028647608
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -218,8 +239,3 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!64 &8821435692638421680 stripped
-MeshCollider:
-  m_CorrespondingSourceObject: {fileID: 3451118302482216456, guid: 998e9b809f8b42b42b2c51d5eb45b9f3, type: 3}
-  m_PrefabInstance: {fileID: 6163418850028647608}
-  m_PrefabAsset: {fileID: 0}

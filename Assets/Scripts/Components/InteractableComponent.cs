@@ -41,7 +41,6 @@ public class InteractableComponent : MonoBehaviour
             StartCoroutine(CooldownCoroutine());
         }
 
-
     }
     void OnInteractionTriggered()
     {

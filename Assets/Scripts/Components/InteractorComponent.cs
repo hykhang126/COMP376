@@ -4,11 +4,26 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-[DisallowMultipleComponent, RequireComponent(typeof(CapsuleCollider))]
+[RequireComponent(typeof(CapsuleCollider))]
 public class InteractorComponent : MonoBehaviour
 {
 
     [SerializeField] private PlayerInput playerInput;
+    [SerializeField]
+    private String _interactionAction = "Interact";
+    private String interactionAction
+    {
+        set
+        {
+            playerInput.actions[_interactionAction].performed -= OnInteractTriggered;
+            _interactionAction = value;
+            playerInput.actions[_interactionAction].performed += OnInteractTriggered;
+        }
+        get
+        {
+            return _interactionAction;
+        }
+    }
 
     [Header("Forward probe (local Z)")]
     [SerializeField]
@@ -18,7 +33,7 @@ public class InteractorComponent : MonoBehaviour
 
     public bool canInteractorTrigger { get; private set; }
 
-    [SerializeField,HideInInspector]
+    [SerializeField, HideInInspector]
     private CapsuleCollider probe;
     private InteractableComponent _interactable_component;
 
@@ -31,7 +46,7 @@ public class InteractorComponent : MonoBehaviour
         }
         else
         {
-            playerInput.actions["Interact"].performed += OnInteractTriggered;
+            playerInput.actions[_interactionAction].performed += OnInteractTriggered;
         }
     }
 

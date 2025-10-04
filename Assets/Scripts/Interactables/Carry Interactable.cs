@@ -45,7 +45,7 @@ public class CarryInteractable : Interactable
 
         if (Player.InstanceReference.stateMachine.GetCurrentStateName() == PlayerStateType.RotatingCarryObject.ToString())
         {
-            player.RotateCarryObject();
+            //player.RotateCarryObject();
         }
 
             // Drop logic
@@ -57,11 +57,11 @@ public class CarryInteractable : Interactable
 
         rb.useGravity = true;
 
-        player.SetIsCarrying(false);
+        //player.SetIsCarrying(false);
         isCarried = false;
         gameObject.layer = LayerMask.NameToLayer("Default");
 
-        player.carriedObject = null;
+        //player.carriedObject = null;
     }
 
     private void PickUp(Player player)
@@ -69,19 +69,19 @@ public class CarryInteractable : Interactable
         // Pick up logic
         this.player = player;
         isCarried = true;
-        player.SetIsCarrying(true);
+        //player.SetIsCarrying(true);
 
         rb.useGravity = false;
 
         gameObject.layer = LayerMask.NameToLayer("Carry");
 
         carryJoint = gameObject.AddComponent<FixedJoint>();
-        carryJoint.connectedBody = player.carryPoint.GetComponent<Rigidbody>();
+        //carryJoint.connectedBody = player.carryPoint.GetComponent<Rigidbody>();
 
         carryJoint.breakForce = Mathf.Infinity;
         carryJoint.breakTorque = Mathf.Infinity;
 
-        this.player.carriedObject = this.gameObject;
+        //this.player.carriedObject = this.gameObject;
     }
 
     public void EnableFixedJoint()
@@ -89,12 +89,12 @@ public class CarryInteractable : Interactable
         if (carryJoint == null)
         {
             carryJoint = gameObject.AddComponent<FixedJoint>();
-            carryJoint.connectedBody = player.carryPoint.GetComponent<Rigidbody>();
+            //carryJoint.connectedBody = player.carryPoint.GetComponent<Rigidbody>();
 
             carryJoint.breakForce = Mathf.Infinity;
             carryJoint.breakTorque = Mathf.Infinity;
 
-            player.carriedObject = this.gameObject;
+            //player.carriedObject = this.gameObject;
         }
 
         rb.constraints = RigidbodyConstraints.None;
