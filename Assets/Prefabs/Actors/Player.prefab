@@ -130,8 +130,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   movementSpeed: 2.5
-  sprintingSpeed: 7
+  sprintingSpeed: 5
   sprintAcceleration: 0.15
+  crouchSpeed: 1.5
   isInverted: 0
   minY: -60
   maxY: 60
@@ -158,10 +159,54 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   states:
+  - stateName: InMenu
+    transitions:
+    - triggerEvent: toIdle
+      toState: Idle
+    - triggerEvent: toCrouch
+      toState: Crouch
+    stateEnter:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 208628007290521926}
+          m_TargetAssemblyTypeName: Player, Assembly-CSharp
+          m_MethodName: InMenuEnter
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+    stateExit:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 208628007290521926}
+          m_TargetAssemblyTypeName: Player, Assembly-CSharp
+          m_MethodName: InMenuExit
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+    stateUpdate:
+      m_PersistentCalls:
+        m_Calls: []
+    stateFixedUpdate:
+      m_PersistentCalls:
+        m_Calls: []
   - stateName: Idle
     transitions:
     - triggerEvent: toSprinting
       toState: Sprinting
+    - triggerEvent: toCrouch
+      toState: Crouch
     stateEnter:
       m_PersistentCalls:
         m_Calls: []
@@ -238,7 +283,7 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
-  - stateName: InMenu
+  - stateName: Crouch
     transitions:
     - triggerEvent: toIdle
       toState: Idle
@@ -247,7 +292,7 @@ MonoBehaviour:
         m_Calls:
         - m_Target: {fileID: 208628007290521926}
           m_TargetAssemblyTypeName: Player, Assembly-CSharp
-          m_MethodName: InMenuEnter
+          m_MethodName: CrouchEnter
           m_Mode: 1
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
@@ -262,7 +307,7 @@ MonoBehaviour:
         m_Calls:
         - m_Target: {fileID: 208628007290521926}
           m_TargetAssemblyTypeName: Player, Assembly-CSharp
-          m_MethodName: InMenuExit
+          m_MethodName: CrouchExit
           m_Mode: 1
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
@@ -274,10 +319,34 @@ MonoBehaviour:
           m_CallState: 2
     stateUpdate:
       m_PersistentCalls:
-        m_Calls: []
+        m_Calls:
+        - m_Target: {fileID: 208628007290521926}
+          m_TargetAssemblyTypeName: Player, Assembly-CSharp
+          m_MethodName: CrouchUpdate
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
     stateFixedUpdate:
       m_PersistentCalls:
-        m_Calls: []
+        m_Calls:
+        - m_Target: {fileID: 208628007290521926}
+          m_TargetAssemblyTypeName: Player, Assembly-CSharp
+          m_MethodName: CrouchFixedUpdate
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
   globalTransitions:
   - triggerEvent: toInMenu
     toState: InMenu

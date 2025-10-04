@@ -1,9 +1,10 @@
+using UnityEngine;
 using System;
+using System.Collections;
 using NaughtyAttributes;
 using Unity.Mathematics;
 using Unity.VisualScripting;
 using UnityEditor.Rendering.LookDev;
-using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
@@ -15,10 +16,11 @@ public class Player : MonoBehaviour
 
     Vector2 movementInput;
 
-    [SerializeField] float movementSpeed = 5f;
-    [SerializeField] float sprintingSpeed = 7f;
+    [SerializeField] float movementSpeed = 2.5f;
+    [SerializeField] float sprintingSpeed = 4f;
     [SerializeField][Range(0f, 1f)] float sprintAcceleration = 0.15f;
 
+    [SerializeField] float crouchSpeed = 1.5f;
     [SerializeField] bool isInverted = false;
 
     GameObject _camera;
@@ -95,6 +97,9 @@ public class Player : MonoBehaviour
         playerInput.actions["Look"].canceled += OnLook;
         playerInput.actions["Sprint"].performed += OnSprint;
         playerInput.actions["Sprint"].canceled += OnSprint;
+        playerInput.actions["Crouch"].performed += OnCrouch;
+        playerInput.actions["Crouch"].canceled += OnCrouch;
+
 
         playerInput.actions["RotateCarryObject"].performed += ctx => RotateCarryObject();
 
@@ -236,6 +241,19 @@ public class Player : MonoBehaviour
         }
     }
 
+    public void OnCrouch(InputAction.CallbackContext context)
+    {
+        bool isCrouching = context.ReadValueAsButton();
+        if (isCrouching)
+        {
+            stateMachine.InvokeStateEvent("toCrouch");
+        }
+        else
+        {
+            stateMachine.InvokeStateEvent("toIdle");
+        }
+    }
+
     #region Idle State Callbacks
     public void IdleUpdate()
     {
@@ -265,7 +283,7 @@ public class Player : MonoBehaviour
 
     }
     #endregion
-    #region  Sprinting State Callbacks
+    #region Sprinting State Callbacks
 
     public void SprintingUpdate()
     {
@@ -299,22 +317,104 @@ public class Player : MonoBehaviour
         Vector3 targetVelocity = transform.TransformDirection(moveDelta) * sprintingSpeed;
         // Lerp to accelerate to sprinting speed
         Vector3 velocity = Vector3.Lerp(currentVelocity, targetVelocity, sprintAcceleration);
-        rb.linearVelocity = new Vector3(velocity.x, rb.linearVelocity.y, velocity.z);        
+        rb.linearVelocity = new Vector3(velocity.x, rb.linearVelocity.y, velocity.z);
+    }
+    #endregion
+    #region Crouch State Callbacks
+
+    public void CrouchEnter()
+    {
+        // Stop other coroutine if currently playing
+        //StopCoroutine(LerpToStandingScale());
+        // Lerp to crouching scale
+        //StartCoroutine(LerpToCrouchScale());
+    }
+
+    public void CrouchExit()
+    {
+        // Stop other coroutine if currently playing
+        //StopCoroutine(LerpToCrouchScale());
+        // Lerp to Standing scale
+        StartCoroutine(LerpToStandingScale());
+    }
+
+    public void CrouchUpdate()
+    {
+        // Clamp pitch camera (local)
+        currentPitch = Mathf.Clamp(currentPitch, minY, maxY);
+
+        // Rotate camera
+        Quaternion curretnPitchRotation = _camera.transform.localRotation;
+        Quaternion tragetPitchRotation = Quaternion.Euler(currentPitch, 0f, 0f);
+        // Slerp from current pitch to target pitch using cameraSmoothing
+        _camera.transform.localRotation = Quaternion.Slerp(curretnPitchRotation, tragetPitchRotation, 1f - cameraSmoothing);
+    }
+
+    public void CrouchFixedUpdate()
+    {
+        //Lerp to crouch scale over 4 frames
+        LerpToCrouchScale();
+        // Rotate Body
+        Quaternion currentBodyRotation = rb.transform.rotation;
+        Quaternion targetBodyRotation = Quaternion.Euler(0f, currentYaw, 0f);
+        // Slerp from current yaw yaw to target yaw using cameraSmoothing
+        rb.transform.rotation = Quaternion.Slerp(currentBodyRotation, targetBodyRotation, 1f - cameraSmoothing);
+
+        // Move player
+        Vector3 moveDelta = new Vector3(movementInput.x, 0, movementInput.y).normalized;
+        Vector3 velocity = transform.TransformDirection(moveDelta) * crouchSpeed;
+        rb.linearVelocity = new Vector3(velocity.x, rb.linearVelocity.y, velocity.z);
+    }
+
+    void LerpToCrouchScale()
+    {
+        transform.localScale = Vector3.Lerp(transform.localScale, new Vector3(1f, 0.5f, 1f), 0.25f);
+    }
+
+    IEnumerator LerpToStandingScale()
+    {
+        Vector3 startScale = transform.localScale;
+        Vector3 targetScale = new Vector3(1f, 1f, 1f);
+        float timeElapsed = 0f;
+        float lerpDuration = 0.15f;
+
+        while (timeElapsed < lerpDuration)
+        {
+            float t = timeElapsed / lerpDuration;
+            transform.localScale = Vector3.Lerp(startScale, targetScale, t);
+            timeElapsed += Time.fixedDeltaTime;
+            yield return null;
+        }
+        transform.localScale = targetScale;
     }
     #endregion
     #region InMenu State Callbacks
     public void InMenuEnter()
     {
         playerInput.actions["Move"].performed -= OnMove;
+        playerInput.actions["Move"].canceled -= OnMove;
         playerInput.actions["Look"].performed -= OnLook;
+        playerInput.actions["Look"].canceled -= OnLook;
+        playerInput.actions["Crouch"].performed -= OnCrouch;
+        playerInput.actions["Crouch"].canceled -= OnCrouch;
+        playerInput.actions["Sprint"].performed -= OnSprint;
+        playerInput.actions["Sprint"].canceled -= OnSprint;
+
     }
 
     public void InMenuExit()
     {
         playerInput.actions["Move"].performed += OnMove;
+        playerInput.actions["Move"].canceled += OnMove;
         playerInput.actions["Look"].performed += OnLook;
+        playerInput.actions["Look"].canceled += OnLook;
+        playerInput.actions["Crouch"].performed += OnCrouch;
+        playerInput.actions["Crouch"].canceled += OnCrouch;
+        playerInput.actions["Sprint"].performed += OnSprint;
+        playerInput.actions["Sprint"].canceled += OnSprint;
 
     }
+
     #endregion
 
 }
