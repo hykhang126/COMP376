@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public class DoorInteractable : Interactable
 {
     [Header("Key Settings")]
-    [SerializeField] private int[] itemKeysToOpenThisDoor;
+    [SerializeField] private string[] itemKeysToOpenThisDoor;
     [SerializeField] private bool isLockedByKeys = false;
 
     private Door door;
@@ -15,7 +15,7 @@ public class DoorInteractable : Interactable
     private AsyncOperation loadNextScene;
 
     [SerializeField] private ItemKeyToSceneNameSO itemKeyToSceneNameSO;
-    private Dictionary<int, string> itemKeyToSceneName;
+    private Dictionary<string, string> itemKeyToSceneName;
 
     private DoorAction doorAction;
 
@@ -54,7 +54,7 @@ public class DoorInteractable : Interactable
                 for (int i = 0; i < itemKeysToOpenThisDoor.Length; i++)
                 {
                     //----- To be replaced by getting the equipped key and checking if it is in the array -----
-                    if (player.inventory.items[player.inventory.GetCurrentItemIndex()].itemKey == itemKeysToOpenThisDoor[i])
+                    if (player.inventory.items[player.inventory.GetCurrentItemIndex()].itemContractSO.Id == itemKeysToOpenThisDoor[i])
                     {
                         OpenDoor(player);
                         player.inventory.RemoveItem();
