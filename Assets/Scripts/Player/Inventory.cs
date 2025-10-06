@@ -7,7 +7,7 @@ using Unity.VisualScripting;
 
 public class Inventory : MonoBehaviour
 {
-    public List<Item> items = new List<Item>();
+    public List<ItemContractSO> items = new List<ItemContractSO>();
 
     private int currentItemIndex = 0;
 
@@ -122,7 +122,7 @@ public class Inventory : MonoBehaviour
         //Set the item name text to the last item seen before closing the inventory
         if (items.Count > 0)
         {
-            itemNameText.text = items[currentItemIndex].itemContractSO.Name; // Update the item name text
+            itemNameText.text = items[currentItemIndex].Name; // Update the item name text
             ShowItemPreview();
         }
         else
@@ -164,7 +164,7 @@ public class Inventory : MonoBehaviour
         // Logic to cycle through items in the inventory
         if (items.Count > 0)
         {
-            itemNameText.text = items[currentItemIndex].itemContractSO.Name; // Update the item name text
+            itemNameText.text = items[currentItemIndex].Name; // Update the item name text
             ShowItemPreview();
         }
 
@@ -186,8 +186,8 @@ public class Inventory : MonoBehaviour
         if (items.Count == 0 || !isInventoryOpen) return; // No items to cycle through
         currentItemIndex = (currentItemIndex + 1) % items.Count;
         playerInventorySO.currentItemIndex = currentItemIndex; // Update the current item index in the SO
-        itemNameText.text = items[currentItemIndex].itemContractSO.Name; // Update the item name text
-        Debug.Log("Next item selected: " + items[currentItemIndex].itemContractSO.Name);
+        itemNameText.text = items[currentItemIndex].Name; // Update the item name text
+        Debug.Log("Next item selected: " + items[currentItemIndex].Name);
 
         ShowItemPreview();
     }
@@ -197,13 +197,13 @@ public class Inventory : MonoBehaviour
         if (items.Count == 0 || !isInventoryOpen) return; // No items to cycle through
         currentItemIndex = (currentItemIndex - 1 + items.Count) % items.Count;
         playerInventorySO.currentItemIndex = currentItemIndex; // Update the current item index in the SO
-        itemNameText.text = items[currentItemIndex].itemContractSO.Name; // Update the item name text
-        Debug.Log("Previous item selected: " + items[currentItemIndex].itemContractSO.Name);
+        itemNameText.text = items[currentItemIndex].Name; // Update the item name text
+        Debug.Log("Previous item selected: " + items[currentItemIndex].Name);
 
         ShowItemPreview();
     }
 
-    public void AddItem(Item item)
+    public void AddItem(ItemContractSO item)
     {
 
         if (playerInventorySO != null)
@@ -245,9 +245,9 @@ public class Inventory : MonoBehaviour
     {
         for (int i = 0; i < items.Count; i++)
         {
-            if (items[i].itemContractSO.Id == itemiD)
+            if (items[i].Id == itemiD)
             {
-                Item FoundItem = items[i];
+                ItemContractSO FoundItem = items[i];
                 return i;
             }
         }
@@ -259,7 +259,7 @@ public class Inventory : MonoBehaviour
     {
         if (items.Count > 0 && currentItemIndex >= 0 && currentItemIndex < items.Count)
         {
-            return items[currentItemIndex].itemContractSO.Id;
+            return items[currentItemIndex].Id;
         }
 
         return null;
@@ -296,7 +296,7 @@ public class Inventory : MonoBehaviour
         if (currentItemPreview != null)
             Destroy(currentItemPreview);
 
-        Item currentItem = items[currentItemIndex];
+        ItemContractSO currentItem = items[currentItemIndex];
 
         //Will have an item prefab already in position
         //Change the mesh of the prefab to the current item's mesh

@@ -65,7 +65,7 @@ public class ItemInteractable : Interactable
         }
         else
         {
-            player.inventory.AddItem(new Item(itemContractSO));
+            player.inventory.AddItem(itemContractSO);
             // player.inventory.AddItem(item.itemName, item.itemKey, item);
             Destroy(gameObject);
         }
