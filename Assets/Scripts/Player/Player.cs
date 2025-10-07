@@ -161,7 +161,7 @@ public class Player : MonoBehaviour
         {
             Vector3 itemPos = carriedItem.transform.position;
             Vector3 anchorPos = carryAnchor.transform.position;
-            float dist = Vector3.Distance(itemPos, anchorPos)*5.0f;
+            float dist = Vector3.Distance(itemPos, anchorPos)*20.0f;
             Vector3 targetPos = Vector3.Lerp(itemPos,anchorPos,Time.fixedDeltaTime*dist);
             carriedItem.GetComponent<Rigidbody>().MovePosition(targetPos);
         }   
