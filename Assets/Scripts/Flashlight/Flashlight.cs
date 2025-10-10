@@ -26,11 +26,10 @@ public class Flashlight : MonoBehaviour
   public UnityEvent OnBatteryInsert;
   public UnityEvent OnBatteryEmpty;
 
+  public UnityEvent OnEnemyHit;
 
   // Replace below with whatever indicates that the player has inserted battery
   // public TargetScript targetScript;
-
-
 
 
   // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -48,12 +47,12 @@ public class Flashlight : MonoBehaviour
   void FixedUpdate()
   {
 
-
     if (HasBatteryLeft)
     {
       if (IsActivated)
       {
-
+        CastRay();
+        
         TimeLeft -= Time.deltaTime;
 
         if (!FirstWarningFlag && TimeLeft < FIRST_WARNING_TIME && TimeLeft >= LAST_WARNING_TIME)
@@ -116,4 +115,30 @@ public class Flashlight : MonoBehaviour
 
   }
 
+
+
+  private void CastRay()
+  {
+    Ray ray = new Ray(transform.position, transform.up);
+    RaycastHit hit;
+
+    // Cast the ray 10 units forward (or your desired range)
+    if (Physics.Raycast(ray, out hit, 10f))
+    {
+      // Draw debug line
+      Debug.DrawRay(ray.origin, ray.direction * hit.distance, Color.green, 1f);
+
+      // Check if we hit an enemy
+      if (hit.collider.CompareTag("enemy"))
+      {
+        // Notify the enemy it was hit
+        OnEnemyHit.Invoke();
+      }
+    }
+    else
+    {
+      Debug.DrawRay(ray.origin, ray.direction * 10f, Color.red, 1f);
+    }
+
+  }
 }
