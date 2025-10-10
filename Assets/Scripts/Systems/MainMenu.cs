@@ -17,8 +17,6 @@ public class MainMenu : MonoBehaviour
 
     private Player _player;
 
-    private float distance;
-
     [SerializeField] private float cameraSpeed = 10f;
 
     [SerializeField] private GameObject playerEndLocation;
