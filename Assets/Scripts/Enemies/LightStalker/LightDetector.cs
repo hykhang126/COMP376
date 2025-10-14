@@ -32,6 +32,7 @@ public class LightDetector : MonoBehaviour
 
     private void HandleBeamEnter(Collider col)
     {
+        Debug.Log("Beam hit enemy");
         //Accept any collider that is part of this enemy (root or child)
         if (!IsColliderForThisObject(col)) return;
 
@@ -59,8 +60,14 @@ public class LightDetector : MonoBehaviour
     private bool IsColliderForThisObject(Collider col)
     {
         if (col == null) return false;
-        //If the collider is on a child, this still returns true.
-        return col.transform.IsChildOf(this.transform);
+
+        // True if collider is exactly this object, a child of this object,
+        // or this object is child of the collider (covers collider-on-parent cases).
+        if (col.transform == this.transform) return true;
+        if (col.transform.IsChildOf(this.transform)) return true;
+        if (this.transform.IsChildOf(col.transform)) return true;
+
+        return false;
     }
 
     private void TriggerScared()
