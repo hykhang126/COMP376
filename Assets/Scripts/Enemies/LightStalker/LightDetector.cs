@@ -8,11 +8,19 @@ public class LightDetector : MonoBehaviour
     public Flashlight playerFlashlight;
     public LightStalkerConfig enemyConfig;
 
+    // fired after the object has been lit for flashlightStunSeconds
     public UnityEvent OnScaredByLight;
 
-    //Prevents scheduling the same “scare” timer more than once
+    // per-enemy immediate enter/exit (no collider param)
+    public UnityEvent OnLightEnter;
+    public UnityEvent OnLightExit;
+
+    // Prevents scheduling the same “scare” timer more than once
     private bool isTimerScheduled = false;
     private float lightHoldTime => enemyConfig != null ? enemyConfig.flashlightStunSeconds : 3f;
+
+    // count of overlapping child colliders currently hit by beam
+    private int beamHitCount = 0;
 
     void Start()
     {
@@ -32,12 +40,16 @@ public class LightDetector : MonoBehaviour
 
     private void HandleBeamEnter(Collider col)
     {
-        Debug.Log("Beam hit enemy");
-        //Accept any collider that is part of this enemy (root or child)
         if (!IsColliderForThisObject(col)) return;
-
-        //Only schedule if object is active and not already scheduled
         if (!gameObject.activeInHierarchy) return;
+
+        // Increase counter (multiple child colliders -> multiple enter calls)
+        beamHitCount = Mathf.Max(0, beamHitCount) + 1;
+        if (beamHitCount == 1)
+        {
+            // first time entering the beam for this enemy
+            OnLightEnter?.Invoke();
+        }
 
         if (!isTimerScheduled)
         {
@@ -50,6 +62,13 @@ public class LightDetector : MonoBehaviour
     {
         if (!IsColliderForThisObject(col)) return;
 
+        beamHitCount = Mathf.Max(0, beamHitCount - 1);
+        if (beamHitCount == 0)
+        {
+            // fully exited beam
+            OnLightExit?.Invoke();
+        }
+
         if (isTimerScheduled)
         {
             CancelInvoke(nameof(TriggerScared));
@@ -61,8 +80,6 @@ public class LightDetector : MonoBehaviour
     {
         if (col == null) return false;
 
-        // True if collider is exactly this object, a child of this object,
-        // or this object is child of the collider (covers collider-on-parent cases).
         if (col.transform == this.transform) return true;
         if (col.transform.IsChildOf(this.transform)) return true;
         if (this.transform.IsChildOf(col.transform)) return true;
@@ -72,7 +89,6 @@ public class LightDetector : MonoBehaviour
 
     private void TriggerScared()
     {
-        //Double-check we're still active before invoking
         if (!gameObject.activeInHierarchy) { isTimerScheduled = false; return; }
 
         OnScaredByLight?.Invoke();
@@ -81,11 +97,17 @@ public class LightDetector : MonoBehaviour
 
     void OnDisable()
     {
-        //If disabled while scheduled, cancel the pending invoke
         if (isTimerScheduled)
         {
             CancelInvoke(nameof(TriggerScared));
             isTimerScheduled = false;
+        }
+
+        // Reset counter and fire exit if needed
+        if (beamHitCount > 0)
+        {
+            beamHitCount = 0;
+            OnLightExit?.Invoke();
         }
     }
 

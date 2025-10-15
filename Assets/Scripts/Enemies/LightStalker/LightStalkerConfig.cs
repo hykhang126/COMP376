@@ -13,5 +13,5 @@ public class LightStalkerConfig : ScriptableObject
     public float flashlightStunSeconds = 3f; //Seconds under beam to despawn
     public float respawnDelay = 8f;
 
-    public float fleeDistanceWhenIlluminated = 6f;
+    public float fleeDistanceWhenIlluminated = 24f;
 }

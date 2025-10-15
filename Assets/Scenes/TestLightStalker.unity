@@ -289,6 +289,8 @@ MonoBehaviour:
   - {fileID: 1199198012}
   - {fileID: 1835616416}
   - {fileID: 674427853}
+  fleeDuration: 4.5
+  fleeSpeedMultiplier: 3
 --- !u!114 &90470938
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -395,10 +397,34 @@ MonoBehaviour:
       toState: Idle
     stateEnter:
       m_PersistentCalls:
-        m_Calls: []
+        m_Calls:
+        - m_Target: {fileID: 90470937}
+          m_TargetAssemblyTypeName: LightStalkerController, Assembly-CSharp
+          m_MethodName: StartFlee
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
     stateExit:
       m_PersistentCalls:
-        m_Calls: []
+        m_Calls:
+        - m_Target: {fileID: 90470937}
+          m_TargetAssemblyTypeName: LightStalkerController, Assembly-CSharp
+          m_MethodName: OnExitChase
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
     stateUpdate:
       m_PersistentCalls:
         m_Calls: []

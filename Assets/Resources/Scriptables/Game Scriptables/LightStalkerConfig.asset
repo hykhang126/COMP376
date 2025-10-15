@@ -19,4 +19,4 @@ MonoBehaviour:
   terrorSoundStartDistance: 20
   flashlightStunSeconds: 3
   respawnDelay: 8
-  fleeDistanceWhenIlluminated: 6
+  fleeDistanceWhenIlluminated: 24
