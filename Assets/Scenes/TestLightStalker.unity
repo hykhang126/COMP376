@@ -266,7 +266,8 @@ Transform:
   m_LocalPosition: {x: -25.2, y: 1.5, z: 53.79}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 856600786}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &90470937
@@ -291,6 +292,18 @@ MonoBehaviour:
   - {fileID: 674427853}
   fleeDuration: 4.5
   fleeSpeedMultiplier: 3
+  inBeamSpeedMultiplier: 0.25
+  proximityTriggerOverride: {fileID: 856600788}
+  hushClip: {fileID: 8300000, guid: 5254e618a1fa1a548959f70cf3b594ba, type: 3}
+  whisperClip: {fileID: 8300000, guid: 0f17b49ced158df43a5909068b2e6fa8, type: 3}
+  hushVolume: 0.5
+  whisperVolume: 1
+  crossfadeTime: 0.25
+  proximityCheckInterval: 0.18
+  useOcclusionRaycast: 1
+  occlusionMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
 --- !u!114 &90470938
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -308,6 +321,12 @@ MonoBehaviour:
   OnScaredByLight:
     m_PersistentCalls:
       m_Calls: []
+  OnLightEnter:
+    m_PersistentCalls:
+      m_Calls: []
+  OnLightExit:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &90470939
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -321,22 +340,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StateMachine
   states:
-  - stateName: Idle
-    transitions:
-    - triggerEvent: PlayerDetected
-      toState: ChasingPlayer
-    stateEnter:
-      m_PersistentCalls:
-        m_Calls: []
-    stateExit:
-      m_PersistentCalls:
-        m_Calls: []
-    stateUpdate:
-      m_PersistentCalls:
-        m_Calls: []
-    stateFixedUpdate:
-      m_PersistentCalls:
-        m_Calls: []
   - stateName: ChasingPlayer
     transitions:
     - triggerEvent: ScaredByLight
@@ -394,7 +397,7 @@ MonoBehaviour:
   - stateName: Scared
     transitions:
     - triggerEvent: Respawned
-      toState: Idle
+      toState: ChasingPlayer
     stateEnter:
       m_PersistentCalls:
         m_Calls:
@@ -425,6 +428,22 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 0
           m_CallState: 2
+    stateUpdate:
+      m_PersistentCalls:
+        m_Calls: []
+    stateFixedUpdate:
+      m_PersistentCalls:
+        m_Calls: []
+  - stateName: Idle
+    transitions:
+    - triggerEvent: PlayerDetected
+      toState: ChasingPlayer
+    stateEnter:
+      m_PersistentCalls:
+        m_Calls: []
+    stateExit:
+      m_PersistentCalls:
+        m_Calls: []
     stateUpdate:
       m_PersistentCalls:
         m_Calls: []
@@ -2177,6 +2196,79 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 5527080448185435633, guid: 362beb73c011ce44a8ccad713fa18763, type: 3}
   m_PrefabInstance: {fileID: 758488788}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &856600785
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 856600786}
+  - component: {fileID: 856600787}
+  - component: {fileID: 856600788}
+  m_Layer: 10
+  m_Name: ProximityTrigger
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &856600786
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 856600785}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 90470936}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!135 &856600787
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 856600785}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 20
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &856600788
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 856600785}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 50de3237b3e374215ac767aa83366135, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ProximityTrigger
+  playerTag: Player
+  OnPlayerEnter:
+    m_PersistentCalls:
+      m_Calls: []
+  OnPlayerExit:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &960402685
 GameObject:
   m_ObjectHideFlags: 0
@@ -2769,7 +2861,7 @@ GameObject:
   - component: {fileID: 1520968121}
   - component: {fileID: 1520968122}
   m_Layer: 0
-  m_Name: SceneTempBoostrap
+  m_Name: SceneTempBootstrap
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

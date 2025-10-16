@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -37,6 +38,36 @@ public class LightStalkerController : MonoBehaviour
     // internal state
     private bool isFleeing = false;
 
+    [Header("Proximity Audio (optional)")]
+    [Tooltip("Optional ProximityTrigger child (if null it will search in children)")]
+    public ProximityTrigger proximityTriggerOverride;
+
+    [Tooltip("Hush (outer) audio clip")]
+    public AudioClip hushClip;
+    [Tooltip("Whisper (inner) audio clip")]
+    public AudioClip whisperClip;
+
+    [Range(0f,1f)] public float hushVolume = 0.25f;
+    [Range(0f,1f)] public float whisperVolume = 0.85f;
+    [Tooltip("Seconds to crossfade between volumes")]
+    public float crossfadeTime = 0.25f;
+    [Tooltip("Seconds between proximity checks while player is inside trigger")]
+    public float proximityCheckInterval = 0.18f;
+    [Tooltip("If true, raycast checks will reduce volume when occluded")]
+    public bool useOcclusionRaycast = true;
+    [Tooltip("Layers considered occluding")]
+    public LayerMask occlusionMask = ~0;
+
+    // runtime
+    private AudioSource hushSource;
+    private AudioSource whisperSource;
+    private Coroutine proximityCoroutine;
+    private bool playerInsideProximity = false;
+    private ProximityTrigger proxTrigger;
+    
+    // colliders considered "body" / capable of directly touching the player
+    private Collider[] bodyColliders;
+
     void Awake()
     {
         stateMachine = GetComponent<StateMachine>();
@@ -55,6 +86,14 @@ public class LightStalkerController : MonoBehaviour
             lightDetector.OnLightExit.AddListener(HandleLightExit);
         }
 
+        // Proximity trigger (optional)
+        proxTrigger = proximityTriggerOverride ?? GetComponentInChildren<ProximityTrigger>();
+        if (proxTrigger != null)
+        {
+            proxTrigger.OnPlayerEnter.AddListener(OnPlayerEnteredProximity);
+            proxTrigger.OnPlayerExit.AddListener(OnPlayerExitedProximity);
+        }
+
         if (enemyConfig != null)
         {
             moveSpeed = enemyConfig.moveSpeed;
@@ -71,8 +110,24 @@ public class LightStalkerController : MonoBehaviour
             if (enemyConfig != null) agent.acceleration = enemyConfig.acceleration;
         }
 
+        CreateAudioSources();
+
+        // populate bodyColliders: all non-trigger colliders under this enemy, excluding the proximity trigger collider.
+        Collider proxCol = (proxTrigger != null) ? proxTrigger.GetComponent<Collider>() : null;
+        var all = GetComponentsInChildren<Collider>(true);
+        var list = new System.Collections.Generic.List<Collider>(all.Length);
+        foreach (var c in all)
+        {
+            if (c == null) continue;
+            if (c == proxCol) continue;          // exclude proximity trigger collider
+            if (c.isTrigger) continue;           // exclude any trigger colliders (we only want physical body colliders)
+            list.Add(c);
+        }
+        bodyColliders = list.ToArray();
+        // END body collider initialization
+
         // TEST: force chase at start for testing scenes (remove in production)
-        stateMachine?.InvokeStateEvent("PlayerDetected");
+        //stateMachine?.InvokeStateEvent("PlayerDetected");
     }
 
     void OnDestroy()
@@ -84,19 +139,23 @@ public class LightStalkerController : MonoBehaviour
             lightDetector.OnLightExit.RemoveListener(HandleLightExit);
         }
 
+        if (proxTrigger != null)
+        {
+            proxTrigger.OnPlayerEnter.RemoveListener(OnPlayerEnteredProximity);
+            proxTrigger.OnPlayerExit.RemoveListener(OnPlayerExitedProximity);
+        }
+
         CancelInvoke(nameof(CompleteFleeAndDespawn));
+        StopProximityCoroutine();
     }
 
     private void OnScaredByLight()
     {
         // Transition into Scared state (inspector should wire Scared state's stateEnter to StartFlee)
         stateMachine?.InvokeStateEvent("ScaredByLight");
-
-        // NOTE: DO NOT call SpawnerManager.NotifyDespawned() here immediately.
-        // We will call it after the flee duration completes inside CompleteFleeAndDespawn().
     }
 
-    //Slowws enemy when in light.
+    //Slows enemy when in light.
     private void HandleLightEnter()
     {
         if (isFleeing) return;
@@ -119,6 +178,10 @@ public class LightStalkerController : MonoBehaviour
     {
         if (isFleeing) return;
         isFleeing = true;
+
+        // stop proximity audio while fleeing
+        playerInsideProximity = false;
+        StopProximityCoroutine();
 
         // ensure agent exists and override speed for fleeing
         if (agent != null)
@@ -160,7 +223,6 @@ public class LightStalkerController : MonoBehaviour
         for (int i = 0; i < sampleCount; i++)
         {
             float angle = i * angleStep;
-            // Build candidate direction by rotating awayDir by angle
             Quaternion rot = Quaternion.Euler(0f, angle, 0f);
             Vector3 candDir = rot * awayDir.normalized;
             if (candDir.sqrMagnitude < 0.001f) candDir = Quaternion.Euler(0, angle, 0) * transform.forward;
@@ -173,11 +235,9 @@ public class LightStalkerController : MonoBehaviour
                 NavMeshPath path = new NavMeshPath();
                 if (NavMesh.CalculatePath(transform.position, navHit.position, NavMesh.AllAreas, path) && path.status == NavMeshPathStatus.PathComplete)
                 {
-                    // compute path length
                     float len = 0f;
                     for (int p = 1; p < path.corners.Length; p++) len += Vector3.Distance(path.corners[p - 1], path.corners[p]);
 
-                    // prefer longest path (furthest reachable)
                     if (len > bestPathLength)
                     {
                         bestPathLength = len;
@@ -188,7 +248,6 @@ public class LightStalkerController : MonoBehaviour
             }
         }
 
-        // If we found a valid path, use it
         if (bestPath != null && bestPathLength > 0f)
         {
             agent.speed = moveSpeed * fleeSpeedMultiplier;
@@ -197,10 +256,8 @@ public class LightStalkerController : MonoBehaviour
         }
         else
         {
-            // Try the easy fallback: sample the closest navmesh edge (if available)
             if (NavMesh.FindClosestEdge(transform.position, out navHit, NavMesh.AllAreas))
             {
-                // attempt to run to a point slightly further along the edge normal
                 Vector3 fallbackTarget = transform.position + navHit.normal * (fleeDistance * 0.5f);
                 if (NavMesh.SamplePosition(fallbackTarget, out navHit, 5f, NavMesh.AllAreas))
                 {
@@ -210,7 +267,6 @@ public class LightStalkerController : MonoBehaviour
                         agent.speed = moveSpeed * fleeSpeedMultiplier;
                         agent.isStopped = false;
                         agent.SetPath(fallbackPath);
-                        // schedule despawn as usual
                         CancelInvoke(nameof(CompleteFleeAndDespawn));
                         Invoke(nameof(CompleteFleeAndDespawn), fleeDuration);
                         return;
@@ -218,7 +274,6 @@ public class LightStalkerController : MonoBehaviour
                 }
             }
 
-            // Last resort: cannot find any reachable flee spot. stop and schedule despawn.
             agent.isStopped = true;
         }
 
@@ -236,14 +291,12 @@ public class LightStalkerController : MonoBehaviour
             agent.speed = (enemyConfig != null ? enemyConfig.moveSpeed : moveSpeed);
         }
 
-        // Use SpawnerManager to handle deactivation and respawn (same as before)
         if (SpawnerManager.Instance != null && enemyConfig != null)
         {
             SpawnerManager.Instance.NotifyDespawned(this, enemyConfig.respawnDelay);
         }
         else
         {
-            // fallback behavior - just deactivate
             gameObject.SetActive(false);
         }
     }
@@ -286,7 +339,6 @@ public class LightStalkerController : MonoBehaviour
     // Called by SpawnerManager when respawning the enemy
     public void RespawnAt(Vector3 spawnPosition)
     {
-        // Place at spawn location and enable agent
         transform.position = spawnPosition;
         gameObject.SetActive(true);
 
@@ -305,5 +357,225 @@ public class LightStalkerController : MonoBehaviour
         // Ensure scheduled calls are canceled if the object is disabled
         CancelInvoke(nameof(CompleteFleeAndDespawn));
         isFleeing = false;
+        StopProximityCoroutine();
+    }
+
+    // -------------------------
+    // Proximity audio functions
+    // -------------------------
+    void CreateAudioSources()
+    {
+        if (hushClip != null && hushSource == null)
+        {
+            hushSource = gameObject.AddComponent<AudioSource>();
+            hushSource.clip = hushClip;
+            hushSource.loop = true;
+            hushSource.playOnAwake = false;
+            hushSource.spatialBlend = 1f;
+            hushSource.rolloffMode = AudioRolloffMode.Logarithmic;
+            hushSource.minDistance = 1f;
+            hushSource.maxDistance = (enemyConfig != null) ? enemyConfig.terrorSoundStartDistance : 20f;
+            hushSource.volume = 0f;
+            hushSource.Play();
+        }
+
+        if (whisperClip != null && whisperSource == null)
+        {
+            whisperSource = gameObject.AddComponent<AudioSource>();
+            whisperSource.clip = whisperClip;
+            whisperSource.loop = true;
+            whisperSource.playOnAwake = false;
+            whisperSource.spatialBlend = 1f;
+            whisperSource.rolloffMode = AudioRolloffMode.Logarithmic;
+            whisperSource.minDistance = 0.5f;
+            whisperSource.maxDistance = (enemyConfig != null) ? enemyConfig.terrorRadius : 12f;
+            whisperSource.volume = 0f;
+            whisperSource.Play();
+        }
+    }
+
+    private void OnPlayerEnteredProximity()
+    {
+        playerInsideProximity = true;
+        StartProximityCoroutine();
+    }
+
+    private void OnPlayerExitedProximity()
+    {
+        playerInsideProximity = false;
+        StopProximityCoroutine();
+    }
+
+    private void StartProximityCoroutine()
+    {
+        if (proximityCoroutine == null)
+            proximityCoroutine = StartCoroutine(ProximityAudioRoutine());
+    }
+
+    private void StopProximityCoroutine()
+    {
+        // Stop the background proximity loop
+        if (proximityCoroutine != null)
+        {
+            StopCoroutine(proximityCoroutine);
+            proximityCoroutine = null;
+        }
+
+        // If this object is active, start a fade-out coroutine so audio fades out smoothly.
+        // If it's already inactive (or being deactivated), avoid StartCoroutine and immediately stop audio.
+        if (this.isActiveAndEnabled)
+        {
+            StartCoroutine(FadeOutAndStopBoth(0.2f));
+        }
+        else
+        {
+            if (hushSource != null)
+            {
+                hushSource.volume = 0f;
+                hushSource.Stop();
+            }
+            if (whisperSource != null)
+            {
+                whisperSource.volume = 0f;
+                whisperSource.Stop();
+            }
+        }
+    }
+
+    private IEnumerator ProximityAudioRoutine()
+    {
+        if (player == null) player = Camera.main?.transform ?? Object.FindFirstObjectByType<Player>()?.transform;
+
+        while (playerInsideProximity)
+        {
+            if (player == null) yield return new WaitForSeconds(proximityCheckInterval);
+            else
+            {
+                float sqr = (player.position - transform.position).sqrMagnitude;
+                float outerR = (enemyConfig != null) ? enemyConfig.terrorSoundStartDistance : 20f;
+                float innerR = (enemyConfig != null) ? enemyConfig.terrorRadius : 12f;
+                float outer_sqr = outerR * outerR;
+                float inner_sqr = innerR * innerR;
+
+                bool inOuter = sqr <= outer_sqr;
+                bool inInner = sqr <= inner_sqr;
+
+                float occlusionFactor = 1f;
+                if (useOcclusionRaycast && player != null)
+                {
+                    Vector3 src = transform.position + Vector3.up * 0.5f;
+                    Vector3 dir = (player.position - src);
+                    float dist = dir.magnitude;
+                    dir /= Mathf.Max(dist, 0.0001f);
+                    if (Physics.Raycast(src, dir, out RaycastHit hit, dist, occlusionMask))
+                    {
+                        occlusionFactor = 0.35f;
+                    }
+                }
+
+                float targetHush = (inOuter && !inInner) ? hushVolume * occlusionFactor : 0f;
+                float targetWhisper = inInner ? whisperVolume * occlusionFactor : 0f;
+
+                if (hushSource != null)
+                    hushSource.volume = Mathf.MoveTowards(hushSource.volume, targetHush, Time.deltaTime / Mathf.Max(0.0001f, crossfadeTime));
+                if (whisperSource != null)
+                    whisperSource.volume = Mathf.MoveTowards(whisperSource.volume, targetWhisper, Time.deltaTime / Mathf.Max(0.0001f, crossfadeTime));
+
+                yield return new WaitForSeconds(proximityCheckInterval);
+            }
+        }
+    }
+
+    private IEnumerator FadeOutAndStopBoth(float fadeTime)
+    {
+        float t = 0f;
+        float startH = (hushSource != null) ? hushSource.volume : 0f;
+        float startW = (whisperSource != null) ? whisperSource.volume : 0f;
+
+        while (t < fadeTime)
+        {
+            t += Time.unscaledDeltaTime;
+            float a = Mathf.Clamp01(t / fadeTime);
+            if (hushSource != null) hushSource.volume = Mathf.Lerp(startH, 0f, a);
+            if (whisperSource != null) whisperSource.volume = Mathf.Lerp(startW, 0f, a);
+            yield return null;
+        }
+
+        if (hushSource != null)
+        {
+            hushSource.volume = 0f;
+            hushSource.Stop();
+        }
+        if (whisperSource != null)
+        {
+            whisperSource.volume = 0f;
+            whisperSource.Stop();
+        }
+    }
+
+    // -------------------------
+    // Player contact / jumpscare placeholder
+    // -------------------------
+    // Fires when the enemy physically touches the player (Collision)
+    void OnCollisionEnter(Collision collision)
+    {
+        if (collision == null || collision.collider == null) return;
+        if (!collision.collider.CompareTag("Player")) return;
+
+        // Only treat as a "touch" if the player's collider is actually overlapping/touching a body collider (not the proximity trigger)
+        if (IsPlayerTouchingBody(collision.collider))
+            HandlePlayerTouch(collision.collider);
+    }
+
+    // Fires when a trigger touches the player (Trigger)
+    void OnTriggerEnter(Collider other)
+    {
+        if (other == null) return;
+        if (!other.CompareTag("Player")) return;
+
+        // OnTrigger events may be fired from the proximity trigger. Ensure the player is actually touching a body collider.
+        if (IsPlayerTouchingBody(other))
+            HandlePlayerTouch(other);
+    }
+
+    // Centralized touch handling — placeholder: log a jumpscare event.
+    // Does nothing if the stalker is currently fleeing.
+    private void HandlePlayerTouch(Collider playerCollider)
+    {
+        if (isFleeing) return; // fleeing enemies cannot kill/damage
+
+        // Placeholder: substitute actual damage/jumpscare logic here.
+        Debug.Log($"{name}: Player touched! (jumpscare placeholder)");
+    }
+
+    // Determine whether the provided player collider is actually touching one of the non-trigger body colliders of this enemy.
+    // Uses ComputePenetration first (accurate overlap check), and a ClosestPoint distance fallback for near-contact.
+    private bool IsPlayerTouchingBody(Collider playerCollider)
+    {
+        if (playerCollider == null || bodyColliders == null || bodyColliders.Length == 0) return false;
+
+        // First try ComputePenetration for each body collider
+        foreach (var bc in bodyColliders)
+        {
+            if (bc == null) continue;
+
+            // If colliders overlap (ComputePenetration returns true), treat as touching
+            if (Physics.ComputePenetration(
+                bc, bc.transform.position, bc.transform.rotation,
+                playerCollider, playerCollider.transform.position, playerCollider.transform.rotation,
+                out Vector3 outDir, out float outDistance))
+            {
+                return true;
+            }
+
+            // fallback: if closest point on body collider to player's collider bounds is essentially at/inside player's collider position -> touching
+            Vector3 playerClosest = playerCollider.ClosestPoint(bc.transform.position);
+            Vector3 bodyClosest = bc.ClosestPoint(playerCollider.transform.position);
+            float dist = Vector3.Distance(playerClosest, bodyClosest);
+            // small threshold (tweak if needed). This detects near-contact even without penetration.
+            if (dist < 0.1f) return true;
+        }
+
+        return false;
     }
 }
