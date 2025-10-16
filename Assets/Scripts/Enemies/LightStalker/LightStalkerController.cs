@@ -58,6 +58,12 @@ public class LightStalkerController : MonoBehaviour
     [Tooltip("Layers considered occluding")]
     public LayerMask occlusionMask = ~0;
 
+    [Header("Flee SFX")]
+    [Tooltip("Screech sound played once the enemy begins fleeing")]
+    public AudioClip fleeScreechClip;
+    [Range(0f,1f)]
+    public float fleeScreechVolume = 1f;
+
     // runtime
     private AudioSource hushSource;
     private AudioSource whisperSource;
@@ -125,9 +131,6 @@ public class LightStalkerController : MonoBehaviour
         }
         bodyColliders = list.ToArray();
         // END body collider initialization
-
-        // TEST: force chase at start for testing scenes (remove in production)
-        //stateMachine?.InvokeStateEvent("PlayerDetected");
     }
 
     void OnDestroy()
@@ -178,6 +181,12 @@ public class LightStalkerController : MonoBehaviour
     {
         if (isFleeing) return;
         isFleeing = true;
+
+        // Play free screech
+        if (fleeScreechClip != null)
+        {
+            AudioSource.PlayClipAtPoint(fleeScreechClip, transform.position, Mathf.Clamp01(fleeScreechVolume));
+        }
 
         // stop proximity audio while fleeing
         playerInsideProximity = false;
@@ -348,6 +357,9 @@ public class LightStalkerController : MonoBehaviour
             agent.isStopped = false;
             agent.speed = moveSpeed;
         }
+
+        // Re-setup proximity/audio/body colliders after respawn
+        ReinitializeProximityAndBodies();
 
         stateMachine?.InvokeStateEvent("Respawned");
     }
@@ -577,5 +589,72 @@ public class LightStalkerController : MonoBehaviour
         }
 
         return false;
+    }
+
+    // -------------------------
+    // Helpers for respawn re-initialization
+    // -------------------------
+    private void ReinitializeProximityAndBodies()
+    {
+        // Re-find/attach prox trigger references & listeners
+        // Remove listeners first to avoid duplicates
+        ProximityTrigger newProx = proximityTriggerOverride ?? GetComponentInChildren<ProximityTrigger>();
+        if (proxTrigger != null && proxTrigger != newProx)
+        {
+            // remove old listeners if proxTrigger changed
+            proxTrigger.OnPlayerEnter.RemoveListener(OnPlayerEnteredProximity);
+            proxTrigger.OnPlayerExit.RemoveListener(OnPlayerExitedProximity);
+        }
+
+        proxTrigger = newProx;
+        if (proxTrigger != null)
+        {
+            // ensure we don't double-subscribe
+            proxTrigger.OnPlayerEnter.RemoveListener(OnPlayerEnteredProximity);
+            proxTrigger.OnPlayerExit.RemoveListener(OnPlayerExitedProximity);
+
+            proxTrigger.OnPlayerEnter.AddListener(OnPlayerEnteredProximity);
+            proxTrigger.OnPlayerExit.AddListener(OnPlayerExitedProximity);
+        }
+
+        // Ensure audio sources exist (CreateAudioSources will only create if null)
+        CreateAudioSources();
+
+        // If audio sources exist but were stopped, restart them so fades work
+        if (hushSource != null && !hushSource.isPlaying)
+            hushSource.Play();
+        if (whisperSource != null && !whisperSource.isPlaying)
+            whisperSource.Play();
+
+        // Rebuild bodyColliders array (exclude proximity trigger collider)
+        Collider proxCol = (proxTrigger != null) ? proxTrigger.GetComponent<Collider>() : null;
+        var all = GetComponentsInChildren<Collider>(true);
+        var list = new System.Collections.Generic.List<Collider>(all.Length);
+        foreach (var c in all)
+        {
+            if (c == null) continue;
+            if (c == proxCol) continue;
+            if (c.isTrigger) continue;
+            list.Add(c);
+        }
+        bodyColliders = list.ToArray();
+
+        // If player is currently inside the proximity collider at the moment of respawn,
+        // Unity won't fire OnTriggerEnter, so manually start proximity audio now.
+        if (proxTrigger != null && player != null)
+        {
+            var proxColComp = proxTrigger.GetComponent<Collider>();
+            if (proxColComp != null)
+            {
+                // ClosestPoint returns the same point as player.position if inside the trigger
+                Vector3 closest = proxColComp.ClosestPoint(player.position);
+                float dist = Vector3.Distance(closest, player.position);
+                if (dist < 0.01f)
+                {
+                    // player is inside the respawned proximity trigger -> start proximity behavior
+                    OnPlayerEnteredProximity();
+                }
+            }
+        }
     }
 }

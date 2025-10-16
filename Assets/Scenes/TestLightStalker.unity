@@ -304,6 +304,8 @@ MonoBehaviour:
   occlusionMask:
     serializedVersion: 2
     m_Bits: 4294967295
+  fleeScreechClip: {fileID: 8300000, guid: 111cb335d900e3146b681d864ab64f8a, type: 3}
+  fleeScreechVolume: 1
 --- !u!114 &90470938
 MonoBehaviour:
   m_ObjectHideFlags: 0
