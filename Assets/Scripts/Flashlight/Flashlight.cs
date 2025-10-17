@@ -91,6 +91,14 @@ public class Flashlight : MonoBehaviour
       else if (TimeLeft <= 0f)
       {
         TimeLeft = 0f;
+
+        // ensure we send an Exit for any collider we were hitting so detectors don't remain "stuck"
+        if (lastHit != null)
+        {
+          OnBeamExit?.Invoke(lastHit);
+          lastHit = null;
+        }
+
         IsActivated = false;
         HasBatteryLeft = false;
 
