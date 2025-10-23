@@ -22,12 +22,9 @@ public class Inventory : MonoBehaviour
     private Player player;
 
     private Pause pauseSystem;
-    //Variables for item model preview
-    public Transform itemPreviewSpawnPoint { get; private set; }
     public Camera inventoryCamera { get; private set; }
 
-    //private RawImage itemPreviewImage; // Optional if you want to toggle visibility
-    public GameObject currentItemPreview { get; private set; }
+    public GameObject itemPreviewPlaceholder;
 
     [SerializeField] private AudioClip pickUpAudioClip;
 
@@ -67,13 +64,12 @@ public class Inventory : MonoBehaviour
             Debug.LogError("PlayerInventorySO not found in Resources");
         }
         pauseSystem = FindAnyObjectByType<Pause>();
-        /*inventoryCamera = transform.Find("InventoryCamera").gameObject?.GetComponent<Camera>();
 
-        // find in children of InventoryCamera
-        if (itemPreviewSpawnPoint == null)
+        itemPreviewPlaceholder = gameObject.transform.Find("ItemPreviewPlaceholder").gameObject;
+        if(itemPreviewPlaceholder == null)
         {
-            itemPreviewSpawnPoint = inventoryCamera.transform.Find("ItemPreviewSpawnPoint").gameObject?.transform;
-        }*/
+            Debug.LogError("Did not find Item Preview Placeholder");
+        }
 
     }
 
@@ -123,7 +119,6 @@ public class Inventory : MonoBehaviour
         if (items.Count > 0)
         {
             itemNameText.text = items[currentItemIndex].Name; // Update the item name text
-            ShowItemPreview();
         }
         else
         {
@@ -131,17 +126,19 @@ public class Inventory : MonoBehaviour
         }
         pauseSystem.action.Disable();
 
+        ItemPreview();
 
+
+    }
+
+    private void ItemPreview()
+    {
+        itemPreviewPlaceholder.GetComponent<MeshFilter>().mesh = items[currentItemIndex].MeshRef;
     }
 
     private void CloseInventory()
     {
         isInventoryOpen = false;
-        // Hide the inventory UI
-        if (currentItemPreview != null)
-        {
-            Destroy(currentItemPreview);
-        }
 
         Debug.Log("Inventory closed");
         inventoryUI.SetActive(false);
@@ -165,10 +162,11 @@ public class Inventory : MonoBehaviour
         if (items.Count > 0)
         {
             itemNameText.text = items[currentItemIndex].Name; // Update the item name text
-            ShowItemPreview();
         }
 
         Debug.Log("Current item index after cycling: " + currentItemIndex);
+
+        ItemPreview();
     }
     public void SetCurrentItemIndex(int index)
     {
@@ -189,7 +187,7 @@ public class Inventory : MonoBehaviour
         itemNameText.text = items[currentItemIndex].Name; // Update the item name text
         Debug.Log("Next item selected: " + items[currentItemIndex].Name);
 
-        ShowItemPreview();
+        ItemPreview();
     }
 
     public void Previous()
@@ -200,7 +198,7 @@ public class Inventory : MonoBehaviour
         itemNameText.text = items[currentItemIndex].Name; // Update the item name text
         Debug.Log("Previous item selected: " + items[currentItemIndex].Name);
 
-        ShowItemPreview();
+        ItemPreview();
     }
 
     public void AddItem(ItemContractSO item)
@@ -286,42 +284,5 @@ public class Inventory : MonoBehaviour
         //if both checks pass, remove the item from the inventory and call the interactable's Interact method.
         return true;
     }
-
-    private void ShowItemPreview()
-    {
-        if (itemPreviewSpawnPoint == null || items.Count == 0)
-            return;
-
-        // Destroy existing preview
-        if (currentItemPreview != null)
-            Destroy(currentItemPreview);
-
-        ItemContractSO currentItem = items[currentItemIndex];
-
-        //Will have an item prefab already in position
-        //Change the mesh of the prefab to the current item's mesh
-    }
-
-    // Utility function to set layer recursively
-    /*private void SetupChildrenRecursively(GameObject obj, int newLayer)
-    {
-        if (obj == null) return;
-
-        obj.layer = newLayer;
-        // Disable collider and rigid body if they exist
-        Collider collider = obj.GetComponent<Collider>();
-        if (collider != null)
-            collider.enabled = false;
-        Rigidbody rb = obj.GetComponent<Rigidbody>();
-        if (rb != null)
-            rb.useGravity = false;
-        foreach (Transform child in obj.transform)
-        {
-            if (child != null)
-            {
-                SetupChildrenRecursively(child.gameObject, newLayer);
-            }
-        }
-    }*/
 
 }
