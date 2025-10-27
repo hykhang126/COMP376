@@ -133,6 +133,12 @@ public class Inventory : MonoBehaviour
 
     private void ItemPreview()
     {
+        if (items.Count == 0)
+        {
+            itemPreviewPlaceholder.SetActive(false);
+            return;
+        }
+        itemPreviewPlaceholder.SetActive(true);
         itemPreviewPlaceholder.GetComponent<MeshFilter>().mesh = items[currentItemIndex].MeshRef;
     }
 
