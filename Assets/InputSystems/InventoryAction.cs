@@ -127,6 +127,15 @@ public partial class @InventoryAction: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Combine"",
+                    ""type"": ""Button"",
+                    ""id"": ""2c332399-bdfe-4ccd-83e1-ad539022ba0e"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -217,6 +226,28 @@ public partial class @InventoryAction: IInputActionCollection2, IDisposable
                     ""action"": ""Previous"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""99e1f464-4764-4579-a9c1-f5aa9c5cea70"",
+                    ""path"": ""<Gamepad>/buttonWest"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Combine"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""5918b8df-be7c-408c-a0d2-05e7228ecba7"",
+                    ""path"": ""<Keyboard>/c"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Combine"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -229,6 +260,7 @@ public partial class @InventoryAction: IInputActionCollection2, IDisposable
         m_Inventory_CycleItems = m_Inventory.FindAction("CycleItems", throwIfNotFound: true);
         m_Inventory_Next = m_Inventory.FindAction("Next", throwIfNotFound: true);
         m_Inventory_Previous = m_Inventory.FindAction("Previous", throwIfNotFound: true);
+        m_Inventory_Combine = m_Inventory.FindAction("Combine", throwIfNotFound: true);
     }
 
     ~@InventoryAction()
@@ -313,6 +345,7 @@ public partial class @InventoryAction: IInputActionCollection2, IDisposable
     private readonly InputAction m_Inventory_CycleItems;
     private readonly InputAction m_Inventory_Next;
     private readonly InputAction m_Inventory_Previous;
+    private readonly InputAction m_Inventory_Combine;
     /// <summary>
     /// Provides access to input actions defined in input action map "Inventory".
     /// </summary>
@@ -340,6 +373,10 @@ public partial class @InventoryAction: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "Inventory/Previous".
         /// </summary>
         public InputAction @Previous => m_Wrapper.m_Inventory_Previous;
+        /// <summary>
+        /// Provides access to the underlying input action "Inventory/Combine".
+        /// </summary>
+        public InputAction @Combine => m_Wrapper.m_Inventory_Combine;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -378,6 +415,9 @@ public partial class @InventoryAction: IInputActionCollection2, IDisposable
             @Previous.started += instance.OnPrevious;
             @Previous.performed += instance.OnPrevious;
             @Previous.canceled += instance.OnPrevious;
+            @Combine.started += instance.OnCombine;
+            @Combine.performed += instance.OnCombine;
+            @Combine.canceled += instance.OnCombine;
         }
 
         /// <summary>
@@ -401,6 +441,9 @@ public partial class @InventoryAction: IInputActionCollection2, IDisposable
             @Previous.started -= instance.OnPrevious;
             @Previous.performed -= instance.OnPrevious;
             @Previous.canceled -= instance.OnPrevious;
+            @Combine.started -= instance.OnCombine;
+            @Combine.performed -= instance.OnCombine;
+            @Combine.canceled -= instance.OnCombine;
         }
 
         /// <summary>
@@ -469,5 +512,12 @@ public partial class @InventoryAction: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnPrevious(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Combine" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnCombine(InputAction.CallbackContext context);
     }
 }

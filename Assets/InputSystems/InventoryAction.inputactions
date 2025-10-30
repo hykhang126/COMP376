@@ -1,4 +1,5 @@
 {
+    "version": 1,
     "name": "InventoryAction",
     "maps": [
         {
@@ -36,6 +37,15 @@
                     "name": "Previous",
                     "type": "Button",
                     "id": "8272d1c6-004b-4752-b3f6-e2eaf62ce7f5",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Combine",
+                    "type": "Button",
+                    "id": "2c332399-bdfe-4ccd-83e1-ad539022ba0e",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
@@ -128,6 +138,28 @@
                     "processors": "",
                     "groups": "",
                     "action": "Previous",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "99e1f464-4764-4579-a9c1-f5aa9c5cea70",
+                    "path": "<Gamepad>/buttonWest",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Combine",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "5918b8df-be7c-408c-a0d2-05e7228ecba7",
+                    "path": "<Keyboard>/c",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Combine",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

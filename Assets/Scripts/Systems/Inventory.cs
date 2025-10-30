@@ -7,7 +7,7 @@ using Unity.VisualScripting;
 
 public class Inventory : MonoBehaviour
 {
-    public List<Item> items = new List<Item>();
+    public List<ItemContractSO> items = new List<ItemContractSO>();
 
     private int currentItemIndex = 0;
 
@@ -22,18 +22,25 @@ public class Inventory : MonoBehaviour
     private Player player;
 
     private Pause pauseSystem;
-    //Variables for item model preview
-    public Transform itemPreviewSpawnPoint { get; private set; }
     public Camera inventoryCamera { get; private set; }
 
-    //private RawImage itemPreviewImage; // Optional if you want to toggle visibility
-    public GameObject currentItemPreview { get; private set; }
+    public GameObject itemPreviewPlaceholder;
 
     [SerializeField] private AudioClip pickUpAudioClip;
 
     [SerializeField] private PlayerInventorySO playerInventorySO;
 
+    private ItemContractSO itemFrom;
+
+    [SerializeField] private int itemFromIndex = -1;
+
+    [SerializeField] private int itemToIndex = -1;
+
+    private ItemContractSO itemTo;
+
     string previousPlayerState;
+
+    public ItemRecipeBook recipeBook;
 
     public void Awake()
     {
@@ -42,6 +49,7 @@ public class Inventory : MonoBehaviour
         actions.Inventory.Next.performed += _ => Next();
         actions.Inventory.Previous.performed += _ => Previous();
         actions.Inventory.CycleItems.performed += CycleItems;
+        actions.Inventory.Combine.performed += _ => Combine();
     }
 
     public void Start()
@@ -67,13 +75,12 @@ public class Inventory : MonoBehaviour
             Debug.LogError("PlayerInventorySO not found in Resources");
         }
         pauseSystem = FindAnyObjectByType<Pause>();
-        /*inventoryCamera = transform.Find("InventoryCamera").gameObject?.GetComponent<Camera>();
 
-        // find in children of InventoryCamera
-        if (itemPreviewSpawnPoint == null)
+        itemPreviewPlaceholder = gameObject.transform.Find("ItemPreviewPlaceholder").gameObject;
+        if(itemPreviewPlaceholder == null)
         {
-            itemPreviewSpawnPoint = inventoryCamera.transform.Find("ItemPreviewSpawnPoint").gameObject?.transform;
-        }*/
+            Debug.LogError("Did not find Item Preview Placeholder");
+        }
 
     }
 
@@ -122,8 +129,7 @@ public class Inventory : MonoBehaviour
         //Set the item name text to the last item seen before closing the inventory
         if (items.Count > 0)
         {
-            itemNameText.text = items[currentItemIndex].itemName; // Update the item name text
-            ShowItemPreview();
+            itemNameText.text = items[currentItemIndex].Name; // Update the item name text
         }
         else
         {
@@ -131,17 +137,25 @@ public class Inventory : MonoBehaviour
         }
         pauseSystem.action.Disable();
 
+        ItemPreview();
 
+
+    }
+
+    private void ItemPreview()
+    {
+        if (items.Count == 0)
+        {
+            itemPreviewPlaceholder.SetActive(false);
+            return;
+        }
+        itemPreviewPlaceholder.SetActive(true);
+        itemPreviewPlaceholder.GetComponent<MeshFilter>().mesh = items[currentItemIndex].MeshRef;
     }
 
     private void CloseInventory()
     {
         isInventoryOpen = false;
-        // Hide the inventory UI
-        if (currentItemPreview != null)
-        {
-            Destroy(currentItemPreview);
-        }
 
         Debug.Log("Inventory closed");
         inventoryUI.SetActive(false);
@@ -164,11 +178,12 @@ public class Inventory : MonoBehaviour
         // Logic to cycle through items in the inventory
         if (items.Count > 0)
         {
-            itemNameText.text = items[currentItemIndex].itemName; // Update the item name text
-            ShowItemPreview();
+            itemNameText.text = items[currentItemIndex].Name; // Update the item name text
         }
 
         Debug.Log("Current item index after cycling: " + currentItemIndex);
+
+        ItemPreview();
     }
     public void SetCurrentItemIndex(int index)
     {
@@ -186,10 +201,10 @@ public class Inventory : MonoBehaviour
         if (items.Count == 0 || !isInventoryOpen) return; // No items to cycle through
         currentItemIndex = (currentItemIndex + 1) % items.Count;
         playerInventorySO.currentItemIndex = currentItemIndex; // Update the current item index in the SO
-        itemNameText.text = items[currentItemIndex].itemName; // Update the item name text
-        Debug.Log("Next item selected: " + items[currentItemIndex].itemName);
+        itemNameText.text = items[currentItemIndex].Name; // Update the item name text
+        Debug.Log("Next item selected: " + items[currentItemIndex].Name+ "with index "+currentItemIndex);
 
-        ShowItemPreview();
+        ItemPreview();
     }
 
     public void Previous()
@@ -197,19 +212,18 @@ public class Inventory : MonoBehaviour
         if (items.Count == 0 || !isInventoryOpen) return; // No items to cycle through
         currentItemIndex = (currentItemIndex - 1 + items.Count) % items.Count;
         playerInventorySO.currentItemIndex = currentItemIndex; // Update the current item index in the SO
-        itemNameText.text = items[currentItemIndex].itemName; // Update the item name text
-        Debug.Log("Previous item selected: " + items[currentItemIndex].itemName);
+        itemNameText.text = items[currentItemIndex].Name; // Update the item name text
+        Debug.Log("Previous item selected: " + items[currentItemIndex].Name + "with index "+currentItemIndex);
 
-        ShowItemPreview();
+        ItemPreview();
     }
 
-    public void AddItem(string itemName, int itemKey, GameObject itemPrefab = null)
+    public void AddItem(ItemContractSO item)
     {
-        Item newItem = new(itemName, itemKey, itemPrefab);
 
         if (playerInventorySO != null)
         {
-            playerInventorySO.items.Add(newItem);
+            playerInventorySO.items.Add(item);
             playerInventorySO.currentItemIndex = currentItemIndex;
             player.playerAudioSource.pitch = Random.Range(0.9f, 1.1f);
             player.playerAudioSource.PlayOneShot(pickUpAudioClip);
@@ -224,31 +238,41 @@ public class Inventory : MonoBehaviour
     {
         if (items.Count > 0)
         {
-            playerInventorySO.items.Remove(items[currentItemIndex]);
+
+            playerInventorySO.items.RemoveAt(currentItemIndex);
             playerInventorySO.currentItemIndex = 0;
             currentItemIndex = 0;
+            ItemRefresh();
         }
     }
 
-    public bool RemoveItemAtIndex(int ItemIndex)
+    public bool RemoveItemAtIndex(int itemIndex)
     {
-        if (items.Count > 0 && ItemIndex >= 0 && ItemIndex < items.Count)
+        if (items.Count > 0 && itemIndex >= 0 && itemIndex < items.Count)
         {
-            items.RemoveAt(ItemIndex);
-            currentItemIndex--;
+            Debug.Log("itemIndex: " + itemIndex);
+            playerInventorySO.items.RemoveAt(itemIndex);
+            currentItemIndex = 0;
+            ItemRefresh();
             return true;
         }
         Debug.LogError("Wrong index passed to RemoveItemAtIndex");
         return false;
     }
 
-    public int GetItemIndex(int itemKey)
+    private void ItemRefresh()
+    {
+        itemNameText.text = items[currentItemIndex].Name;
+        ItemPreview();
+    }
+
+    public int GetItemIndex(string itemiD)
     {
         for (int i = 0; i < items.Count; i++)
         {
-            if (items[i].itemKey == itemKey)
+            if (items[i].Id == itemiD)
             {
-                Item FoundItem = items[i];
+                ItemContractSO FoundItem = items[i];
                 return i;
             }
         }
@@ -256,14 +280,14 @@ public class Inventory : MonoBehaviour
         return -1;
     }
 
-    public int GetEquippedItemKey()
+    public string GetEquippedItemKey()
     {
         if (items.Count > 0 && currentItemIndex >= 0 && currentItemIndex < items.Count)
         {
-            return items[currentItemIndex].itemKey;
+            return items[currentItemIndex].Id;
         }
 
-        return -1;
+        return null;
     }
 
     public bool UseItemByItemKey(int itemKey)
@@ -288,50 +312,56 @@ public class Inventory : MonoBehaviour
         return true;
     }
 
-    private void ShowItemPreview()
+    private void RemoveTwoItems()
     {
-        if (itemPreviewSpawnPoint == null || items.Count == 0)
-            return;
+        // Remove both items safely by removing the higher index first so the second index stays valid
+                int firstIndex = Mathf.Max(itemFromIndex, itemToIndex);
+                int secondIndex = Mathf.Min(itemFromIndex, itemToIndex);
 
-        // Destroy existing preview
-        if (currentItemPreview != null)
-            Destroy(currentItemPreview);
+                if (playerInventorySO != null)
+                {
+                    if (firstIndex >= 0 && firstIndex < playerInventorySO.items.Count)
+                        playerInventorySO.items.RemoveAt(firstIndex);
 
-        Item currentItem = items[currentItemIndex];
-
-        if (currentItem.itemPrefab != null)
-        {
-            currentItemPreview = Instantiate(currentItem.itemPrefab, itemPreviewSpawnPoint.position, Quaternion.identity, itemPreviewSpawnPoint);
-            // Rotate 90 degress over Y and Z axis
-            currentItemPreview.transform.localRotation = Quaternion.Euler(0, 90, 90);
-            // Scale the preivew by 3 times
-            currentItemPreview.transform.localScale = new Vector3(3, 3, 3);
-
-            // Ensure it's on the correct layer so only the InventoryCamera sees it
-            SetupChildrenRecursively(currentItemPreview, LayerMask.NameToLayer("ItemLayer"));
-        }
+                    if (secondIndex >= 0 && secondIndex < playerInventorySO.items.Count)
+                        playerInventorySO.items.RemoveAt(secondIndex);
+                    
+                    currentItemIndex = playerInventorySO.items.Count-1;
+                    playerInventorySO.currentItemIndex = currentItemIndex;
+                    ItemRefresh();
+                }
     }
 
-    // Utility function to set layer recursively
-    private void SetupChildrenRecursively(GameObject obj, int newLayer)
+    public void Combine()
     {
-        if (obj == null) return;
-
-        obj.layer = newLayer;
-        // Disable collider and rigid body if they exist
-        Collider collider = obj.GetComponent<Collider>();
-        if (collider != null)
-            collider.enabled = false;
-        Rigidbody rb = obj.GetComponent<Rigidbody>();
-        if (rb != null)
-            rb.useGravity = false;
-        foreach (Transform child in obj.transform)
+        if (itemFrom == null)
         {
-            if (child != null)
-            {
-                SetupChildrenRecursively(child.gameObject, newLayer);
-            }
+            itemFrom = items[currentItemIndex];
+            itemFromIndex = currentItemIndex;
+            Debug.Log("ItemFrom: " + itemFrom.name + " at itemFromIndex: " + itemFromIndex);
         }
+        else if(itemTo == null && currentItemIndex != itemFromIndex)
+        {
+            itemTo = items[currentItemIndex];
+            itemToIndex = currentItemIndex;
+            List<ItemContractSO> itemIngredients = new List<ItemContractSO>
+            {
+                itemFrom,
+                itemTo
+            };
+            ItemContractSO result = recipeBook.FindRecipe(itemIngredients);
+            if (result != null)
+            {
+                Debug.Log("itemFromIndex: " + itemFromIndex + ". The count  is " + items.Count);
+                AddItem(result);
+                RemoveTwoItems();
+            }
+            itemFrom = null;
+            itemTo = null;
+            itemFromIndex = -1;
+            itemToIndex = -1;
+        }
+        
     }
 
 }
