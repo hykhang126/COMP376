@@ -7,29 +7,18 @@ public class Pause : MonoBehaviour
 {
 
     public PauseAction action;
-
-    private bool paused = false;
-
     public GameObject pauseMenu;
 
-    [SerializeField] private Player playerController;
-
     [Header("Pause Menu Buttons")]
-
     [SerializeField] private Button resumeButton;
-
     [SerializeField] private Button quitButton;
 
     [Header("Settings")]
-
     [SerializeField] private GameSettingsSO gameSettingsSO;
 
+    private bool paused = false;
     private Inventory inventorySystem;
-
     private string previousPlayerState;
-
-
-
 
     private void Awake()
     {
@@ -91,8 +80,7 @@ public class Pause : MonoBehaviour
         Cursor.lockState = CursorLockMode.None; // Unlock the cursor
         Cursor.visible = true; // Make the cursor visible
 
-        if (playerController != null)
-            playerController.playerInput.enabled = false;
+        Player.InstanceReference.playerInputHandler.DisableInput(); // Disable player controls
 
         if (resumeButton != null)
             EventSystem.current.SetSelectedGameObject(resumeButton.gameObject);
@@ -107,8 +95,7 @@ public class Pause : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked; // Lock the cursor
         Cursor.visible = false; // Hide the cursor
 
-        if (playerController != null)
-            playerController.playerInput.enabled = true;
+        Player.InstanceReference.playerInputHandler.EnableInput(); // Enable player controls
 
         EventSystem.current.SetSelectedGameObject(null);
         inventorySystem.actions.Enable();

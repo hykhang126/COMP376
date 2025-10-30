@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 8066416756518888055}
   - component: {fileID: 7803028597270645323}
   - component: {fileID: 208628007290521926}
+  - component: {fileID: 356833715875402867}
   - component: {fileID: 6419870049198850795}
   - component: {fileID: 7025571321497782876}
   - component: {fileID: 2397821621807915758}
@@ -147,6 +148,18 @@ MonoBehaviour:
   gamepadSensitivityMultiplier: 5
   playerAudioSource: {fileID: 2156201757411810303}
   gameSettingsSO: {fileID: 11400000, guid: a3efab0d2fded724c87672e1bdd84afb, type: 2}
+--- !u!114 &356833715875402867
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 972639073029162981}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 604b5f5476cb2ca468cee329cb75347d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerInputHandler
 --- !u!114 &6419870049198850795
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -7,40 +7,28 @@ using Unity.VisualScripting;
 
 public class Inventory : MonoBehaviour
 {
-    public List<ItemContractSO> items = new List<ItemContractSO>();
-
-    private int currentItemIndex = 0;
-
+    // Global Variables
     public InventoryAction actions;
-
-    private bool isInventoryOpen = false;
-
+    public List<ItemContractSO> items = new List<ItemContractSO>();
     public GameObject inventoryUI; // Reference to the inventory UI GameObject
-
-    private TextMeshProUGUI itemNameText; // Reference to the TextMeshProUGUI for item name display 
-
-    private Player player;
-
-    private Pause pauseSystem;
+    public GameObject itemPreviewPlaceholder;
+    public ItemRecipeBook recipeBook;
     public Camera inventoryCamera { get; private set; }
 
-    public GameObject itemPreviewPlaceholder;
-
-    [SerializeField] private AudioClip pickUpAudioClip;
-
+    // Serialized
     [SerializeField] private PlayerInventorySO playerInventorySO;
-
-    private ItemContractSO itemFrom;
-
+    [SerializeField] private AudioClip pickUpAudioClip;
     [SerializeField] private int itemFromIndex = -1;
-
     [SerializeField] private int itemToIndex = -1;
 
+    // Private
+    private int currentItemIndex = 0;
+    private bool isInventoryOpen = false;
+    private TextMeshProUGUI itemNameText;
+    private Pause pauseSystem;
+    private ItemContractSO itemFrom;
     private ItemContractSO itemTo;
-
-    string previousPlayerState;
-
-    public ItemRecipeBook recipeBook;
+    private string previousPlayerState;
 
     public void Awake()
     {
@@ -59,7 +47,6 @@ public class Inventory : MonoBehaviour
         Transform itemNameTransform = panel != null ? panel.transform.Find("ItemName") : null;
         itemNameText = itemNameTransform != null ? itemNameTransform.GetComponent<TextMeshProUGUI>() : null;
         inventoryUI.SetActive(false);
-        player = FindAnyObjectByType<Player>();
 
 #if UNITY_EDITOR
         playerInventorySO.ClearItemsInstance();
@@ -116,14 +103,13 @@ public class Inventory : MonoBehaviour
         previousPlayerState = Player.InstanceReference.stateMachine.GetCurrentStateName();
         isInventoryOpen = true;
         // Show the inventory UI
-        Debug.Log("Inventory opened");
         inventoryUI.SetActive(true);
         Cursor.visible = true; // Make the cursor visible
         Cursor.lockState = CursorLockMode.None; // Unlock the cursor
         //disable player movement
-        if (player != null)
+        if (Player.InstanceReference != null)
         {
-            player.playerInput.actions.Disable(); // Disable player input actions
+            Player.InstanceReference.playerInputHandler.DisableInput(); // Disable player input actions
         }
 
         //Set the item name text to the last item seen before closing the inventory
@@ -157,13 +143,12 @@ public class Inventory : MonoBehaviour
     {
         isInventoryOpen = false;
 
-        Debug.Log("Inventory closed");
         inventoryUI.SetActive(false);
         Cursor.visible = false; // Hide the cursor
         Cursor.lockState = CursorLockMode.Locked; // Lock the cursor
-        if (player != null)
+        if (Player.InstanceReference != null)
         {
-            player.playerInput.actions.Enable(); // Re-enable player input actions
+            Player.InstanceReference.playerInputHandler.EnableInput(); // Re-enable player input actions
         }
         pauseSystem.action.Enable();
         Player.InstanceReference.stateMachine.InvokeStateEvent(previousPlayerState);
@@ -223,8 +208,11 @@ public class Inventory : MonoBehaviour
         {
             playerInventorySO.items.Add(item);
             playerInventorySO.currentItemIndex = currentItemIndex;
-            player.playerAudioSource.pitch = Random.Range(0.9f, 1.1f);
-            player.playerAudioSource.PlayOneShot(pickUpAudioClip);
+            if (Player.InstanceReference != null && Player.InstanceReference.playerAudioSource != null)
+            {
+                Player.InstanceReference.playerAudioSource.pitch = Random.Range(0.9f, 1.1f);
+                Player.InstanceReference.playerAudioSource.PlayOneShot(pickUpAudioClip);
+            }
         }
         else
         {

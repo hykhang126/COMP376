@@ -4,21 +4,15 @@ using UnityEngine.UI;
 
 public class HUD : MonoBehaviour
 {
-    TextMeshProUGUI interactPrompt;
-
     public GameObject EndGamePanel{ get; private set; }
-
     public GameObject EndGameVolume { get; private set; }
 
+    private TextMeshProUGUI interactPrompt;
     private Button quitGame;
-
-    Player player;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-
-        player = GameObject.Find("Player").GetComponent<Player>();
         interactPrompt = transform.Find("Interact Prompt").GetComponent<TextMeshProUGUI>();
         if (interactPrompt == null)
         {
@@ -63,7 +57,7 @@ public class HUD : MonoBehaviour
 
     public void ShowEndGamePrompt()
     {
-        player.playerInput.enabled = false;
+        Player.InstanceReference.playerInputHandler.DisableInput();
 
         Player.InstanceReference.stateMachine.InvokeStateEvent(PlayerStateType.InMenu.ToString());
         

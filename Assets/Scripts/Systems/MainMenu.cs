@@ -1,35 +1,28 @@
 using System.Collections;
-using SojaExiles;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem.UI;
-using UnityEngine.ProBuilder.Shapes;
 using UnityEngine.UI;
 
 public class MainMenu : MonoBehaviour
 {
-    private Button start;
-
-    private Button quit;
-
+    // Serialized
     [SerializeField] private GameObject door;
-
-    private Player _player;
-
-    [SerializeField] private float cameraSpeed = 10f;
-
     [SerializeField] private GameObject playerEndLocation;
     [SerializeField] private GameObject blackVoid;
+    [SerializeField] private float cameraSpeed = 10f;
 
+    // UI references
+    private Button start;
+    private Button quit;
+    // Systems
     private Pause pauseSystem;
-
     private Inventory inventorySystem;
 
 
     public void Awake()
     {
-        start = transform.Find("Start").gameObject?.GetComponent<Button>();
+        start = transform.Find("Start").gameObject.GetComponent<Button>();
         if (start == null)
         {
             Debug.LogError("Start button not found");
@@ -49,7 +42,7 @@ public class MainMenu : MonoBehaviour
 
         quit.onClick.AddListener(QuitGame);
 
-        _player = FindAnyObjectByType<Player>();
+    // No local player cache — use Player.InstanceReference when needed
 
         pauseSystem = FindAnyObjectByType<Pause>();
 
@@ -85,7 +78,8 @@ public class MainMenu : MonoBehaviour
         //Door Opens
         door.GetComponent<DoorAction>().OpenDoor();
         //camera moves until a certain point after the door
-        StartCoroutine(StartSceneTransition(_player.transform.position, playerEndLocation.transform.position, cameraSpeed));
+        Vector3 playerStartPos = Player.InstanceReference != null ? Player.InstanceReference.transform.position : Vector3.zero;
+        StartCoroutine(StartSceneTransition(playerStartPos, playerEndLocation.transform.position, cameraSpeed));
         //Load the Game Scene
     }
 
@@ -94,7 +88,8 @@ public class MainMenu : MonoBehaviour
         Debug.Log("Quit Game");
         blackVoid.SetActive(true);
         door.GetComponent<DoorAction>().OpenDoor();
-        StartCoroutine(QuitSceneTransition(_player.transform.position, playerEndLocation.transform.position, cameraSpeed));
+        Vector3 playerStartPos = Player.InstanceReference != null ? Player.InstanceReference.transform.position : Vector3.zero;
+        StartCoroutine(QuitSceneTransition(playerStartPos, playerEndLocation.transform.position, cameraSpeed));
     }
 
     public void Update()
@@ -120,14 +115,17 @@ public class MainMenu : MonoBehaviour
         float elapsed = 0f;
         while (elapsed < timeToReach)
         {
-            _player.transform.position = Vector3.Lerp(playerStartPos, playerEndPos, elapsed / timeToReach);
+            if (Player.InstanceReference != null)
+                Player.InstanceReference.transform.position = Vector3.Lerp(playerStartPos, playerEndPos, elapsed / timeToReach);
             elapsed += Time.deltaTime;
             yield return null;
         }
-        _player.transform.position = playerEndPos;
+        if (Player.InstanceReference != null)
+            Player.InstanceReference.transform.position = playerEndPos;
 
         door.GetComponent<DoorAction>().CloseDoor();
-        _player.playerInput.enabled = true;
+        if (Player.InstanceReference != null)
+            Player.InstanceReference.playerInputHandler.EnableInput(); // Re-enable player input actions
         // Transition player to Idle state after game start
         Player.InstanceReference.stateMachine.InvokeStateEvent("toIdle");
         if (blackVoid != null)
@@ -153,11 +151,13 @@ public class MainMenu : MonoBehaviour
         float elapsed = 0f;
         while (elapsed < timeToReach)
         {
-            _player.transform.position = Vector3.Lerp(playerStartPos, playerEndPos, elapsed / timeToReach);
+            if (Player.InstanceReference != null)
+                Player.InstanceReference.transform.position = Vector3.Lerp(playerStartPos, playerEndPos, elapsed / timeToReach);
             elapsed += Time.deltaTime;
             yield return null;
         }
-        _player.transform.position = playerEndPos;
+        if (Player.InstanceReference != null)
+            Player.InstanceReference.transform.position = playerEndPos;
 
         Application.Quit();
 
