@@ -30,7 +30,17 @@ public class Inventory : MonoBehaviour
 
     [SerializeField] private PlayerInventorySO playerInventorySO;
 
+    private ItemContractSO itemFrom;
+
+    [SerializeField] private int itemFromIndex = -1;
+
+    [SerializeField] private int itemToIndex = -1;
+
+    private ItemContractSO itemTo;
+
     string previousPlayerState;
+
+    public ItemRecipeBook recipeBook;
 
     public void Awake()
     {
@@ -39,6 +49,7 @@ public class Inventory : MonoBehaviour
         actions.Inventory.Next.performed += _ => Next();
         actions.Inventory.Previous.performed += _ => Previous();
         actions.Inventory.CycleItems.performed += CycleItems;
+        actions.Inventory.Combine.performed += _ => Combine();
     }
 
     public void Start()
@@ -133,6 +144,12 @@ public class Inventory : MonoBehaviour
 
     private void ItemPreview()
     {
+        if (items.Count == 0)
+        {
+            itemPreviewPlaceholder.SetActive(false);
+            return;
+        }
+        itemPreviewPlaceholder.SetActive(true);
         itemPreviewPlaceholder.GetComponent<MeshFilter>().mesh = items[currentItemIndex].MeshRef;
     }
 
@@ -185,7 +202,7 @@ public class Inventory : MonoBehaviour
         currentItemIndex = (currentItemIndex + 1) % items.Count;
         playerInventorySO.currentItemIndex = currentItemIndex; // Update the current item index in the SO
         itemNameText.text = items[currentItemIndex].Name; // Update the item name text
-        Debug.Log("Next item selected: " + items[currentItemIndex].Name);
+        Debug.Log("Next item selected: " + items[currentItemIndex].Name+ "with index "+currentItemIndex);
 
         ItemPreview();
     }
@@ -196,7 +213,7 @@ public class Inventory : MonoBehaviour
         currentItemIndex = (currentItemIndex - 1 + items.Count) % items.Count;
         playerInventorySO.currentItemIndex = currentItemIndex; // Update the current item index in the SO
         itemNameText.text = items[currentItemIndex].Name; // Update the item name text
-        Debug.Log("Previous item selected: " + items[currentItemIndex].Name);
+        Debug.Log("Previous item selected: " + items[currentItemIndex].Name + "with index "+currentItemIndex);
 
         ItemPreview();
     }
@@ -221,22 +238,32 @@ public class Inventory : MonoBehaviour
     {
         if (items.Count > 0)
         {
-            playerInventorySO.items.Remove(items[currentItemIndex]);
+
+            playerInventorySO.items.RemoveAt(currentItemIndex);
             playerInventorySO.currentItemIndex = 0;
             currentItemIndex = 0;
+            ItemRefresh();
         }
     }
 
-    public bool RemoveItemAtIndex(int ItemIndex)
+    public bool RemoveItemAtIndex(int itemIndex)
     {
-        if (items.Count > 0 && ItemIndex >= 0 && ItemIndex < items.Count)
+        if (items.Count > 0 && itemIndex >= 0 && itemIndex < items.Count)
         {
-            items.RemoveAt(ItemIndex);
-            currentItemIndex--;
+            Debug.Log("itemIndex: " + itemIndex);
+            playerInventorySO.items.RemoveAt(itemIndex);
+            currentItemIndex = 0;
+            ItemRefresh();
             return true;
         }
         Debug.LogError("Wrong index passed to RemoveItemAtIndex");
         return false;
+    }
+
+    private void ItemRefresh()
+    {
+        itemNameText.text = items[currentItemIndex].Name;
+        ItemPreview();
     }
 
     public int GetItemIndex(string itemiD)
@@ -283,6 +310,58 @@ public class Inventory : MonoBehaviour
         //Check if the item key is the same as the itemKey of the interactable
         //if both checks pass, remove the item from the inventory and call the interactable's Interact method.
         return true;
+    }
+
+    private void RemoveTwoItems()
+    {
+        // Remove both items safely by removing the higher index first so the second index stays valid
+                int firstIndex = Mathf.Max(itemFromIndex, itemToIndex);
+                int secondIndex = Mathf.Min(itemFromIndex, itemToIndex);
+
+                if (playerInventorySO != null)
+                {
+                    if (firstIndex >= 0 && firstIndex < playerInventorySO.items.Count)
+                        playerInventorySO.items.RemoveAt(firstIndex);
+
+                    if (secondIndex >= 0 && secondIndex < playerInventorySO.items.Count)
+                        playerInventorySO.items.RemoveAt(secondIndex);
+                    
+                    currentItemIndex = playerInventorySO.items.Count-1;
+                    playerInventorySO.currentItemIndex = currentItemIndex;
+                    ItemRefresh();
+                }
+    }
+
+    public void Combine()
+    {
+        if (itemFrom == null)
+        {
+            itemFrom = items[currentItemIndex];
+            itemFromIndex = currentItemIndex;
+            Debug.Log("ItemFrom: " + itemFrom.name + " at itemFromIndex: " + itemFromIndex);
+        }
+        else if(itemTo == null && currentItemIndex != itemFromIndex)
+        {
+            itemTo = items[currentItemIndex];
+            itemToIndex = currentItemIndex;
+            List<ItemContractSO> itemIngredients = new List<ItemContractSO>
+            {
+                itemFrom,
+                itemTo
+            };
+            ItemContractSO result = recipeBook.FindRecipe(itemIngredients);
+            if (result != null)
+            {
+                Debug.Log("itemFromIndex: " + itemFromIndex + ". The count  is " + items.Count);
+                AddItem(result);
+                RemoveTwoItems();
+            }
+            itemFrom = null;
+            itemTo = null;
+            itemFromIndex = -1;
+            itemToIndex = -1;
+        }
+        
     }
 
 }
