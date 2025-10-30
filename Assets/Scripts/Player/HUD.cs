@@ -64,7 +64,9 @@ public class HUD : MonoBehaviour
     public void ShowEndGamePrompt()
     {
         player.playerInput.enabled = false;
-        PlayerState.instance.TriggerTransition(PlayerStateType.InMenu);
+
+        Player.InstanceReference.stateMachine.InvokeStateEvent(PlayerStateType.InMenu.ToString());
+        
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
         endGamePanel.SetActive(true);

@@ -6,7 +6,7 @@ public class PlayerInventorySO : MyScriptables
 {
     public int currentItemIndex = 0;
 
-    public List<Item> items = new List<Item>();
+    public List<ItemContractSO> items = new List<ItemContractSO>();
 
     [Header("Item Prefab preference")]
     public List<SerializableKeyValuePair<int, GameObject>> itemList = new();

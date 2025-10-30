@@ -62,7 +62,7 @@ public class MainMenu : MonoBehaviour
 
     public void Start()
     {
-        PlayerState.instance.TriggerTransition(PlayerStateType.InMenu);
+        Player.InstanceReference.stateMachine.InvokeStateEvent(PlayerStateType.InMenu.ToString());
         StartCoroutine(MainMenuInit());
 
 
