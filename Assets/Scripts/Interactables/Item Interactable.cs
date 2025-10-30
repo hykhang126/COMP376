@@ -2,24 +2,53 @@ using System;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
-
+//Needs MeshRenderer component
+[RequireComponent(typeof(MeshFilter))]
+[RequireComponent(typeof(MeshRenderer))]
+[RequireComponent(typeof(MeshCollider))]
 public class ItemInteractable : Interactable
 {
 
-    private Item item;
+    [SerializeField] private ItemContractSO itemContractSO;
 
-    [SerializeField] private string itemName;
-    [SerializeField] private int itemKey;
+    MeshFilter _meshFilter;
+
+    MeshRenderer _meshRenderer;
+
+    MeshCollider _meshCollider;
 
     [SerializeField] private PlayerInventorySO playerInventorySO;
-
-    [SerializeField] private GameObject itemPrefab;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        item = new Item(itemName, itemKey, itemPrefab);
-        Debug.Log("Item created: " + item.itemName + " with key: " + item.itemKey);
+        if (itemContractSO == null)
+        {
+            Debug.LogError("ItemContractSO is not assigned in the inspector.");
+            return;
+        }
+        _meshFilter = GetComponent<MeshFilter>();
+        _meshCollider = GetComponent<MeshCollider>();
+        //Set the mesh of the item to the mesh from the ItemContractSO
+        if (itemContractSO.MeshRef != null)
+        {
+            _meshFilter.mesh = itemContractSO.MeshRef;
+        }
+        else
+        {
+            Debug.LogWarning("MeshRef is not assigned in ItemContractSO: " + itemContractSO.Name);
+        }
+
+        if (itemContractSO.Material != null)
+        {
+            _meshRenderer = GetComponent<MeshRenderer>();
+            _meshRenderer.material = itemContractSO.Material;
+        }
+        else
+        {
+            Debug.LogWarning("Material is not assigned in ItemContractSO: " + itemContractSO.Name);
+        }
+        _meshCollider.sharedMesh = _meshFilter.mesh;
     }
 
     public override void Interact(Player player)
@@ -36,7 +65,7 @@ public class ItemInteractable : Interactable
         }
         else
         {
-            player.inventory.AddItem(item.itemName, item.itemKey, GetItemPrefab(item.itemKey));
+            player.inventory.AddItem(itemContractSO);
             // player.inventory.AddItem(item.itemName, item.itemKey, item);
             Destroy(gameObject);
         }
