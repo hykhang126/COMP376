@@ -2950,42 +2950,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 3068820054916647589, guid: a9b92ebf67d0a7f4e8a1b3efedc9a2b4, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3068820054916647589, guid: a9b92ebf67d0a7f4e8a1b3efedc9a2b4, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3068820054916647589, guid: a9b92ebf67d0a7f4e8a1b3efedc9a2b4, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0.634
-      objectReference: {fileID: 0}
-    - target: {fileID: 4382643286937919051, guid: a9b92ebf67d0a7f4e8a1b3efedc9a2b4, type: 3}
-      propertyPath: m_BackGroundColor.a
-      value: 0.60784316
-      objectReference: {fileID: 0}
-    - target: {fileID: 4382643286937919051, guid: a9b92ebf67d0a7f4e8a1b3efedc9a2b4, type: 3}
-      propertyPath: m_BackGroundColor.b
-      value: 0.99433964
-      objectReference: {fileID: 0}
-    - target: {fileID: 4382643286937919051, guid: a9b92ebf67d0a7f4e8a1b3efedc9a2b4, type: 3}
-      propertyPath: m_BackGroundColor.g
-      value: 0.99433964
-      objectReference: {fileID: 0}
-    - target: {fileID: 4382643286937919051, guid: a9b92ebf67d0a7f4e8a1b3efedc9a2b4, type: 3}
-      propertyPath: m_BackGroundColor.r
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 6218547655644601836, guid: a9b92ebf67d0a7f4e8a1b3efedc9a2b4, type: 3}
       propertyPath: inventoryUI
       value: 
       objectReference: {fileID: 758488793}
-    - target: {fileID: 6218547655644601836, guid: a9b92ebf67d0a7f4e8a1b3efedc9a2b4, type: 3}
-      propertyPath: pickUpAudioClip
-      value: 
-      objectReference: {fileID: 8300000, guid: ac7590bb6cfd7414bae26d112007a196, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
