@@ -58,8 +58,8 @@ public class StateMachine : MonoBehaviour
 
     [SerializeField, Tooltip("List of transitions that can be executed from any State")]
     public List<Transition> globalTransitions;
-
-    public State currentState { get; private set; }
+    
+    public State currentState;
 
     // GlobalTransitions Dictionary for efficient lookup using state event
     private Dictionary<string, State> globalTransitionsDictionary;

@@ -202,7 +202,6 @@ public class Inventory : MonoBehaviour
         currentItemIndex = (currentItemIndex + 1) % items.Count;
         playerInventorySO.currentItemIndex = currentItemIndex; // Update the current item index in the SO
         itemNameText.text = items[currentItemIndex].Name; // Update the item name text
-        Debug.Log("Next item selected: " + items[currentItemIndex].Name+ "with index "+currentItemIndex);
 
         ItemPreview();
     }
@@ -213,7 +212,6 @@ public class Inventory : MonoBehaviour
         currentItemIndex = (currentItemIndex - 1 + items.Count) % items.Count;
         playerInventorySO.currentItemIndex = currentItemIndex; // Update the current item index in the SO
         itemNameText.text = items[currentItemIndex].Name; // Update the item name text
-        Debug.Log("Previous item selected: " + items[currentItemIndex].Name + "with index "+currentItemIndex);
 
         ItemPreview();
     }

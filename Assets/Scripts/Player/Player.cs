@@ -7,6 +7,7 @@ using UnityEngine.UI;
 using Unity.VisualScripting;
 
 [RequireComponent(typeof(PlayerInput))]
+[RequireComponent(typeof(Rigidbody))]
 public class Player : MonoBehaviour
 {
     // Global Player reference
@@ -67,13 +68,10 @@ public class Player : MonoBehaviour
     private float currentYaw = 0f;
     private float sensitivity = 5f;
 
-    [Header("HUD")]
-
-    [SerializeField] private HUD HUD;
-
+    [Header("Player Settings")]
     public AudioSource playerAudioSource;
-
     [SerializeField] private GameSettingsSO gameSettingsSO;
+    private HUD HUD;
 
     public void Awake()
     {
@@ -91,7 +89,7 @@ public class Player : MonoBehaviour
         playerInput.actions["Crouch"].canceled += OnCrouch;
         
 
-        // Set payer instance reference on init and remove any old refrences
+        // Set player instance reference on init and remove any old refrences
         if (InstanceReference != null && InstanceReference != this)
         {
             // Makes sure no duplicate instances can exsit
@@ -119,15 +117,18 @@ public class Player : MonoBehaviour
             sensitivity = gamepadSensitivityMultiplier;
         }
 
+        // Rigidbody
+        rb = GetComponent<Rigidbody>();
+
         // Connect to HUD
-        HUD = FindAnyObjectByType<HUD>();
+        HUD = FindFirstObjectByType<HUD>();
         if (HUD == null)
         {
             Debug.LogError("HUD not found");
         }
+
         Cursor.lockState = CursorLockMode.Locked;
         _camera = GameObject.Find("camera");
-        rb = GetComponent<Rigidbody>();
 
         // Initialize camera rotation
         _camera.transform.localRotation = Quaternion.Euler(0, 0, 0);
