@@ -2,6 +2,10 @@ using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+/**
+TODO: Make the handler switch maps based on Player State changes!
+**/
+
 /// <summary>
 /// Handles player input using the Unity Input System.
 /// Provides global access to PlayerInput, modifying its behavior and managing input action subscriptions.
@@ -10,9 +14,7 @@ using UnityEngine.InputSystem;
 [RequireComponent(typeof(Player), typeof(PlayerInput))]
 public class PlayerInputHandler : MonoBehaviour
 {
-    // Global access to PlayerInput
-    public PlayerInput PlayerInput { get; private set; }
-
+    // Global
     // Action names
     [Header("Input Action Names")]
     [Tooltip("Name of the Move action in the Player Input Action Map")]
@@ -27,15 +29,35 @@ public class PlayerInputHandler : MonoBehaviour
     public string grabAction = "Grab";
     [Tooltip("Name of the Interact action in the Player Input Action Map")]
     public string interactionAction = "Interact";
+    // Map names
+    [Header("Input Action Map Names")]
+    [Tooltip("Name of the Player Action Map")]
+    public string playerActionMap = "Player";
+    [Tooltip("Name of the Inventory Action Map")]
+    public string inventoryActionMap = "Inventory";
+    [Tooltip("Name of the Pause Action Map")]
+    public string pauseActionMap = "Pause";
+
 
     // Private
+    // Component reference
+    private PlayerInput PlayerInput { get; set; }
+    // Script reference
+    private PlayerInput_Actions PlayerInputActions { get; set; }
     private Player player;
+
+    // DEBUG
+    [Header("DEBUG: No need to assign")]
+    public string currentActionMapName;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         player = GetComponent<Player>();
         PlayerInput = GetComponent<PlayerInput>();
+
+        PlayerInputActions = new PlayerInput_Actions();
+        PlayerInputActions.Enable();
 
         Init();
     }
@@ -54,9 +76,6 @@ public class PlayerInputHandler : MonoBehaviour
 
         // Grab
         PlayerInput.actions[grabAction].performed += OnGrab;
-
-        // Interaction
-        PlayerInput.actions[interactionAction].performed += OnInteract;
     }
 
     #region Input Maps Control
@@ -85,11 +104,11 @@ public class PlayerInputHandler : MonoBehaviour
     {
         if (enable)
         {
-            PlayerInput.actions["Grab"].performed += OnGrab;
+            PlayerInput.actions[grabAction].performed += OnGrab;
         }
         else
         {
-            PlayerInput.actions["Grab"].performed -= OnGrab;
+            PlayerInput.actions[grabAction].performed -= OnGrab;
         }
     }
 
@@ -98,6 +117,41 @@ public class PlayerInputHandler : MonoBehaviour
         // Unity will handle null checks internally
         InputAction action = PlayerInput.actions.FindAction(actionName);
         action.performed += callback;
+    }
+
+    public void RemoveActionSubscriber(string actionName, Action<InputAction.CallbackContext> callback)
+    {
+        // Unity will handle null checks internally
+        InputAction action = PlayerInput.actions.FindAction(actionName);
+        action.performed -= callback;
+    }
+
+    public void AddMapActionNoParamSubscriber(string mapName, string actionName, Action callback)
+    {
+        InputActionMap actionMap = PlayerInput.actions.FindActionMap(mapName);
+        InputAction action = actionMap.FindAction(actionName);
+        action.performed += _ => callback();
+    }
+
+    public void RemoveMapActionNoParamSubscriber(string mapName, string actionName, Action callback)
+    {
+        InputActionMap actionMap = PlayerInput.actions.FindActionMap(mapName);
+        InputAction action = actionMap.FindAction(actionName);
+        action.performed -= _ => callback();
+    }
+
+    public void AddMapActionSubscriber(string mapName, string actionName, Action<InputAction.CallbackContext> callback)
+    {
+        InputActionMap actionMap = PlayerInput.actions.FindActionMap(mapName);
+        InputAction action = actionMap.FindAction(actionName);
+        action.performed += callback;
+    }
+
+    public void RemoveMapActionSubscriber(string mapName, string actionName, Action<InputAction.CallbackContext> callback)
+    {
+        InputActionMap actionMap = PlayerInput.actions.FindActionMap(mapName);
+        InputAction action = actionMap.FindAction(actionName);
+        action.performed -= callback;
     }
 
     #endregion
@@ -134,22 +188,10 @@ public class PlayerInputHandler : MonoBehaviour
 
     public void OnGrab(InputAction.CallbackContext context)
     {
-        OnGrabTriggered(context);
-
         if (player.IsHoldingItem())
         {
             player.DropItem();
         }
-    }
-
-    private void OnGrabTriggered(InputAction.CallbackContext context)
-    {
-        // TODO: Implement grab logic here
-    }
-
-    public void OnInteract(InputAction.CallbackContext context)
-    {
-        // TODO: Implement interaction logic here
     }
 
     #endregion
@@ -158,30 +200,36 @@ public class PlayerInputHandler : MonoBehaviour
 
     public void InMenuEnter()
     {
-        PlayerInput.actions["Move"].performed -= OnMove;
-        PlayerInput.actions["Move"].canceled -= OnMove;
-        PlayerInput.actions["Look"].performed -= OnLook;
-        PlayerInput.actions["Look"].canceled -= OnLook;
-        PlayerInput.actions["Crouch"].performed -= OnCrouch;
-        PlayerInput.actions["Crouch"].canceled -= OnCrouch;
-        PlayerInput.actions["Sprint"].performed -= OnSprint;
-        PlayerInput.actions["Sprint"].canceled -= OnSprint;
+        PlayerInput.actions[moveAction].performed -= OnMove;
+        PlayerInput.actions[moveAction].canceled -= OnMove;
+        PlayerInput.actions[lookAction].performed -= OnLook;
+        PlayerInput.actions[lookAction].canceled -= OnLook;
+        PlayerInput.actions[crouchAction].performed -= OnCrouch;
+        PlayerInput.actions[crouchAction].canceled -= OnCrouch;
+        PlayerInput.actions[sprintAction].performed -= OnSprint;
+        PlayerInput.actions[sprintAction].canceled -= OnSprint;
 
     }
 
     public void InMenuExit()
     {
-        PlayerInput.actions["Move"].performed += OnMove;
-        PlayerInput.actions["Move"].canceled += OnMove;
-        PlayerInput.actions["Look"].performed += OnLook;
-        PlayerInput.actions["Look"].canceled += OnLook;
-        PlayerInput.actions["Crouch"].performed += OnCrouch;
-        PlayerInput.actions["Crouch"].canceled += OnCrouch;
-        PlayerInput.actions["Sprint"].performed += OnSprint;
-        PlayerInput.actions["Sprint"].canceled += OnSprint;
+        PlayerInput.actions[moveAction].performed += OnMove;
+        PlayerInput.actions[moveAction].canceled += OnMove;
+        PlayerInput.actions[lookAction].performed += OnLook;
+        PlayerInput.actions[lookAction].canceled += OnLook;
+        PlayerInput.actions[crouchAction].performed += OnCrouch;
+        PlayerInput.actions[crouchAction].canceled += OnCrouch;
+        PlayerInput.actions[sprintAction].performed += OnSprint;
+        PlayerInput.actions[sprintAction].canceled += OnSprint;
 
     }
 
     #endregion
+
+    // DEBUG
+    private void Update()
+    {
+        currentActionMapName = PlayerInput.currentActionMap.name;
+    }
 
 }

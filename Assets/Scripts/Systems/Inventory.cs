@@ -1,14 +1,11 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.UI;
 using System.Collections.Generic;
 using TMPro;
-using Unity.VisualScripting;
 
 public class Inventory : MonoBehaviour
 {
     // Global Variables
-    public InventoryAction actions;
     public List<ItemContractSO> items = new List<ItemContractSO>();
     public GameObject inventoryUI; // Reference to the inventory UI GameObject
     public GameObject itemPreviewPlaceholder;
@@ -22,26 +19,40 @@ public class Inventory : MonoBehaviour
     [SerializeField] private int itemToIndex = -1;
 
     // Private
+    private PlayerInputHandler playerInputHandler;
     private int currentItemIndex = 0;
     private bool isInventoryOpen = false;
     private TextMeshProUGUI itemNameText;
-    private Pause pauseSystem;
     private ItemContractSO itemFrom;
     private ItemContractSO itemTo;
     private string previousPlayerState;
-
-    public void Awake()
-    {
-        actions = new InventoryAction();
-        actions.Inventory.InventoryToggle.performed += _ => ToggleInventory();
-        actions.Inventory.Next.performed += _ => Next();
-        actions.Inventory.Previous.performed += _ => Previous();
-        actions.Inventory.CycleItems.performed += CycleItems;
-        actions.Inventory.Combine.performed += _ => Combine();
-    }
+    private string playerMapName;
+    private string inventoryMapName;
 
     public void Start()
     {
+        if (Player.InstanceReference != null)
+        {
+            playerInputHandler = Player.InstanceReference.playerInputHandler;
+            if (playerInputHandler == null)
+            {
+                Debug.LogError("PlayerInputHandler is null on Player Instance Reference.");
+            }
+        }
+        else
+        {
+            Debug.LogError("Player Instance Reference is null. Cannot access PlayerInputHandler.");
+        }
+        playerMapName = playerInputHandler.playerActionMap;
+        inventoryMapName = playerInputHandler.inventoryActionMap;
+
+        playerInputHandler.AddMapActionNoParamSubscriber(playerMapName, "InventoryToggle", ToggleInventory);
+        playerInputHandler.AddMapActionNoParamSubscriber(inventoryMapName, "InventoryToggle", CloseInventory);
+        playerInputHandler.AddMapActionNoParamSubscriber(inventoryMapName, "Next", Next);
+        playerInputHandler.AddMapActionNoParamSubscriber(inventoryMapName, "Previous", Previous);
+        playerInputHandler.AddMapActionNoParamSubscriber(inventoryMapName, "Combine", Combine);
+        playerInputHandler.AddMapActionSubscriber(inventoryMapName, "CycleItems", CycleItems);
+
         Transform InventoryPanelTransform = inventoryUI.transform.Find("Panel");
         GameObject panel = InventoryPanelTransform != null ? InventoryPanelTransform.gameObject : null;
         Transform itemNameTransform = panel != null ? panel.transform.Find("ItemName") : null;
@@ -61,7 +72,6 @@ public class Inventory : MonoBehaviour
         {
             Debug.LogError("PlayerInventorySO not found in Resources");
         }
-        pauseSystem = FindAnyObjectByType<Pause>();
 
         itemPreviewPlaceholder = gameObject.transform.Find("ItemPreviewPlaceholder").gameObject;
         if(itemPreviewPlaceholder == null)
@@ -69,16 +79,6 @@ public class Inventory : MonoBehaviour
             Debug.LogError("Did not find Item Preview Placeholder");
         }
 
-    }
-
-    public void OnEnable()
-    {
-        actions.Enable();
-    }
-
-    public void OnDisable()
-    {
-        actions.Disable();
     }
 
     public void ToggleInventory()
@@ -106,11 +106,9 @@ public class Inventory : MonoBehaviour
         inventoryUI.SetActive(true);
         Cursor.visible = true; // Make the cursor visible
         Cursor.lockState = CursorLockMode.None; // Unlock the cursor
-        //disable player movement
-        if (Player.InstanceReference != null)
-        {
-            Player.InstanceReference.playerInputHandler.DisableInput(); // Disable player input actions
-        }
+
+        // Switch to Inventory input map
+        playerInputHandler.SwitchInputMap(inventoryMapName);
 
         //Set the item name text to the last item seen before closing the inventory
         if (items.Count > 0)
@@ -121,11 +119,8 @@ public class Inventory : MonoBehaviour
         {
             itemNameText.text = ""; // Default text if no items
         }
-        pauseSystem.action.Disable();
 
         ItemPreview();
-
-
     }
 
     private void ItemPreview()
@@ -146,11 +141,10 @@ public class Inventory : MonoBehaviour
         inventoryUI.SetActive(false);
         Cursor.visible = false; // Hide the cursor
         Cursor.lockState = CursorLockMode.Locked; // Lock the cursor
-        if (Player.InstanceReference != null)
-        {
-            Player.InstanceReference.playerInputHandler.EnableInput(); // Re-enable player input actions
-        }
-        pauseSystem.action.Enable();
+
+        // Switch back to Player input map
+        playerInputHandler.SwitchInputMap(playerMapName);
+
         Player.InstanceReference.stateMachine.InvokeStateEvent(previousPlayerState);
     }
 

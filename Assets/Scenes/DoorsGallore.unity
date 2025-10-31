@@ -11224,14 +11224,50 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 394989092}
     m_Modifications:
+    - target: {fileID: 356833715875402867, guid: a134cc40a117af44daa5d51a4d3e902a, type: 3}
+      propertyPath: currentActionMap.m_Id
+      value: 0882fb52-9325-40c9-a989-91207335467d
+      objectReference: {fileID: 0}
+    - target: {fileID: 356833715875402867, guid: a134cc40a117af44daa5d51a4d3e902a, type: 3}
+      propertyPath: currentActionMap.m_Name
+      value: Current
+      objectReference: {fileID: 0}
+    - target: {fileID: 356833715875402867, guid: a134cc40a117af44daa5d51a4d3e902a, type: 3}
+      propertyPath: currentActionMap.m_Actions.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 356833715875402867, guid: a134cc40a117af44daa5d51a4d3e902a, type: 3}
+      propertyPath: currentActionMap.m_Bindings.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 356833715875402867, guid: a134cc40a117af44daa5d51a4d3e902a, type: 3}
+      propertyPath: currentActionMap.m_Actions.Array.data[0].m_Id
+      value: 5b3bb8e8-9c6d-4acb-8f94-bfe485e91a79
+      objectReference: {fileID: 0}
+    - target: {fileID: 356833715875402867, guid: a134cc40a117af44daa5d51a4d3e902a, type: 3}
+      propertyPath: currentActionMap.m_Bindings.Array.data[0].m_Id
+      value: e593ba6e-fc60-44b5-a56d-0e42d3004063
+      objectReference: {fileID: 0}
+    - target: {fileID: 356833715875402867, guid: a134cc40a117af44daa5d51a4d3e902a, type: 3}
+      propertyPath: currentActionMap.m_Actions.Array.data[0].m_Name
+      value: New action
+      objectReference: {fileID: 0}
+    - target: {fileID: 356833715875402867, guid: a134cc40a117af44daa5d51a4d3e902a, type: 3}
+      propertyPath: currentActionMap.m_Actions.Array.data[0].m_Type
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 356833715875402867, guid: a134cc40a117af44daa5d51a4d3e902a, type: 3}
+      propertyPath: currentActionMap.m_Bindings.Array.data[0].m_Action
+      value: New action
+      objectReference: {fileID: 0}
+    - target: {fileID: 356833715875402867, guid: a134cc40a117af44daa5d51a4d3e902a, type: 3}
+      propertyPath: currentActionMap.m_Actions.Array.data[0].m_ExpectedControlType
+      value: Button
+      objectReference: {fileID: 0}
     - target: {fileID: 972639073029162981, guid: a134cc40a117af44daa5d51a4d3e902a, type: 3}
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
-    - target: {fileID: 7025571321497782876, guid: a134cc40a117af44daa5d51a4d3e902a, type: 3}
-      propertyPath: m_Actions
-      value: 
-      objectReference: {fileID: -944628639613478452, guid: 7e7bce3ab9d388948b2db4c2096602f1, type: 3}
     - target: {fileID: 7724768560626574633, guid: a134cc40a117af44daa5d51a4d3e902a, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0

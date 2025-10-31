@@ -134,6 +134,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aaea91b1caa02b54da40746d14e1733e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  movementInput: {x: 0, y: 0}
+  lookInput: {x: 0, y: 0}
   carryAnchor: {fileID: 5085665329965969228}
   movementSpeed: 2.5
   sprintingSpeed: 5
@@ -160,6 +162,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 604b5f5476cb2ca468cee329cb75347d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerInputHandler
+  moveAction: Move
+  lookAction: Look
+  sprintAction: Sprint
+  crouchAction: Crouch
+  grabAction: Grab
+  interactionAction: Interact
 --- !u!114 &6419870049198850795
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -379,7 +387,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  m_Actions: {fileID: -944628639613478452, guid: 7e7bce3ab9d388948b2db4c2096602f1, type: 3}
   m_NotificationBehavior: 3
   m_UIInputModule: {fileID: 0}
   m_DeviceLostEvent:
@@ -812,11 +820,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 278617ba72d09484abf89abf1fba2aa8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerInput: {fileID: 7025571321497782876}
-  _interactionAction: Interact
   length: 2
   radius: 0.25
   probe: {fileID: 3692463945112656143}
+  _interactable_component: {fileID: 0}
+  canInteractorTrigger: 0
 --- !u!114 &21873035584615497
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -829,11 +837,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ee10df60920ecc1ea78aa40c64ca0bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerInput: {fileID: 7025571321497782876}
-  _interactionAction: Grab
   length: 2
   radius: 0.25
   probe: {fileID: 3692463945112656143}
+  carryableObject: {fileID: 0}
 --- !u!1001 &1020224209365685413
 PrefabInstance:
   m_ObjectHideFlags: 0

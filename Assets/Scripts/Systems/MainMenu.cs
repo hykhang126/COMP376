@@ -15,9 +15,6 @@ public class MainMenu : MonoBehaviour
     // UI references
     private Button start;
     private Button quit;
-    // Systems
-    private Pause pauseSystem;
-    private Inventory inventorySystem;
 
 
     public void Awake()
@@ -41,14 +38,6 @@ public class MainMenu : MonoBehaviour
         #endif
 
         quit.onClick.AddListener(QuitGame);
-
-    // No local player cache — use Player.InstanceReference when needed
-
-        pauseSystem = FindAnyObjectByType<Pause>();
-
-        inventorySystem = FindAnyObjectByType<Inventory>();
-
-
     }
 
     public void Start()
@@ -134,9 +123,9 @@ public class MainMenu : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked; // Unlock the cursor
         Cursor.visible = false; // Make the cursor visible
         EventSystem.current.SetSelectedGameObject(null);
-        //Unlock other systems
-        pauseSystem.action.Enable();
-        inventorySystem.actions.Enable();
+
+        // Switch to player input map
+        Player.InstanceReference.playerInputHandler.SwitchInputMap(Player.InstanceReference.playerInputHandler.playerActionMap);
 
     }
 
