@@ -1,5 +1,3 @@
-using System;
-using UnityEditor.EditorTools;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -100,4 +98,11 @@ public class InteractorComponent : MonoBehaviour
     {
         Reset_probe();
     }
+
+    #region  SUSSY callbacks
+    public void OnSussyInteractableDestroyed(bool interactable)
+    {
+        canInteractorTrigger = interactable;
+    }
+    #endregion
 }
