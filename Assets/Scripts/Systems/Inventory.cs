@@ -1,65 +1,63 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.UI;
 using System.Collections.Generic;
 using TMPro;
-using Unity.VisualScripting;
 
 public class Inventory : MonoBehaviour
 {
+    // Global Variables
     public List<ItemContractSO> items = new List<ItemContractSO>();
-
-    private int currentItemIndex = 0;
-
-    public InventoryAction actions;
-
-    private bool isInventoryOpen = false;
-
     public GameObject inventoryUI; // Reference to the inventory UI GameObject
-
-    private TextMeshProUGUI itemNameText; // Reference to the TextMeshProUGUI for item name display 
-
-    private Player player;
-
-    private Pause pauseSystem;
+    public GameObject itemPreviewPlaceholder;
+    public ItemRecipeBook recipeBook;
     public Camera inventoryCamera { get; private set; }
 
-    public GameObject itemPreviewPlaceholder;
-
-    [SerializeField] private AudioClip pickUpAudioClip;
-
+    // Serialized
     [SerializeField] private PlayerInventorySO playerInventorySO;
-
-    private ItemContractSO itemFrom;
-
+    [SerializeField] private AudioClip pickUpAudioClip;
     [SerializeField] private int itemFromIndex = -1;
-
     [SerializeField] private int itemToIndex = -1;
 
+    // Private
+    private PlayerInputHandler playerInputHandler;
+    private int currentItemIndex = 0;
+    private bool isInventoryOpen = false;
+    private TextMeshProUGUI itemNameText;
+    private ItemContractSO itemFrom;
     private ItemContractSO itemTo;
-
-    string previousPlayerState;
-
-    public ItemRecipeBook recipeBook;
-
-    public void Awake()
-    {
-        actions = new InventoryAction();
-        actions.Inventory.InventoryToggle.performed += _ => ToggleInventory();
-        actions.Inventory.Next.performed += _ => Next();
-        actions.Inventory.Previous.performed += _ => Previous();
-        actions.Inventory.CycleItems.performed += CycleItems;
-        actions.Inventory.Combine.performed += _ => Combine();
-    }
+    private string previousPlayerState;
+    private string playerMapName;
+    private string inventoryMapName;
 
     public void Start()
     {
+        if (Player.InstanceReference != null)
+        {
+            playerInputHandler = Player.InstanceReference.playerInputHandler;
+            if (playerInputHandler == null)
+            {
+                Debug.LogError("PlayerInputHandler is null on Player Instance Reference.");
+            }
+        }
+        else
+        {
+            Debug.LogError("Player Instance Reference is null. Cannot access PlayerInputHandler.");
+        }
+        playerMapName = playerInputHandler.playerActionMap;
+        inventoryMapName = playerInputHandler.inventoryActionMap;
+
+        playerInputHandler.AddMapActionNoParamSubscriber(playerMapName, "InventoryToggle", ToggleInventory);
+        playerInputHandler.AddMapActionNoParamSubscriber(inventoryMapName, "InventoryToggle", CloseInventory);
+        playerInputHandler.AddMapActionNoParamSubscriber(inventoryMapName, "Next", Next);
+        playerInputHandler.AddMapActionNoParamSubscriber(inventoryMapName, "Previous", Previous);
+        playerInputHandler.AddMapActionNoParamSubscriber(inventoryMapName, "Combine", Combine);
+        playerInputHandler.AddMapActionSubscriber(inventoryMapName, "CycleItems", CycleItems);
+
         Transform InventoryPanelTransform = inventoryUI.transform.Find("Panel");
         GameObject panel = InventoryPanelTransform != null ? InventoryPanelTransform.gameObject : null;
         Transform itemNameTransform = panel != null ? panel.transform.Find("ItemName") : null;
         itemNameText = itemNameTransform != null ? itemNameTransform.GetComponent<TextMeshProUGUI>() : null;
         inventoryUI.SetActive(false);
-        player = FindAnyObjectByType<Player>();
 
 #if UNITY_EDITOR
         playerInventorySO.ClearItemsInstance();
@@ -74,7 +72,6 @@ public class Inventory : MonoBehaviour
         {
             Debug.LogError("PlayerInventorySO not found in Resources");
         }
-        pauseSystem = FindAnyObjectByType<Pause>();
 
         itemPreviewPlaceholder = gameObject.transform.Find("ItemPreviewPlaceholder").gameObject;
         if(itemPreviewPlaceholder == null)
@@ -82,16 +79,6 @@ public class Inventory : MonoBehaviour
             Debug.LogError("Did not find Item Preview Placeholder");
         }
 
-    }
-
-    public void OnEnable()
-    {
-        actions.Enable();
-    }
-
-    public void OnDisable()
-    {
-        actions.Disable();
     }
 
     public void ToggleInventory()
@@ -116,15 +103,12 @@ public class Inventory : MonoBehaviour
         previousPlayerState = Player.InstanceReference.stateMachine.GetCurrentStateName();
         isInventoryOpen = true;
         // Show the inventory UI
-        Debug.Log("Inventory opened");
         inventoryUI.SetActive(true);
         Cursor.visible = true; // Make the cursor visible
         Cursor.lockState = CursorLockMode.None; // Unlock the cursor
-        //disable player movement
-        if (player != null)
-        {
-            player.playerInput.actions.Disable(); // Disable player input actions
-        }
+
+        // Switch to Inventory input map
+        playerInputHandler.SwitchInputMap(inventoryMapName);
 
         //Set the item name text to the last item seen before closing the inventory
         if (items.Count > 0)
@@ -135,11 +119,8 @@ public class Inventory : MonoBehaviour
         {
             itemNameText.text = ""; // Default text if no items
         }
-        pauseSystem.action.Disable();
 
         ItemPreview();
-
-
     }
 
     private void ItemPreview()
@@ -157,15 +138,13 @@ public class Inventory : MonoBehaviour
     {
         isInventoryOpen = false;
 
-        Debug.Log("Inventory closed");
         inventoryUI.SetActive(false);
         Cursor.visible = false; // Hide the cursor
         Cursor.lockState = CursorLockMode.Locked; // Lock the cursor
-        if (player != null)
-        {
-            player.playerInput.actions.Enable(); // Re-enable player input actions
-        }
-        pauseSystem.action.Enable();
+
+        // Switch back to Player input map
+        playerInputHandler.SwitchInputMap(playerMapName);
+
         Player.InstanceReference.stateMachine.InvokeStateEvent(previousPlayerState);
     }
 
@@ -202,7 +181,6 @@ public class Inventory : MonoBehaviour
         currentItemIndex = (currentItemIndex + 1) % items.Count;
         playerInventorySO.currentItemIndex = currentItemIndex; // Update the current item index in the SO
         itemNameText.text = items[currentItemIndex].Name; // Update the item name text
-        Debug.Log("Next item selected: " + items[currentItemIndex].Name+ "with index "+currentItemIndex);
 
         ItemPreview();
     }
@@ -213,7 +191,6 @@ public class Inventory : MonoBehaviour
         currentItemIndex = (currentItemIndex - 1 + items.Count) % items.Count;
         playerInventorySO.currentItemIndex = currentItemIndex; // Update the current item index in the SO
         itemNameText.text = items[currentItemIndex].Name; // Update the item name text
-        Debug.Log("Previous item selected: " + items[currentItemIndex].Name + "with index "+currentItemIndex);
 
         ItemPreview();
     }
@@ -225,8 +202,11 @@ public class Inventory : MonoBehaviour
         {
             playerInventorySO.items.Add(item);
             playerInventorySO.currentItemIndex = currentItemIndex;
-            player.playerAudioSource.pitch = Random.Range(0.9f, 1.1f);
-            player.playerAudioSource.PlayOneShot(pickUpAudioClip);
+            if (Player.InstanceReference != null && Player.InstanceReference.playerAudioSource != null)
+            {
+                Player.InstanceReference.playerAudioSource.pitch = Random.Range(0.9f, 1.1f);
+                Player.InstanceReference.playerAudioSource.PlayOneShot(pickUpAudioClip);
+            }
         }
         else
         {

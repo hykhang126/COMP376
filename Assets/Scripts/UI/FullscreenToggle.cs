@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
+[RequireComponent(typeof(Toggle))]
 public class FullscreenToggle : MonoBehaviour
 {
     // FullscreenToggle
@@ -28,10 +29,17 @@ public class FullscreenToggle : MonoBehaviour
     }
 
     // Toggle fullscreen
-    [NaughtyAttributes.Button("Toggle Fullscreen")]
     private void ToggleFullscreen(bool isOn)
     {
         gameSettingsSO.isFullscreen = isOn;
         Screen.fullScreen = isOn;
+    }
+
+    // Debug button to toggle fullscreen in editor
+    [NaughtyAttributes.Button("Toggle Fullscreen")] 
+    private void ToggleFullscreenDebug()
+    {
+        fullscreenToggle.isOn = !fullscreenToggle.isOn;
+        ToggleFullscreen(fullscreenToggle.isOn);
     }
 }

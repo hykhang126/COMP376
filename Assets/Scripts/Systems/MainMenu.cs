@@ -1,37 +1,25 @@
 using System.Collections;
-using SojaExiles;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem.UI;
-using UnityEngine.ProBuilder.Shapes;
 using UnityEngine.UI;
 
 public class MainMenu : MonoBehaviour
 {
-    private Button start;
-
-    private Button quit;
-
+    // Serialized
     [SerializeField] private GameObject door;
-
-    private Player _player;
-
-    private float distance;
-
-    [SerializeField] private float cameraSpeed = 10f;
-
     [SerializeField] private GameObject playerEndLocation;
     [SerializeField] private GameObject blackVoid;
+    [SerializeField] private float cameraSpeed = 10f;
 
-    private Pause pauseSystem;
-
-    private Inventory inventorySystem;
+    // UI references
+    private Button start;
+    private Button quit;
 
 
     public void Awake()
     {
-        start = transform.Find("Start").gameObject?.GetComponent<Button>();
+        start = transform.Find("Start").gameObject.GetComponent<Button>();
         if (start == null)
         {
             Debug.LogError("Start button not found");
@@ -50,24 +38,12 @@ public class MainMenu : MonoBehaviour
         #endif
 
         quit.onClick.AddListener(QuitGame);
-
-        _player = FindAnyObjectByType<Player>();
-
-        pauseSystem = FindAnyObjectByType<Pause>();
-
-        inventorySystem = FindAnyObjectByType<Inventory>();
-
-
     }
 
     public void Start()
     {
         Player.InstanceReference.stateMachine.InvokeStateEvent(PlayerStateType.InMenu.ToString());
         StartCoroutine(MainMenuInit());
-
-
-
-
     }
 
     private IEnumerator MainMenuInit()
@@ -76,7 +52,9 @@ public class MainMenu : MonoBehaviour
         Cursor.lockState = CursorLockMode.None; // Unlock the cursor
         Cursor.visible = true; // Make the cursor visible
         EventSystem.current.SetSelectedGameObject(start.gameObject);
-        // _player.playerInput.enabled = false; // Disable player input
+
+        // Disable player input
+        Player.InstanceReference.playerInputHandler.DisableInput();
     }
 
     public void StartGame()
@@ -87,8 +65,8 @@ public class MainMenu : MonoBehaviour
         //Door Opens
         door.GetComponent<DoorAction>().OpenDoor();
         //camera moves until a certain point after the door
-        StartCoroutine(StartSceneTransition(_player.transform.position, playerEndLocation.transform.position, cameraSpeed));
-        //Load the Game Scene
+        Vector3 playerStartPos = Player.InstanceReference != null ? Player.InstanceReference.transform.position : Vector3.zero;
+        StartCoroutine(StartSceneTransition(playerStartPos, playerEndLocation.transform.position, cameraSpeed));
     }
 
     public void QuitGame()
@@ -96,7 +74,8 @@ public class MainMenu : MonoBehaviour
         Debug.Log("Quit Game");
         blackVoid.SetActive(true);
         door.GetComponent<DoorAction>().OpenDoor();
-        StartCoroutine(QuitSceneTransition(_player.transform.position, playerEndLocation.transform.position, cameraSpeed));
+        Vector3 playerStartPos = Player.InstanceReference != null ? Player.InstanceReference.transform.position : Vector3.zero;
+        StartCoroutine(QuitSceneTransition(playerStartPos, playerEndLocation.transform.position, cameraSpeed));
     }
 
     public void Update()
@@ -122,14 +101,20 @@ public class MainMenu : MonoBehaviour
         float elapsed = 0f;
         while (elapsed < timeToReach)
         {
-            _player.transform.position = Vector3.Lerp(playerStartPos, playerEndPos, elapsed / timeToReach);
+            if (Player.InstanceReference != null)
+                Player.InstanceReference.transform.position = Vector3.Lerp(playerStartPos, playerEndPos, elapsed / timeToReach);
             elapsed += Time.deltaTime;
             yield return null;
         }
-        _player.transform.position = playerEndPos;
+        if (Player.InstanceReference != null)
+            Player.InstanceReference.transform.position = playerEndPos;
 
         door.GetComponent<DoorAction>().CloseDoor();
-        _player.playerInput.enabled = true;
+
+        // Re-enable player input actions
+        if (Player.InstanceReference != null)
+            Player.InstanceReference.playerInputHandler.EnableInput(); 
+            
         // Transition player to Idle state after game start
         Player.InstanceReference.stateMachine.InvokeStateEvent("toIdle");
         if (blackVoid != null)
@@ -140,9 +125,9 @@ public class MainMenu : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked; // Unlock the cursor
         Cursor.visible = false; // Make the cursor visible
         EventSystem.current.SetSelectedGameObject(null);
-        //Unlock other systems
-        pauseSystem.action.Enable();
-        inventorySystem.actions.Enable();
+
+        // Switch to player input map
+        Player.InstanceReference.playerInputHandler.SwitchInputMap(Player.InstanceReference.playerInputHandler.playerActionMap);
 
     }
 
@@ -155,11 +140,13 @@ public class MainMenu : MonoBehaviour
         float elapsed = 0f;
         while (elapsed < timeToReach)
         {
-            _player.transform.position = Vector3.Lerp(playerStartPos, playerEndPos, elapsed / timeToReach);
+            if (Player.InstanceReference != null)
+                Player.InstanceReference.transform.position = Vector3.Lerp(playerStartPos, playerEndPos, elapsed / timeToReach);
             elapsed += Time.deltaTime;
             yield return null;
         }
-        _player.transform.position = playerEndPos;
+        if (Player.InstanceReference != null)
+            Player.InstanceReference.transform.position = playerEndPos;
 
         Application.Quit();
 

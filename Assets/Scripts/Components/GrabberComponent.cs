@@ -1,59 +1,48 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
-using System;
-using Unity.VisualScripting;
 
 [RequireComponent(typeof(CapsuleCollider))]
 public class GrabberComponent : MonoBehaviour
 {
-    [SerializeField] private PlayerInput playerInput;
-    [SerializeField]
-    private String _interactionAction = "Grab";
-    private String interactionAction
-    {
-        set
-        {
-            playerInput.actions[_interactionAction].performed -= OnGrabTriggered;
-            _interactionAction = value;
-            playerInput.actions[_interactionAction].performed += OnGrabTriggered;
-        }
-        get
-        {
-            return _interactionAction;
-        }
-    }
-
     [Header("Forward probe (local Z)")]
     [SerializeField]
     float length = 2f;       // how far forward the probe reaches
     [SerializeField]
     float radius = 0.05f;    // how thin the probe is
 
-    [SerializeField, HideInInspector]
-    private CapsuleCollider probe;
-    private GameObject carryableObject = null;
+    [SerializeField, HideInInspector] private CapsuleCollider probe;
 
-    void Awake()
-    {
-        if (playerInput == null)
-        {
-            Debug.LogError("Must assign playerInput in InteractorCOmponent!");
-            return;
-        }
-        else
-        {
-            playerInput.actions[_interactionAction].performed += OnGrabTriggered;
-        }
-    }
+    [Header("DEBUG: No assignment")]
+    [Tooltip("The currently detected carryable object")]
+    [SerializeField] private GameObject carryableObject = null;
+
+    private PlayerInputHandler playerInputHandler;
 
     void Start()
     {
+        // Grab the PlayerInputHandler from Player Instance
+        if (Player.InstanceReference != null)
+        {
+            playerInputHandler = Player.InstanceReference.playerInputHandler;
+            if (playerInputHandler != null)
+            {
+                playerInputHandler.AddActionSubscriber(playerInputHandler.grabAction, OnGrabTriggered);
+            }
+            else
+            {
+                Debug.LogError("PlayerInputHandler component not found on Player instance!");
+            }
+        }
+        else
+        {
+            Debug.LogError("Player instance not found!");
+        }
         
-        reset_probe();
+        Reset_probe();
     }
 
 
-    private void reset_probe()
+    private void Reset_probe()
     {
         probe = GetComponent<CapsuleCollider>();
         if (probe == null)
@@ -70,7 +59,8 @@ public class GrabberComponent : MonoBehaviour
 
     private void OnGrabTriggered(InputAction.CallbackContext context)
     {
-        if (carryableObject != null){
+        if (carryableObject != null)
+        {
             Player.InstanceReference.AttemptGrabItem(carryableObject);
         }
     }
@@ -91,6 +81,6 @@ public class GrabberComponent : MonoBehaviour
 
     void OnValidate()
     {
-        reset_probe();
+        Reset_probe();
     }
 }
