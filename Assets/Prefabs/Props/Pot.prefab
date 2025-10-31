@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3466519510533395518}
   m_Layer: 0
   m_Name: Pot
-  m_TagString: Untagged
+  m_TagString: Grabbable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -80,9 +80,33 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -8598709518847841063, guid: 5fa70f0f251bc124abcd181f92537ad5, type: 3}
+      propertyPath: m_TagString
+      value: Grabbable
+      objectReference: {fileID: 0}
+    - target: {fileID: -1433085203283487586, guid: 5fa70f0f251bc124abcd181f92537ad5, type: 3}
+      propertyPath: m_TagString
+      value: Grabbable
+      objectReference: {fileID: 0}
+    - target: {fileID: -1277212420883862316, guid: 5fa70f0f251bc124abcd181f92537ad5, type: 3}
+      propertyPath: m_TagString
+      value: Grabbable
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 5fa70f0f251bc124abcd181f92537ad5, type: 3}
       propertyPath: m_Name
       value: FlowerPot
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 5fa70f0f251bc124abcd181f92537ad5, type: 3}
+      propertyPath: m_TagString
+      value: Grabbable
+      objectReference: {fileID: 0}
+    - target: {fileID: 1147046440103043391, guid: 5fa70f0f251bc124abcd181f92537ad5, type: 3}
+      propertyPath: m_TagString
+      value: Grabbable
+      objectReference: {fileID: 0}
+    - target: {fileID: 4116745239155202714, guid: 5fa70f0f251bc124abcd181f92537ad5, type: 3}
+      propertyPath: m_TagString
+      value: Grabbable
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -205,10 +229,10 @@ Rigidbody:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4212639584759037605}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Mass: 1000
-  m_Drag: 0
-  m_AngularDrag: 0.05
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}

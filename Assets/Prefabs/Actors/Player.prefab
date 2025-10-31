@@ -168,6 +168,10 @@ MonoBehaviour:
   crouchAction: Crouch
   grabAction: Grab
   interactionAction: Interact
+  playerActionMap: Player
+  inventoryActionMap: Inventory
+  pauseActionMap: Pause
+  currentActionMapName: 
 --- !u!114 &6419870049198850795
 MonoBehaviour:
   m_ObjectHideFlags: 0

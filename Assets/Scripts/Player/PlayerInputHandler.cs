@@ -50,11 +50,19 @@ public class PlayerInputHandler : MonoBehaviour
     [Header("DEBUG: No need to assign")]
     public string currentActionMapName;
 
+    void Awake()
+    {
+        PlayerInput = GetComponent<PlayerInput>();
+        if (PlayerInput == null)
+        {
+            Debug.LogError("PlayerInput component not found on Player GameObject!");
+        }
+    }
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         player = GetComponent<Player>();
-        PlayerInput = GetComponent<PlayerInput>();
 
         PlayerInputActions = new PlayerInput_Actions();
         PlayerInputActions.Enable();
@@ -76,6 +84,27 @@ public class PlayerInputHandler : MonoBehaviour
 
         // Grab
         PlayerInput.actions[grabAction].performed += OnGrab;
+    }
+
+    void OnEnable()
+    {
+        Init();
+    }
+
+    void OnDisable()
+    {
+        // Movement and Look
+        PlayerInput.actions[moveAction].performed -= OnMove;
+        PlayerInput.actions[moveAction].canceled -= OnMove;
+        PlayerInput.actions[lookAction].performed -= OnLook;
+        PlayerInput.actions[lookAction].canceled -= OnLook;
+        PlayerInput.actions[sprintAction].performed -= OnSprint;
+        PlayerInput.actions[sprintAction].canceled -= OnSprint;
+        PlayerInput.actions[crouchAction].performed -= OnCrouch;
+        PlayerInput.actions[crouchAction].canceled -= OnCrouch;
+
+        // Grab
+        PlayerInput.actions[grabAction].performed -= OnGrab;
     }
 
     #region Input Maps Control
@@ -229,7 +258,8 @@ public class PlayerInputHandler : MonoBehaviour
     // DEBUG
     private void Update()
     {
-        currentActionMapName = PlayerInput.currentActionMap.name;
+        if (PlayerInput.currentActionMap != null)
+            currentActionMapName = PlayerInput.currentActionMap.name;
     }
 
 }

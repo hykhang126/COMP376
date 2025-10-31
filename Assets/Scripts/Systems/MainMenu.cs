@@ -44,10 +44,6 @@ public class MainMenu : MonoBehaviour
     {
         Player.InstanceReference.stateMachine.InvokeStateEvent(PlayerStateType.InMenu.ToString());
         StartCoroutine(MainMenuInit());
-
-
-
-
     }
 
     private IEnumerator MainMenuInit()
@@ -56,6 +52,9 @@ public class MainMenu : MonoBehaviour
         Cursor.lockState = CursorLockMode.None; // Unlock the cursor
         Cursor.visible = true; // Make the cursor visible
         EventSystem.current.SetSelectedGameObject(start.gameObject);
+
+        // Disable player input
+        Player.InstanceReference.playerInputHandler.DisableInput();
     }
 
     public void StartGame()
@@ -111,8 +110,11 @@ public class MainMenu : MonoBehaviour
             Player.InstanceReference.transform.position = playerEndPos;
 
         door.GetComponent<DoorAction>().CloseDoor();
+
+        // Re-enable player input actions
         if (Player.InstanceReference != null)
-            Player.InstanceReference.playerInputHandler.EnableInput(); // Re-enable player input actions
+            Player.InstanceReference.playerInputHandler.EnableInput(); 
+            
         // Transition player to Idle state after game start
         Player.InstanceReference.stateMachine.InvokeStateEvent("toIdle");
         if (blackVoid != null)
