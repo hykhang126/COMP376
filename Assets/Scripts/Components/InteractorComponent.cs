@@ -1,65 +1,52 @@
 using System;
-using System.Collections.Generic;
-using Unity.VisualScripting;
+using UnityEditor.EditorTools;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(CapsuleCollider))]
 public class InteractorComponent : MonoBehaviour
 {
-
-    [SerializeField] private PlayerInput playerInput;
-    [SerializeField]
-    private String _interactionAction = "Interact";
-    private String interactionAction
-    {
-        set
-        {
-            playerInput.actions[_interactionAction].performed -= OnInteractTriggered;
-            _interactionAction = value;
-            playerInput.actions[_interactionAction].performed += OnInteractTriggered;
-        }
-        get
-        {
-            return _interactionAction;
-        }
-    }
-
     [Header("Forward probe (local Z)")]
     [SerializeField]
     float length = 2f;       // how far forward the probe reaches
     [SerializeField]
     float radius = 0.05f;    // how thin the probe is
 
-    public bool canInteractorTrigger { get; private set; }
+    [SerializeField, HideInInspector] private CapsuleCollider probe;
 
-    [SerializeField, HideInInspector]
-    private CapsuleCollider probe;
-    private InteractableComponent _interactable_component;
+    [Header("DEBUG: No assignment")]
+    [Tooltip("The currently detected interactable object")]
+    [SerializeField] private InteractableComponent _interactable_component;
+    [Tooltip("Can the interactor currently trigger interaction?")]
+    public bool canInteractorTrigger = false;
 
-    void Awake()
-    {
-        if (playerInput == null)
-        {
-            Debug.LogError("Must assign playerInput in InteractorCOmponent!");
-            return;
-        }
-        else
-        {
-            playerInput.actions[_interactionAction].performed += OnInteractTriggered;
-        }
-    }
-
-
+    private PlayerInputHandler playerInputHandler;
 
     void Start()
     {
+        // Grab the PlayerInputHandler from Player Instance
+        if (Player.InstanceReference != null)
+        {
+            playerInputHandler = Player.InstanceReference.playerInputHandler;
+            if (playerInputHandler != null)
+            {
+                playerInputHandler.AddActionSubscriber(playerInputHandler.interactionAction, OnInteractTriggered);
+            }
+            else
+            {
+                Debug.LogError("PlayerInputHandler component not found on Player instance!");
+            }
+        }
+        else
+        {
+            Debug.LogError("Player instance not found!");
+        }
         
-        reset_probe();
+        Reset_probe();
     }
 
 
-    private void reset_probe()
+    private void Reset_probe()
     {
         probe = GetComponent<CapsuleCollider>();
         if (probe == null)
@@ -111,6 +98,6 @@ public class InteractorComponent : MonoBehaviour
 
     void OnValidate()
     {
-        reset_probe();
+        Reset_probe();
     }
 }

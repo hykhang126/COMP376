@@ -67,7 +67,6 @@ public class MainMenu : MonoBehaviour
         Cursor.lockState = CursorLockMode.None; // Unlock the cursor
         Cursor.visible = true; // Make the cursor visible
         EventSystem.current.SetSelectedGameObject(start.gameObject);
-        // _player.playerInput.enabled = false; // Disable player input
     }
 
     public void StartGame()
@@ -80,7 +79,6 @@ public class MainMenu : MonoBehaviour
         //camera moves until a certain point after the door
         Vector3 playerStartPos = Player.InstanceReference != null ? Player.InstanceReference.transform.position : Vector3.zero;
         StartCoroutine(StartSceneTransition(playerStartPos, playerEndLocation.transform.position, cameraSpeed));
-        //Load the Game Scene
     }
 
     public void QuitGame()

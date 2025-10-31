@@ -1,11 +1,34 @@
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+/// <summary>
+/// Handles player input using the Unity Input System.
+/// Provides global access to PlayerInput, modifying its behavior and managing input action subscriptions.
+/// Accessible via Player.InstanceReference.playerInputHandler
+/// </summary>
 [RequireComponent(typeof(Player), typeof(PlayerInput))]
 public class PlayerInputHandler : MonoBehaviour
 {
+    // Global access to PlayerInput
     public PlayerInput PlayerInput { get; private set; }
 
+    // Action names
+    [Header("Input Action Names")]
+    [Tooltip("Name of the Move action in the Player Input Action Map")]
+    public string moveAction = "Move";
+    [Tooltip("Name of the Look action in the Player Input Action Map")]
+    public string lookAction = "Look";
+    [Tooltip("Name of the Sprint action in the Player Input Action Map")]
+    public string sprintAction = "Sprint";
+    [Tooltip("Name of the Crouch action in the Player Input Action Map")]
+    public string crouchAction = "Crouch";
+    [Tooltip("Name of the Grab action in the Player Input Action Map")]
+    public string grabAction = "Grab";
+    [Tooltip("Name of the Interact action in the Player Input Action Map")]
+    public string interactionAction = "Interact";
+
+    // Private
     private Player player;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -19,14 +42,21 @@ public class PlayerInputHandler : MonoBehaviour
 
     private void Init()
     {
-        PlayerInput.actions["Move"].performed += OnMove;
-        PlayerInput.actions["Move"].canceled += OnMove;
-        PlayerInput.actions["Look"].performed += OnLook;
-        PlayerInput.actions["Look"].canceled += OnLook;
-        PlayerInput.actions["Sprint"].performed += OnSprint;
-        PlayerInput.actions["Sprint"].canceled += OnSprint;
-        PlayerInput.actions["Crouch"].performed += OnCrouch;
-        PlayerInput.actions["Crouch"].canceled += OnCrouch;
+        // Movement and Look
+        PlayerInput.actions[moveAction].performed += OnMove;
+        PlayerInput.actions[moveAction].canceled += OnMove;
+        PlayerInput.actions[lookAction].performed += OnLook;
+        PlayerInput.actions[lookAction].canceled += OnLook;
+        PlayerInput.actions[sprintAction].performed += OnSprint;
+        PlayerInput.actions[sprintAction].canceled += OnSprint;
+        PlayerInput.actions[crouchAction].performed += OnCrouch;
+        PlayerInput.actions[crouchAction].canceled += OnCrouch;
+
+        // Grab
+        PlayerInput.actions[grabAction].performed += OnGrab;
+
+        // Interaction
+        PlayerInput.actions[interactionAction].performed += OnInteract;
     }
 
     #region Input Maps Control
@@ -63,9 +93,16 @@ public class PlayerInputHandler : MonoBehaviour
         }
     }
 
+    public void AddActionSubscriber(string actionName, Action<InputAction.CallbackContext> callback)
+    {
+        // Unity will handle null checks internally
+        InputAction action = PlayerInput.actions.FindAction(actionName);
+        action.performed += callback;
+    }
+
     #endregion
 
-    #region Inputs
+    #region Inputs Callbacks
 
     public void OnMove(InputAction.CallbackContext context)
     {
@@ -97,10 +134,22 @@ public class PlayerInputHandler : MonoBehaviour
 
     public void OnGrab(InputAction.CallbackContext context)
     {
+        OnGrabTriggered(context);
+
         if (player.IsHoldingItem())
         {
             player.DropItem();
         }
+    }
+
+    private void OnGrabTriggered(InputAction.CallbackContext context)
+    {
+        // TODO: Implement grab logic here
+    }
+
+    public void OnInteract(InputAction.CallbackContext context)
+    {
+        // TODO: Implement interaction logic here
     }
 
     #endregion

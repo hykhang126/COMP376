@@ -2700,7 +2700,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pauseMenu: {fileID: 1129409040}
-  playerController: {fileID: 840569747}
   resumeButton: {fileID: 1193273358}
   quitButton: {fileID: 442810683}
   gameSettingsSO: {fileID: 11400000, guid: a3efab0d2fded724c87672e1bdd84afb, type: 2}
@@ -11214,6 +11213,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 7025571321497782876, guid: a134cc40a117af44daa5d51a4d3e902a, type: 3}
+      propertyPath: m_Actions
+      value: 
+      objectReference: {fileID: -944628639613478452, guid: 7e7bce3ab9d388948b2db4c2096602f1, type: 3}
     - target: {fileID: 7724768560626574633, guid: a134cc40a117af44daa5d51a4d3e902a, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -11267,9 +11270,21 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 664814317}
     m_Modifications:
+    - target: {fileID: 1123288876750920046, guid: 8e23ad5e861473a49a957bc585721f7b, type: 3}
+      propertyPath: m_TagString
+      value: Grabbable
+      objectReference: {fileID: 0}
     - target: {fileID: 2945875798731397007, guid: 8e23ad5e861473a49a957bc585721f7b, type: 3}
       propertyPath: m_Name
       value: Pot
+      objectReference: {fileID: 0}
+    - target: {fileID: 2945875798731397007, guid: 8e23ad5e861473a49a957bc585721f7b, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2945875798731397007, guid: 8e23ad5e861473a49a957bc585721f7b, type: 3}
+      propertyPath: m_TagString
+      value: Grabbable
       objectReference: {fileID: 0}
     - target: {fileID: 3466519510533395518, guid: 8e23ad5e861473a49a957bc585721f7b, type: 3}
       propertyPath: m_LocalPosition.x
@@ -11310,6 +11325,26 @@ PrefabInstance:
     - target: {fileID: 3466519510533395518, guid: 8e23ad5e861473a49a957bc585721f7b, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4133183072423469771, guid: 8e23ad5e861473a49a957bc585721f7b, type: 3}
+      propertyPath: m_TagString
+      value: Grabbable
+      objectReference: {fileID: 0}
+    - target: {fileID: 4212639584759037605, guid: 8e23ad5e861473a49a957bc585721f7b, type: 3}
+      propertyPath: m_TagString
+      value: Grabbable
+      objectReference: {fileID: 0}
+    - target: {fileID: 4475482863513333549, guid: 8e23ad5e861473a49a957bc585721f7b, type: 3}
+      propertyPath: m_TagString
+      value: Grabbable
+      objectReference: {fileID: 0}
+    - target: {fileID: 6408985804684832544, guid: 8e23ad5e861473a49a957bc585721f7b, type: 3}
+      propertyPath: m_TagString
+      value: Grabbable
+      objectReference: {fileID: 0}
+    - target: {fileID: 6533469797809248106, guid: 8e23ad5e861473a49a957bc585721f7b, type: 3}
+      propertyPath: m_TagString
+      value: Grabbable
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
