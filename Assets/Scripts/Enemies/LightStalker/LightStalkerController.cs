@@ -28,8 +28,9 @@ public class LightStalkerController : MonoBehaviour
     public float fleeDuration = 2.5f;
     [Tooltip("Multiplier applied to agent.speed while fleeing")]
     public float fleeSpeedMultiplier = 2.0f;
-
-    [Header("Light effect")]
+  [Tooltip("Multiply the computed flee distance (1 = unchanged, 4 = four times as far)")]
+  public float fleeDistanceMultiplier = 4f;
+  [Header("Light effect")]
     [Tooltip("Multiplier applied to agent.speed while the enemy is under the flashlight beam")]
     public float inBeamSpeedMultiplier = 0.25f;
     public float originalAgentSpeed = 3f;
@@ -74,7 +75,9 @@ public class LightStalkerController : MonoBehaviour
     // colliders considered "body" / capable of directly touching the player
     private Collider[] bodyColliders;
 
-    void Awake()
+
+
+  void Awake()
     {
         stateMachine = GetComponent<StateMachine>();
         lightDetector = GetComponent<LightDetector>();
@@ -177,122 +180,152 @@ public class LightStalkerController : MonoBehaviour
             agent.speed = (enemyConfig != null ? enemyConfig.moveSpeed : moveSpeed);
     }
 
-    // Called by the StateMachine's 'Scared' state's stateEnter event
-    public void StartFlee()
+  // Called by the StateMachine's 'Scared' state's stateEnter event
+  public void StartFlee()
+  {
+    if (isFleeing) return;
+    isFleeing = true;
+
+    // Play flee screech
+    if (fleeScreechClip != null)
     {
-        if (isFleeing) return;
-        isFleeing = true;
-
-        // Play free screech
-        if (fleeScreechClip != null)
-        {
-            AudioSource.PlayClipAtPoint(fleeScreechClip, transform.position, Mathf.Clamp01(fleeScreechVolume));
-        }
-
-        // stop proximity audio while fleeing
-        playerInsideProximity = false;
-        StopProximityCoroutine();
-
-        // ensure agent exists and override speed for fleeing
-        if (agent != null)
-        {
-            agent.speed = (enemyConfig != null ? enemyConfig.moveSpeed : moveSpeed) * fleeSpeedMultiplier;
-            agent.isStopped = false;
-        }
-
-        if (player == null) player = Camera.main?.transform ?? Object.FindFirstObjectByType<Player>()?.transform;
-        if (agent == null)
-        {
-            transform.rotation = Quaternion.LookRotation((transform.position - (player != null ? player.position : transform.position + transform.forward)).normalized);
-            Invoke(nameof(CompleteFleeAndDespawn), fleeDuration);
-            return;
-        }
-
-        Vector3 awayDir;
-        if (player != null)
-        {
-            awayDir = (transform.position - player.position);
-            awayDir.y = 0f;
-            if (awayDir.sqrMagnitude < 0.1f) awayDir = -transform.forward;
-        }
-        else awayDir = transform.forward;
-
-        // choose the greater of configured flee distance, or the distance agent can run for fleeDuration
-        float fleeDistance = Mathf.Max((enemyConfig != null) ? enemyConfig.fleeDistanceWhenIlluminated : 6f,
-                              (agent != null ? agent.speed : moveSpeed) * fleeSpeedMultiplier * fleeDuration);
-
-        // Search candidates around a circle
-        NavMeshHit navHit;
-        NavMeshPath bestPath = null;
-        Vector3 bestPos = transform.position;
-        float bestPathLength = -1f;
-
-        int sampleCount = 16; // tune: more samples => better chance to find escape
-        float angleStep = 360f / sampleCount;
-
-        for (int i = 0; i < sampleCount; i++)
-        {
-            float angle = i * angleStep;
-            Quaternion rot = Quaternion.Euler(0f, angle, 0f);
-            Vector3 candDir = rot * awayDir.normalized;
-            if (candDir.sqrMagnitude < 0.001f) candDir = Quaternion.Euler(0, angle, 0) * transform.forward;
-
-            Vector3 candWorld = transform.position + candDir * fleeDistance;
-
-            // Snap to navmesh near candidate
-            if (NavMesh.SamplePosition(candWorld, out navHit, Mathf.Max(1f, fleeDistance * 0.5f), NavMesh.AllAreas))
-            {
-                NavMeshPath path = new NavMeshPath();
-                if (NavMesh.CalculatePath(transform.position, navHit.position, NavMesh.AllAreas, path) && path.status == NavMeshPathStatus.PathComplete)
-                {
-                    float len = 0f;
-                    for (int p = 1; p < path.corners.Length; p++) len += Vector3.Distance(path.corners[p - 1], path.corners[p]);
-
-                    if (len > bestPathLength)
-                    {
-                        bestPathLength = len;
-                        bestPath = path;
-                        bestPos = navHit.position;
-                    }
-                }
-            }
-        }
-
-        if (bestPath != null && bestPathLength > 0f)
-        {
-            agent.speed = moveSpeed * fleeSpeedMultiplier;
-            agent.isStopped = false;
-            agent.SetPath(bestPath);
-        }
-        else
-        {
-            if (NavMesh.FindClosestEdge(transform.position, out navHit, NavMesh.AllAreas))
-            {
-                Vector3 fallbackTarget = transform.position + navHit.normal * (fleeDistance * 0.5f);
-                if (NavMesh.SamplePosition(fallbackTarget, out navHit, 5f, NavMesh.AllAreas))
-                {
-                    NavMeshPath fallbackPath = new NavMeshPath();
-                    if (NavMesh.CalculatePath(transform.position, navHit.position, NavMesh.AllAreas, fallbackPath) && fallbackPath.status == NavMeshPathStatus.PathComplete)
-                    {
-                        agent.speed = moveSpeed * fleeSpeedMultiplier;
-                        agent.isStopped = false;
-                        agent.SetPath(fallbackPath);
-                        CancelInvoke(nameof(CompleteFleeAndDespawn));
-                        Invoke(nameof(CompleteFleeAndDespawn), fleeDuration);
-                        return;
-                    }
-                }
-            }
-
-            agent.isStopped = true;
-        }
-
-        CancelInvoke(nameof(CompleteFleeAndDespawn));
-        Invoke(nameof(CompleteFleeAndDespawn), fleeDuration);
+      AudioSource.PlayClipAtPoint(fleeScreechClip, transform.position, Mathf.Clamp01(fleeScreechVolume));
     }
 
-    // Called when fleeing time completes
-    private void CompleteFleeAndDespawn()
+    // stop proximity audio while fleeing
+    playerInsideProximity = false;
+    StopProximityCoroutine();
+
+    // ensure agent exists and override speed for fleeing
+    if (agent != null)
+    {
+      agent.speed = (enemyConfig != null ? enemyConfig.moveSpeed : moveSpeed) * fleeSpeedMultiplier;
+      agent.isStopped = false;
+    }
+
+    if (player == null) player = Camera.main?.transform ?? Object.FindFirstObjectByType<Player>()?.transform;
+    if (agent == null)
+    {
+      transform.rotation = Quaternion.LookRotation((transform.position - (player != null ? player.position : transform.position + transform.forward)).normalized);
+      Invoke(nameof(CompleteFleeAndDespawn), fleeDuration);
+      return;
+    }
+
+    Vector3 awayDir;
+    if (player != null)
+    {
+      awayDir = (transform.position - player.position);
+      awayDir.y = 0f;
+      if (awayDir.sqrMagnitude < 0.1f) awayDir = -transform.forward;
+    }
+    else awayDir = transform.forward;
+
+    // choose the greater of configured flee distance, or the distance agent can run for fleeDuration
+    float baseFleeDistance = Mathf.Max((enemyConfig != null) ? enemyConfig.fleeDistanceWhenIlluminated : 6f,
+                      (agent != null ? agent.speed : moveSpeed) * fleeSpeedMultiplier * fleeDuration);
+
+    // apply multiplier (allows easy tuning from inspector)
+    float fleeDistance = Mathf.Max(0.01f, baseFleeDistance * fleeDistanceMultiplier);
+
+    // Search candidates around a circle
+    NavMeshHit navHit;
+    NavMeshPath bestPath = null;
+    Vector3 bestPos = transform.position;
+    float bestPathLength = -1f;
+
+    int sampleCount = 16; // tune: more samples => better chance to find escape
+    float angleStep = 360f / sampleCount;
+
+    // clamp how far we allow SamplePosition to search for the nearest navmesh point.
+    // On very small maps, using large sample radii causes weird snaps or misses.
+    float sampleRadius = Mathf.Clamp(fleeDistance * 0.5f, 1f, 5f);
+
+    for (int i = 0; i < sampleCount; i++)
+    {
+      float angle = i * angleStep;
+      Quaternion rot = Quaternion.Euler(0f, angle, 0f);
+      Vector3 candDir = rot * awayDir.normalized;
+      if (candDir.sqrMagnitude < 0.001f) candDir = Quaternion.Euler(0, angle, 0) * transform.forward;
+
+      Vector3 candWorld = transform.position + candDir * fleeDistance;
+
+      // Snap to navmesh near candidate using a capped sample radius (safer on small maps)
+      if (NavMesh.SamplePosition(candWorld, out navHit, sampleRadius, NavMesh.AllAreas))
+      {
+        NavMeshPath path = new NavMeshPath();
+        bool calc = NavMesh.CalculatePath(transform.position, navHit.position, NavMesh.AllAreas, path);
+        // Accept either complete paths OR partial paths that actually contain movement (corners > 1)
+        if (calc && (path.status == NavMeshPathStatus.PathComplete || path.corners.Length > 1))
+        {
+          // compute path length
+          float len = 0f;
+          for (int p = 1; p < path.corners.Length; p++) len += Vector3.Distance(path.corners[p - 1], path.corners[p]);
+
+          // prefer longest path (furthest reachable)
+          if (len > bestPathLength)
+          {
+            bestPathLength = len;
+            bestPath = path;
+            bestPos = navHit.position;
+          }
+        }
+      }
+    }
+
+    if (bestPath != null && bestPathLength > 0f)
+    {
+      agent.speed = moveSpeed * fleeSpeedMultiplier;
+      agent.isStopped = false;
+      agent.SetPath(bestPath);
+    }
+    else
+    {
+      // Fallback 1: try a closer one-step sample in the away direction (helps tiny rooms)
+      Vector3 fallbackCandidate = transform.position + awayDir.normalized * Mathf.Min(fleeDistance * 0.5f, 3f);
+      if (NavMesh.SamplePosition(fallbackCandidate, out navHit, 2f, NavMesh.AllAreas))
+      {
+        NavMeshPath fallbackPath = new NavMeshPath();
+        bool calc = NavMesh.CalculatePath(transform.position, navHit.position, NavMesh.AllAreas, fallbackPath);
+        if (calc && (fallbackPath.status == NavMeshPathStatus.PathComplete || fallbackPath.corners.Length > 1))
+        {
+          agent.speed = moveSpeed * fleeSpeedMultiplier;
+          agent.isStopped = false;
+          agent.SetPath(fallbackPath);
+          CancelInvoke(nameof(CompleteFleeAndDespawn));
+          Invoke(nameof(CompleteFleeAndDespawn), fleeDuration);
+          return;
+        }
+      }
+
+      // Original fallback: try closest navmesh edge path (kept, but with smaller sample radius)
+      if (NavMesh.FindClosestEdge(transform.position, out navHit, NavMesh.AllAreas))
+      {
+        Vector3 fallbackTarget = transform.position + navHit.normal * (fleeDistance * 0.5f);
+        if (NavMesh.SamplePosition(fallbackTarget, out navHit, 2f, NavMesh.AllAreas))
+        {
+          NavMeshPath fallbackPath = new NavMeshPath();
+          if (NavMesh.CalculatePath(transform.position, navHit.position, NavMesh.AllAreas, fallbackPath)
+              && (fallbackPath.status == NavMeshPathStatus.PathComplete || fallbackPath.corners.Length > 1))
+          {
+            agent.speed = moveSpeed * fleeSpeedMultiplier;
+            agent.isStopped = false;
+            agent.SetPath(fallbackPath);
+            CancelInvoke(nameof(CompleteFleeAndDespawn));
+            Invoke(nameof(CompleteFleeAndDespawn), fleeDuration);
+            return;
+          }
+        }
+      }
+
+      // Last resort: cannot find any reachable flee spot. stop and schedule despawn.
+      agent.isStopped = true;
+    }
+
+    CancelInvoke(nameof(CompleteFleeAndDespawn));
+    Invoke(nameof(CompleteFleeAndDespawn), fleeDuration);
+  }
+  // Called when fleeing time completes
+  private void CompleteFleeAndDespawn()
     {
         isFleeing = false;
         if (agent != null)

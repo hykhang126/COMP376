@@ -22,7 +22,10 @@ public class LightDetector : MonoBehaviour
     // count of overlapping child colliders currently hit by beam
     private int beamHitCount = 0;
 
-    void Start()
+    private float lightTimer = 0f;
+    private bool isUnderBeam => beamHitCount > 0;
+
+  void Start()
     {
         if (playerFlashlight == null)
         {
@@ -38,7 +41,24 @@ public class LightDetector : MonoBehaviour
         }
     }
 
-    private void HandleBeamEnter(Collider col)
+  private void Update()
+  {
+    if (isUnderBeam)
+    {
+      lightTimer += Time.deltaTime;
+      if (!isTimerScheduled && lightTimer >= lightHoldTime)
+      {
+        TriggerScared();
+      }
+    }
+    else
+    {
+      // Optional: slowly decay timer if beam is lost (makes it forgiving)
+      lightTimer = Mathf.Max(lightTimer - Time.deltaTime * 0.5f, 0f);
+    }
+  }
+
+  private void HandleBeamEnter(Collider col)
     {
         if (!IsColliderForThisObject(col)) return;
         if (!gameObject.activeInHierarchy) return;
@@ -87,15 +107,16 @@ public class LightDetector : MonoBehaviour
         return false;
     }
 
-    private void TriggerScared()
-    {
-        if (!gameObject.activeInHierarchy) { isTimerScheduled = false; return; }
+  private void TriggerScared()
+  {
+    if (!gameObject.activeInHierarchy) return;
 
-        OnScaredByLight?.Invoke();
-        isTimerScheduled = false;
-    }
+    OnScaredByLight?.Invoke();
+    lightTimer = 0f;
+    isTimerScheduled = true; // prevents retrigger until reset
+  }
 
-    void OnDisable()
+  void OnDisable()
     {
         if (isTimerScheduled)
         {
