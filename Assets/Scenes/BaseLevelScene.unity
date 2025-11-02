@@ -37920,7 +37920,7 @@ MonoBehaviour:
   - {fileID: 2082767929}
   - {fileID: 1049141032}
   fleeDuration: 2.5
-  fleeSpeedMultiplier: 3
+  fleeSpeedMultiplier: 1.5
   fleeDistanceMultiplier: 2
   inBeamSpeedMultiplier: 0.25
   originalAgentSpeed: 3
@@ -37960,7 +37960,7 @@ MonoBehaviour:
   OnLightExit:
     m_PersistentCalls:
       m_Calls: []
-  lightDecayPerSecond: 0.5
+  lightDecayPerSecond: 0.2
 --- !u!114 &1355750378
 MonoBehaviour:
   m_ObjectHideFlags: 0
