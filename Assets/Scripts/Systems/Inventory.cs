@@ -139,10 +139,10 @@ public class Inventory : MonoBehaviour
         {
             itemNameText.text = ""; // Default text if no items
         }
-        if (pauseSystem != null)
+        /*if (pauseSystem != null)
         {
             pauseSystem.action.Disable();
-        }
+        }*/
 
         ItemPreview();
     }
@@ -169,12 +169,12 @@ public class Inventory : MonoBehaviour
         inventoryUI.SetActive(false);
         Cursor.visible = false; // Hide the cursor
         Cursor.lockState = CursorLockMode.Locked; // Lock the cursor
-        if (player != null)
+        /*if (player != null)
         {
             player.playerInput.actions.Enable(); // Re-enable player input actions
             pauseSystem.action.Enable();
-        }
-        Player.InstanceReference.stateMachine.InvokeStateEvent(previousPlayerState);
+        }*/
+        Player.InstanceReference.playerInputHandler.SwitchInputMap("Player");
     }
 
     public void CycleItems(InputAction.CallbackContext context)
