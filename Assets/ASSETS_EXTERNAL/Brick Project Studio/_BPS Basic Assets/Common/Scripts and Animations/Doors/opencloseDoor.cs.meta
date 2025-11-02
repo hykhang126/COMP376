@@ -1,0 +1,19 @@
+fileFormatVersion: 2
+guid: e25be562b3496b7b4b10e038b9bc6a23
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 124055
+  packageName: Apartment Kit
+  packageVersion: 4.2
+  assetPath: Assets/ASSETS_EXTERNAL/Brick Project Studio/_BPS Basic Assets/Common/Scripts
+    and Animations/Doors/opencloseDoor.cs
+  uploadId: 594248
