@@ -511,6 +511,11 @@ public class LightStalkerController : MonoBehaviour
     // private void StartFlee()
     // {
     //     Debug.Log($"[StartFlee] No reachable spawner found for {name} — despawning immediately.");
+    //     // Play flee screech
+    //     if (fleeScreechClip != null)
+    //     {
+    //        AudioSource.PlayClipAtPoint(fleeScreechClip, transform.position, Mathf.Clamp01(fleeScreechVolume));
+    //     }
     //     CompleteFleeAndDespawn();
     // }
 
