@@ -2,45 +2,40 @@ using UnityEngine;
 using System;
 using System.Collections;
 using Unity.Mathematics;
-using UnityEngine.InputSystem;
-using UnityEngine.UI;
 using Unity.VisualScripting;
 
-[RequireComponent(typeof(PlayerInput))]
+[RequireComponent(typeof(PlayerInputHandler))]
+[RequireComponent(typeof(Rigidbody))]
 public class Player : MonoBehaviour
 {
     // Global Player reference
     public static Player InstanceReference { get; private set; }
     public StateMachine stateMachine { get; private set; }
-    public PlayerInput playerInput { get; private set; }
     public Inventory inventory { get; private set; }
-    private Vector2 lookInput;
-    GameObject _camera;
-    Rigidbody rb;
+    public PlayerInputHandler playerInputHandler { get; private set; }
+    [HideInInspector] public Vector2 movementInput;
+    [HideInInspector] public Vector2 lookInput;
+
     // ref to currently carried item
-    [DoNotSerialize]
-    GameObject carriedItem = null;
-    Vector2 movementInput;
-
-
-    [SerializeField] GameObject carryAnchor;
+    [DoNotSerialize] private GameObject carriedItem = null;
+    [SerializeField] private GameObject carryAnchor;
 
     [Header("Idle State")]
-    [SerializeField] float movementSpeed = 2.5f;
+    [SerializeField] private float movementSpeed = 2.5f;
     [Header("Sprinting State")]
-    [SerializeField] float sprintingSpeed = 4f;
-    [SerializeField][Range(0f, 1f)] float sprintAcceleration = 0.15f;
+    [SerializeField] private float sprintingSpeed = 4f;
+    [SerializeField][Range(0f, 1f)] private float sprintAcceleration = 0.15f;
     [Header("Crouch State")]
-    [SerializeField] float crouchSpeed = 1.5f;
+    [SerializeField] private float crouchSpeed = 1.5f;
     [Header("Camera")]
-    [SerializeField] bool isInverted = false;
+    [Tooltip("State event to invoke on player's StateMachine (default -> toIdle)")]
+    public bool isInverted = false;
     // Clamp angles for vertical look (Y-axis rotation)
     [SerializeField] private float minY = -40f;  // Min vertical rotation angle
     [SerializeField] private float maxY = 40f;   // Max vertical rotation angle
     [SerializeField][Range(0f, 1f)] private float cameraSmoothing = 0.5f;
     //Set sensitivity whenever inputMode is updated
-    [SerializeField]
-    private INPUT_MODE _inputMode = INPUT_MODE.MOUSE_KEYBOARD;
+    [SerializeField] private INPUT_MODE _inputMode = INPUT_MODE.MOUSE_KEYBOARD;
     public INPUT_MODE InputMode
     {
         get { return _inputMode; }
@@ -60,38 +55,25 @@ public class Player : MonoBehaviour
     public enum INPUT_MODE { MOUSE_KEYBOARD, GAMEPAD };
 
     [SerializeField] private float mouseSensitivityMultiplier = 5f; // Mouse sensitivity multiplier
-
     [SerializeField] private float gamepadSensitivityMultiplier = 5f; // Gamepad analog stick sensitivity multiplier
 
     private float currentPitch = 0f;  // Track current pitch (vertical rotation)
     private float currentYaw = 0f;
     private float sensitivity = 5f;
 
-    [Header("HUD")]
-
-    [SerializeField] private HUD HUD;
-
+    [Header("Player Settings")]
     public AudioSource playerAudioSource;
-
     [SerializeField] private GameSettingsSO gameSettingsSO;
+    private GameObject _camera;
+    private HUD HUD;
+    private Rigidbody rb;
 
     public void Awake()
     {
-
-        playerInput = GetComponent<PlayerInput>();
         stateMachine = GetComponent<StateMachine>();
+        playerInputHandler = GetComponent<PlayerInputHandler>();
 
-        playerInput.actions["Move"].performed += OnMove;
-        playerInput.actions["Move"].canceled += OnMove;
-        playerInput.actions["Look"].performed += OnLook;
-        playerInput.actions["Look"].canceled += OnLook;
-        playerInput.actions["Sprint"].performed += OnSprint;
-        playerInput.actions["Sprint"].canceled += OnSprint;
-        playerInput.actions["Crouch"].performed += OnCrouch;
-        playerInput.actions["Crouch"].canceled += OnCrouch;
-        
-
-        // Set payer instance reference on init and remove any old refrences
+        // Set player instance reference on init and remove any old refrences
         if (InstanceReference != null && InstanceReference != this)
         {
             // Makes sure no duplicate instances can exsit
@@ -119,14 +101,18 @@ public class Player : MonoBehaviour
             sensitivity = gamepadSensitivityMultiplier;
         }
 
+        // Rigidbody
+        rb = GetComponent<Rigidbody>();
+
         // Connect to HUD
+        HUD = FindFirstObjectByType<HUD>();
         if (HUD == null)
         {
             Debug.LogError("HUD not found");
         }
+
         Cursor.lockState = CursorLockMode.Locked;
         _camera = GameObject.Find("camera");
-        rb = GetComponent<Rigidbody>();
 
         // Initialize camera rotation
         _camera.transform.localRotation = Quaternion.Euler(0, 0, 0);
@@ -174,7 +160,7 @@ public class Player : MonoBehaviour
         if (IsHoldingItem() == false)
         {
             carriedItem = item;
-            playerInput.actions["Grab"].performed += OnGrab;
+            playerInputHandler.ToggleGrabInput(true);
             carriedItem.GetComponent<Rigidbody>().useGravity = false;
             carriedItem.GetComponent<Rigidbody>().freezeRotation = true;
         }
@@ -184,39 +170,32 @@ public class Player : MonoBehaviour
     {
         if (IsHoldingItem())
         {
-            playerInput.actions["Grab"].performed -= OnGrab;
+            playerInputHandler.ToggleGrabInput(false);
             carriedItem.GetComponent<Rigidbody>().useGravity = true;
             carriedItem.GetComponent<Rigidbody>().freezeRotation = false;
-            carriedItem = null; 
+            carriedItem = null;
         }
     }
+
     public bool IsHoldingItem()
     {
         return carriedItem != null;
     }
+    
     #endregion
 
-    #region Inputs
-    public void OnMove(InputAction.CallbackContext context)
-    {
-        movementInput = context.ReadValue<Vector2>();
-    }
+    #region Movement
 
-    public void OnLook(InputAction.CallbackContext context)
+    // From PlayerInputHandler OnLook
+    public void OnLook()
     {
-        lookInput = context.ReadValue<Vector2>();
-        if (!isInverted)
-        {
-            //Invert to adjust for inverted camera input
-            lookInput.y *= -1f;
-        }
         currentYaw += lookInput.x * sensitivity * Time.deltaTime;
         currentPitch += lookInput.y * sensitivity * Time.deltaTime;
     }
 
-    public void OnSprint(InputAction.CallbackContext context)
+    // From PlayerInputHandler OnSprint
+    public void OnSprint(bool isSprinting)
     {
-        bool isSprinting = context.ReadValueAsButton();
         if (isSprinting && movementInput.y > float.Epsilon) // Only sprint if forward move input is held
             stateMachine.InvokeStateEvent("toSprinting");
         else
@@ -225,9 +204,9 @@ public class Player : MonoBehaviour
         }
     }
 
-    public void OnCrouch(InputAction.CallbackContext context)
+    // From PlayerInputHandler OnCrouch
+    public void OnCrouch(bool isCrouching)
     {
-        bool isCrouching = context.ReadValueAsButton();
         if (isCrouching)
         {
             stateMachine.InvokeStateEvent("toCrouch");
@@ -235,14 +214,6 @@ public class Player : MonoBehaviour
         else
         {
             stateMachine.InvokeStateEvent("toIdle");
-        }
-    }
-
-    public void OnGrab(InputAction.CallbackContext context)
-    {
-        if (IsHoldingItem())
-        {
-            DropItem();
         }
     }
 
@@ -373,34 +344,4 @@ public class Player : MonoBehaviour
         transform.localScale = targetScale;
     }
     #endregion
-
-    #region InMenu State Callbacks
-    public void InMenuEnter()
-    {
-        playerInput.actions["Move"].performed -= OnMove;
-        playerInput.actions["Move"].canceled -= OnMove;
-        playerInput.actions["Look"].performed -= OnLook;
-        playerInput.actions["Look"].canceled -= OnLook;
-        playerInput.actions["Crouch"].performed -= OnCrouch;
-        playerInput.actions["Crouch"].canceled -= OnCrouch;
-        playerInput.actions["Sprint"].performed -= OnSprint;
-        playerInput.actions["Sprint"].canceled -= OnSprint;
-
-    }
-
-    public void InMenuExit()
-    {
-        playerInput.actions["Move"].performed += OnMove;
-        playerInput.actions["Move"].canceled += OnMove;
-        playerInput.actions["Look"].performed += OnLook;
-        playerInput.actions["Look"].canceled += OnLook;
-        playerInput.actions["Crouch"].performed += OnCrouch;
-        playerInput.actions["Crouch"].canceled += OnCrouch;
-        playerInput.actions["Sprint"].performed += OnSprint;
-        playerInput.actions["Sprint"].canceled += OnSprint;
-
-    }
-
-    #endregion
-
 }

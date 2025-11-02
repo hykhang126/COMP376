@@ -93,8 +93,7 @@ public class EndRoom : MonoBehaviour
             jumpScareSource.pitch = Random.Range(0.95f, 1.1f);
             jumpScareSource.PlayOneShot(jumpScareClip);
 
-            player.playerInput.actions.Disable();
-            player.playerInput.enabled = false;
+            player.playerInputHandler.DisableInput();
 
             player.transform.position = playerSpawnPosition.position;
             player.transform.rotation = playerSpawnPosition.rotation;

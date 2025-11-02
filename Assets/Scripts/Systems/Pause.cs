@@ -5,45 +5,44 @@ using UnityEngine.InputSystem.UI;
 
 public class Pause : MonoBehaviour
 {
-
-    public PauseAction action;
-
-    private bool paused = false;
-
     public GameObject pauseMenu;
 
-    [SerializeField] private Player playerController;
-
     [Header("Pause Menu Buttons")]
-
     [SerializeField] private Button resumeButton;
-
     [SerializeField] private Button quitButton;
 
     [Header("Settings")]
-
     [SerializeField] private GameSettingsSO gameSettingsSO;
 
-    private Inventory inventorySystem;
-
+    private bool paused = false;
     private string previousPlayerState;
-
-
-
-
-    private void Awake()
-    {
-        action = new PauseAction();
-    }
+    private PlayerInputHandler playerInputHandler;
+    private string playerMapName;
+    private string pauseMapName;
 
     private void Start()
     {
-        action.Pause.PauseGame.performed += _ => DeteminePause();
+        if (Player.InstanceReference != null)
+        {
+            playerInputHandler = Player.InstanceReference.playerInputHandler;
+            if (playerInputHandler == null)
+            {
+                Debug.LogError("PlayerInputHandler is null on Player Instance Reference.");
+            }
+        }
+        else
+        {
+            Debug.LogError("Player Instance Reference is null. Cannot access PlayerInputHandler.");
+        }
+        playerMapName = playerInputHandler.playerActionMap;
+        pauseMapName = playerInputHandler.pauseActionMap;
+
+        playerInputHandler.AddMapActionNoParamSubscriber(playerMapName, "PauseGame", DeteminePause);
+        playerInputHandler.AddMapActionNoParamSubscriber(pauseMapName, "PauseGame", ResumeGame);
+
         pauseMenu.SetActive(false); // Ensure the pause menu is hidden at start
         resumeButton.onClick.AddListener(ResumeGame);
         quitButton.onClick.AddListener(QuitGame);
-        
-        inventorySystem = FindAnyObjectByType<Inventory>();
 
         if (!gameSettingsSO)
             gameSettingsSO = Resources.Load<GameSettingsSO>("Scriptable Objects/GameSettingsSO");
@@ -70,14 +69,7 @@ public class Pause : MonoBehaviour
         else
             PauseGame();
     }
-    private void OnEnable()
-    {
-        action.Enable();
-    }
-    private void OnDisable()
-    {
-        action.Disable();
-    }
+
     public void PauseGame()
     {
         // State handler
@@ -91,12 +83,12 @@ public class Pause : MonoBehaviour
         Cursor.lockState = CursorLockMode.None; // Unlock the cursor
         Cursor.visible = true; // Make the cursor visible
 
-        if (playerController != null)
-            playerController.playerInput.enabled = false;
+        // Switch to pause map
+        playerInputHandler.SwitchInputMap(pauseMapName);
 
         if (resumeButton != null)
             EventSystem.current.SetSelectedGameObject(resumeButton.gameObject);
-        inventorySystem.actions.Disable();
+        // inventorySystem.actions.Disable();
     }
 
     public void ResumeGame()
@@ -107,11 +99,10 @@ public class Pause : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked; // Lock the cursor
         Cursor.visible = false; // Hide the cursor
 
-        if (playerController != null)
-            playerController.playerInput.enabled = true;
+        // Switch back to player map
+        playerInputHandler.SwitchInputMap(playerMapName);
 
         EventSystem.current.SetSelectedGameObject(null);
-        inventorySystem.actions.Enable();
 
         //Might cause a bug where if you pause when you were carrying before
 

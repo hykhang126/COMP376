@@ -32,8 +32,8 @@ public class LightStalkerController : MonoBehaviour
     [Header("Light effect")]
     [Tooltip("Multiplier applied to agent.speed while the enemy is under the flashlight beam")]
     public float inBeamSpeedMultiplier = 0.25f;
+    public float originalAgentSpeed = 3f;
     private bool isInBeam = false;
-    private float originalAgentSpeed = 3f;
 
     // internal state
     private bool isFleeing = false;
@@ -163,6 +163,7 @@ public class LightStalkerController : MonoBehaviour
     {
         if (isFleeing) return;
         isInBeam = true;
+        Debug.Log("LightStalker: In Beam: " + isInBeam);
         if (agent != null)
             agent.speed = (enemyConfig != null ? enemyConfig.moveSpeed : moveSpeed) * inBeamSpeedMultiplier;
     }
