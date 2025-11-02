@@ -7,15 +7,15 @@ using UnityEngine.UI;
 public class DoorInteractable : Interactable
 {
     [Header("Key Settings")]
-    [SerializeField] private int[] itemKeysToOpenThisDoor;
+    [SerializeField] private ItemContractSO[] itemContractSOsToOpenThisDoor;
     [SerializeField] private bool isLockedByKeys = false;
 
     private Door door;
 
-    private AsyncOperation loadNextScene;
+    //private AsyncOperation loadNextScene;
 
     [SerializeField] private ItemKeyToSceneNameSO itemKeyToSceneNameSO;
-    private Dictionary<int, string> itemKeyToSceneName;
+    private Dictionary<string, string> itemKeyToSceneName;
 
     private DoorAction doorAction;
 
@@ -29,7 +29,7 @@ public class DoorInteractable : Interactable
             Debug.LogError("Door component not found on the DoorInteractable object.");
         }
         
-        isLockedByKeys = itemKeysToOpenThisDoor.Length > 0;
+        isLockedByKeys = itemContractSOsToOpenThisDoor.Length > 0;
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -51,10 +51,10 @@ public class DoorInteractable : Interactable
             }
             else if (player.inventory)
             {
-                for (int i = 0; i < itemKeysToOpenThisDoor.Length; i++)
+                for (int i = 0; i < itemContractSOsToOpenThisDoor.Length; i++)
                 {
                     //----- To be replaced by getting the equipped key and checking if it is in the array -----
-                    if (player.inventory.items[player.inventory.GetCurrentItemIndex()].itemKey == itemKeysToOpenThisDoor[i])
+                    if (player.inventory.items[player.inventory.GetCurrentItemIndex()].Id == itemContractSOsToOpenThisDoor[i].Id)
                     {
                         OpenDoor(player);
                         player.inventory.RemoveItem();
@@ -79,12 +79,12 @@ public class DoorInteractable : Interactable
         }
     }
 
-    private void LoadNextScene(Player player, int keyIndex)
+    /*private void LoadNextScene(Player player, int keyIndex)
     {
-        loadNextScene = SceneManager.LoadSceneAsync(itemKeyToSceneName[itemKeysToOpenThisDoor[keyIndex]], LoadSceneMode.Additive);
+        loadNextScene = SceneManager.LoadSceneAsync(itemKeyToSceneName[itemContractSOsToOpenThisDoor[keyIndex]], LoadSceneMode.Additive);
         player.inventory.RemoveItemAtIndex(player.inventory.GetCurrentItemIndex());
         loadNextScene.completed += UnlockDoor;
-    }
+    }*/
 
     private void OpenDoor(Player player)
     {

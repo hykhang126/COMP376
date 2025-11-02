@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8e9dc5f7d7ea94c41958f79f15ca32b9, type: 3}
+  m_Name: WarmSmileKey
+  m_EditorClassIdentifier: 
+  _name: Warm Smile Key
+  _description: Warm Smile
+  _meshRef: {fileID: 7740754830181976171, guid: a54f3f79d759eac4aa327d73dbe70a61, type: 3}
+  _material: {fileID: 2100000, guid: 4e3472c094b8146469870886e7ccf1a0, type: 2}
+  _id: d92927b7-5647-485e-a53f-273cd07b041d

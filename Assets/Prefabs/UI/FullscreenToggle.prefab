@@ -236,7 +236,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bbcac0465b611dc48b11b01606bb5511, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  windowToggle: {fileID: 1616708875572531446}
+  fullscreenToggle: {fileID: 1616708875572531446}
   gameSettingsSO: {fileID: 11400000, guid: a3efab0d2fded724c87672e1bdd84afb, type: 2}
 --- !u!1 &5118571547507121735
 GameObject:
