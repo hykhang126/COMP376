@@ -28,11 +28,11 @@ public class SpawnerManager : MonoBehaviour
     {
         yield return new WaitForSeconds(delay);
 
-        Transform chosen = FindFurthestSpawnerNotInView(enemy.transform.position);
+        Transform chosen = FindFurthestSpawnerNotInView(playerCamera.transform.position);
         if (chosen == null)
         {
             //Fallback: pick the furthest spawner ignoring view
-            chosen = FindFurthestSpawnerFrom(enemy.transform.position);
+            chosen = FindFurthestSpawnerFrom(playerCamera.transform.position);
         }
 
         //Ensure the chosen spawner isn't inside player view (best-effort)

@@ -19,7 +19,7 @@ public class Flashlight : MonoBehaviour
   [SerializeField] private float FIRST_WARNING_TIME = 10.0f;
   [SerializeField] private float LAST_WARNING_TIME = 5.0f;
 
-  private bool IsActivated = false;
+  public bool IsActivated = false;
   private bool HasBatteryLeft = true;
 
   private bool FirstWarningFlag = false;
@@ -38,8 +38,6 @@ public class Flashlight : MonoBehaviour
   //Legacy single-enemy event you had (kept for compatibility if used elsewhere)
   public UnityEvent OnEnemyHit;
 
-  // public read-only API
-  public bool IsOn => IsActivated;
 
   //Raycast helpers
   [Header("Beam Detection")]
@@ -64,8 +62,6 @@ public class Flashlight : MonoBehaviour
 
   void Update()
   {
-    HandlePlayerInput();
-
     if (!HasBatteryLeft) return;
 
     if (IsActivated)
@@ -120,24 +116,22 @@ public class Flashlight : MonoBehaviour
     }
   }
 
-  private void HandlePlayerInput()
+
+  // Toggle flashlight on/off. Called by PlayerInputHandler when flashlight action is triggered.
+  public void ToggleFlashlight()
   {
-    // Using legacy Input.GetMouseButtonDown for simplicity — keep as before
-    if (Input.GetMouseButtonDown(0))
+    if (!HasBatteryLeft) return;
+
+    IsActivated = !IsActivated;
+
+    if (FlashlightLight != null) FlashlightLight.SetActive(IsActivated);
+    if (FlashlightSpotLight != null) FlashlightSpotLight.enabled = IsActivated;
+
+    if (!IsActivated && lastHit != null)
     {
-      if (!HasBatteryLeft) return;
-
-      IsActivated = !IsActivated;
-
-      if (FlashlightLight != null) FlashlightLight.SetActive(IsActivated);
-      if (FlashlightSpotLight != null) FlashlightSpotLight.enabled = IsActivated;
-
-      if (!IsActivated && lastHit != null)
-      {
-        // emit exit if turned off while hitting something
-        OnBeamExit?.Invoke(lastHit);
-        lastHit = null;
-      }
+      // emit exit if turned off while hitting something
+      OnBeamExit?.Invoke(lastHit);
+      lastHit = null;
     }
   }
 
