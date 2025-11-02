@@ -135,7 +135,10 @@ public class Inventory : MonoBehaviour
         {
             itemNameText.text = ""; // Default text if no items
         }
-        pauseSystem.action.Disable();
+        if (pauseSystem != null)
+        {
+            pauseSystem.action.Disable();
+        }
 
         ItemPreview();
 
@@ -149,7 +152,11 @@ public class Inventory : MonoBehaviour
             itemPreviewPlaceholder.SetActive(false);
             return;
         }
-        itemPreviewPlaceholder.SetActive(true);
+        else
+        {
+            itemPreviewPlaceholder.SetActive(true);
+        }
+        
         itemPreviewPlaceholder.GetComponent<MeshFilter>().mesh = items[currentItemIndex].MeshRef;
     }
 
@@ -164,8 +171,8 @@ public class Inventory : MonoBehaviour
         if (player != null)
         {
             player.playerInput.actions.Enable(); // Re-enable player input actions
+            pauseSystem.action.Enable();
         }
-        pauseSystem.action.Enable();
         Player.InstanceReference.stateMachine.InvokeStateEvent(previousPlayerState);
     }
 
