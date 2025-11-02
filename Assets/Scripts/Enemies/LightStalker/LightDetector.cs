@@ -15,17 +15,22 @@ public class LightDetector : MonoBehaviour
     public UnityEvent OnLightEnter;
     public UnityEvent OnLightExit;
 
-    // Prevents scheduling the same “scare” timer more than once
-    private bool isTimerScheduled = false;
+    // configured hold time (fallback 3s)
     private float lightHoldTime => enemyConfig != null ? enemyConfig.flashlightStunSeconds : 3f;
 
     // count of overlapping child colliders currently hit by beam
     private int beamHitCount = 0;
 
+    // accumulating timer & small state to avoid double triggering
     private float lightTimer = 0f;
+    private bool hasTriggeredThisExposure = false;
     private bool isUnderBeam => beamHitCount > 0;
 
-  void Start()
+    [Header("Tuning (for forgiving occlusions)")]
+    [Tooltip("How fast accumulated light time decays per second when not under beam. 0 = no decay, higher = faster loss.")]
+    public float lightDecayPerSecond = 0.5f;
+
+    void Start()
     {
         if (playerFlashlight == null)
         {
@@ -41,24 +46,32 @@ public class LightDetector : MonoBehaviour
         }
     }
 
-  private void Update()
-  {
-    if (isUnderBeam)
+    private void Update()
     {
-      lightTimer += Time.deltaTime;
-      if (!isTimerScheduled && lightTimer >= lightHoldTime)
-      {
-        TriggerScared();
-      }
+        if (isUnderBeam)
+        {
+            // accumulate while in beam (only if we haven't already triggered for this continuous exposure)
+            if (!hasTriggeredThisExposure)
+            {
+                lightTimer += Time.deltaTime;
+                if (lightTimer >= lightHoldTime)
+                {
+                    TriggerScared();
+                }
+            }
+        }
+        else
+        {
+            // slowly decay accumulated time when briefly out of beam
+            if (lightTimer > 0f)
+            {
+                lightTimer = Mathf.Max(0f, lightTimer - lightDecayPerSecond * Time.deltaTime);
+            }
+            // Note: do NOT reset hasTriggeredThisExposure here; reset when beam fully exits in HandleBeamExit
+        }
     }
-    else
-    {
-      // Optional: slowly decay timer if beam is lost (makes it forgiving)
-      lightTimer = Mathf.Max(lightTimer - Time.deltaTime * 0.5f, 0f);
-    }
-  }
 
-  private void HandleBeamEnter(Collider col)
+    private void HandleBeamEnter(Collider col)
     {
         if (!IsColliderForThisObject(col)) return;
         if (!gameObject.activeInHierarchy) return;
@@ -71,11 +84,7 @@ public class LightDetector : MonoBehaviour
             OnLightEnter?.Invoke();
         }
 
-        if (!isTimerScheduled)
-        {
-            Invoke(nameof(TriggerScared), lightHoldTime);
-            isTimerScheduled = true;
-        }
+        // nothing else to do here — accumulation happens in Update()
     }
 
     private void HandleBeamExit(Collider col)
@@ -87,13 +96,16 @@ public class LightDetector : MonoBehaviour
         {
             // fully exited beam
             OnLightExit?.Invoke();
+
+            // Allow future exposures to trigger again
+            hasTriggeredThisExposure = false;
+
+            // Optionally keep accumulated lightTimer (it will decay slowly).
+            // If you prefer instant reset on full exit, uncomment next line:
+            // lightTimer = 0f;
         }
 
-        if (isTimerScheduled)
-        {
-            CancelInvoke(nameof(TriggerScared));
-            isTimerScheduled = false;
-        }
+        // no Invoke/CancelInvoke anymore
     }
 
     private bool IsColliderForThisObject(Collider col)
@@ -107,29 +119,32 @@ public class LightDetector : MonoBehaviour
         return false;
     }
 
-  private void TriggerScared()
-  {
-    if (!gameObject.activeInHierarchy) return;
-
-    OnScaredByLight?.Invoke();
-    lightTimer = 0f;
-    isTimerScheduled = true; // prevents retrigger until reset
-  }
-
-  void OnDisable()
+    private void TriggerScared()
     {
-        if (isTimerScheduled)
-        {
-            CancelInvoke(nameof(TriggerScared));
-            isTimerScheduled = false;
-        }
+        if (!gameObject.activeInHierarchy) return;
+        if (hasTriggeredThisExposure) return; // guard
 
+        OnScaredByLight?.Invoke();
+
+        // Mark that we've already triggered for this continuous exposure so we don't spam the event
+        hasTriggeredThisExposure = true;
+
+        // reset accumulated time so we don't immediately re-trigger (optional)
+        lightTimer = 0f;
+    }
+
+    void OnDisable()
+    {
         // Reset counter and fire exit if needed
         if (beamHitCount > 0)
         {
             beamHitCount = 0;
             OnLightExit?.Invoke();
         }
+
+        // Reset state
+        lightTimer = 0f;
+        hasTriggeredThisExposure = false;
     }
 
     void OnDestroy()

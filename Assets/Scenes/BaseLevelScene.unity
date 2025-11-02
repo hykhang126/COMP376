@@ -37919,9 +37919,9 @@ MonoBehaviour:
   - {fileID: 1722370364}
   - {fileID: 2082767929}
   - {fileID: 1049141032}
-  fleeDuration: 4.5
+  fleeDuration: 2.5
   fleeSpeedMultiplier: 3
-  fleeDistanceMultiplier: 20
+  fleeDistanceMultiplier: 2
   inBeamSpeedMultiplier: 0.25
   originalAgentSpeed: 3
   proximityTriggerOverride: {fileID: 1141319548}
@@ -37960,6 +37960,7 @@ MonoBehaviour:
   OnLightExit:
     m_PersistentCalls:
       m_Calls: []
+  lightDecayPerSecond: 0.5
 --- !u!114 &1355750378
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -57805,7 +57806,7 @@ Transform:
   m_GameObject: {fileID: 2082767928}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -12.76865, y: -3.10112, z: -16.07733}
+  m_LocalPosition: {x: -15.373, y: -3.10112, z: -17.525}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
