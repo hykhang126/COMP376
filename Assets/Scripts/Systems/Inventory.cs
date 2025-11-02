@@ -20,6 +20,7 @@ public class Inventory : MonoBehaviour
 
     // Private
     private PlayerInputHandler playerInputHandler;
+    private Flashlight flashlight;
     private int currentItemIndex = 0;
     private bool isInventoryOpen = false;
     private TextMeshProUGUI itemNameText;
@@ -37,6 +38,12 @@ public class Inventory : MonoBehaviour
             if (playerInputHandler == null)
             {
                 Debug.LogError("PlayerInputHandler is null on Player Instance Reference.");
+            }
+            else
+            {
+                // Get flashlight reference from PlayerInputHandler (may be null if not yet available)
+                flashlight = playerInputHandler.flashlight;
+                
             }
         }
         else
@@ -102,6 +109,19 @@ public class Inventory : MonoBehaviour
         if (Player.InstanceReference.stateMachine.GetCurrentStateName() == PlayerStateType.InMenu.ToString()) return;
         previousPlayerState = Player.InstanceReference.stateMachine.GetCurrentStateName();
         isInventoryOpen = true;
+
+        // Update flashlight reference if needed (in case it wasn't available at start)
+        if (flashlight == null && playerInputHandler != null)
+        {
+            flashlight = playerInputHandler.flashlight;
+        }
+
+        // Turn off flashlight when opening inventory (only if flashlight exists and is activated)
+        if (flashlight != null && flashlight.IsActivated)
+        {
+            flashlight.ToggleFlashlight();
+        }
+
         // Show the inventory UI
         inventoryUI.SetActive(true);
         Cursor.visible = true; // Make the cursor visible
