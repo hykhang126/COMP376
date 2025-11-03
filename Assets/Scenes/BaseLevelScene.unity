@@ -37302,11 +37302,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3601596711742229865, guid: a134cc40a117af44daa5d51a4d3e902a, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4290891215773832849, guid: a134cc40a117af44daa5d51a4d3e902a, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5892630267381453625, guid: a134cc40a117af44daa5d51a4d3e902a, type: 3}
       propertyPath: maxBattery
