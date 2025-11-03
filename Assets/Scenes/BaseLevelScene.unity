@@ -11582,7 +11582,6 @@ GameObject:
   - component: {fileID: 376199836}
   - component: {fileID: 376199835}
   - component: {fileID: 376199834}
-  - component: {fileID: 376199839}
   m_Layer: 0
   m_Name: Ceiling
   m_TagString: Untagged
@@ -11953,7 +11952,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 03cc69445df6b4204bbbcc3a1fb583db, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SceneTempPlayerBootstrap
-  stateEventToInvoke: toIdle
   startDelay: 0.05
 --- !u!4 &390680846
 Transform:
@@ -60500,3 +60498,6 @@ SceneRoots:
   - {fileID: 1885552569}
   - {fileID: 494534622}
   - {fileID: 390680846}
+  - {fileID: 73990548}
+  - {fileID: 1355750382}
+  - {fileID: 1411579782}
