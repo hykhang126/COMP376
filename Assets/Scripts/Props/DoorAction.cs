@@ -25,39 +25,18 @@ public class DoorAction : MonoBehaviour
 		doorAudioSource = gameObject.GetComponent<AudioSource>();
 	}
 
-	void OnMouseOver()
-	{
+	public void OpenorClose()
+    {
+		if (!open)
 		{
-			if (Player)
-			{
-				float dist = Vector3.Distance(Player.position, transform.position);
-				if (dist < 15)
-				{
-					if (open == false)
-					{
-						if (Input.GetMouseButtonDown(0))
-						{
-							StartCoroutine(opening());
-						}
-					}
-					else
-					{
-						if (open == true)
-						{
-							if (Input.GetMouseButtonDown(0))
-							{
-								StartCoroutine(closing());
-							}
-						}
-
-					}
-
-				}
-			}
+			OpenDoor();
 
 		}
-
-	}
+        else
+        {
+			CloseDoor();
+        }
+    }
 
 	public void OpenDoor()
 	{
@@ -85,9 +64,9 @@ public class DoorAction : MonoBehaviour
 	{
 		print("you are opening the door");
 		openandclose.Play(openAnimation);
-		doorAudioSource.clip = openSound;
+		/*doorAudioSource.clip = openSound;
 		doorAudioSource.pitch = Random.Range(0.9f, 1.1f);
-		doorAudioSource.Play();
+		doorAudioSource.Play();*/
 		open = true;
 		yield return new WaitForSeconds(waitTime);
 	}
@@ -96,8 +75,8 @@ public class DoorAction : MonoBehaviour
 	{
 		print("you are closing the door");
 		openandclose.Play(closeAnimation);
-		doorAudioSource.clip = closeSound;
-		doorAudioSource.Play();
+		/*doorAudioSource.clip = closeSound;
+		doorAudioSource.Play();*/
 		open = false;
 		yield return new WaitForSeconds(waitTime);
 	}
