@@ -23,6 +23,8 @@ public class TVInteractable : Interactable
 
     private bool isPlaying = false;
 
+    Light TVLight;
+
     private AudioSource audioSource;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -41,7 +43,7 @@ public class TVInteractable : Interactable
             Debug.LogError("VideoPlayer component not found on the screen object.");
             return;
         }
-
+        
         _screenRenderer.material = TVOffMaterial;
 
         audioSource = GetComponent<AudioSource>();
