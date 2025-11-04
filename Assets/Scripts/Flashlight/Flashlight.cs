@@ -42,7 +42,7 @@ public class Flashlight : MonoBehaviour
   //Raycast helpers
   [Header("Beam Detection")]
   [Tooltip("Raycast range used by CastRay (meters)")]
-  public float beamRange = 10f;
+  public float beamRange = 1f;
   [Tooltip("LayerMask to include enemies (set in inspector)")]
   public LayerMask beamHitMask = ~0;
 
