@@ -2,6 +2,8 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using System.Collections.Generic;
 using TMPro;
+using UnityEngine.Events;
+using UnityEditor.ShaderKeywordFilter;
 
 public class Inventory : MonoBehaviour
 {
@@ -29,6 +31,10 @@ public class Inventory : MonoBehaviour
     private string previousPlayerState;
     private string playerMapName;
     private string inventoryMapName;
+
+    public ItemContractSO flashlightContractSO;
+
+    public static UnityEvent rechargeEvent = new UnityEvent();
 
     public void Start()
     {
@@ -158,8 +164,9 @@ public class Inventory : MonoBehaviour
         {
             itemPreviewPlaceholder.SetActive(true);
         }
-        
+
         itemPreviewPlaceholder.GetComponent<MeshFilter>().mesh = items[currentItemIndex].MeshRef;
+        itemPreviewPlaceholder.GetComponent<MeshRenderer>().material = items[currentItemIndex].Material;
     }
 
     private void CloseInventory()
@@ -362,8 +369,24 @@ public class Inventory : MonoBehaviour
             if (result != null)
             {
                 Debug.Log("itemFromIndex: " + itemFromIndex + ". The count  is " + items.Count);
-                AddItem(result);
-                RemoveTwoItems();
+                if (result.Id == flashlightContractSO.Id)
+                {
+                    rechargeEvent?.Invoke();
+                    if (itemFrom.Id != flashlightContractSO.Id)
+                    {
+                        playerInventorySO.items.RemoveAt(itemFromIndex);
+                    }
+                    else
+                    {
+                        playerInventorySO.items.RemoveAt(itemToIndex);
+                    }
+                }
+                else
+                {
+                    AddItem(result);
+                    RemoveTwoItems();
+                }
+                
             }
             itemFrom = null;
             itemTo = null;
