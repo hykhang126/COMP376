@@ -6,7 +6,9 @@ public class DoorAction : MonoBehaviour
 
 	public Animator openandclose;
 	public bool open;
-	public Transform Player;
+	public ItemContractSO key;
+
+	[SerializeField] bool isLocked = true;
 
 	[SerializeField] string openAnimation;
 
@@ -26,7 +28,19 @@ public class DoorAction : MonoBehaviour
 	}
 
 	public void OpenorClose()
-    {
+	{
+		if (isLocked && key != null && Player.InstanceReference.inventory.items[Player.InstanceReference.inventory.GetCurrentItemIndex()].Id ==
+		key.Id)
+		{
+			Debug.Log("Unlocked");	
+			isLocked = false;
+		}
+		else if (isLocked)
+		{
+			Debug.Log("Locked and you don't have the right key");
+			return;
+		}
+		
 		if (!open)
 		{
 			OpenDoor();
