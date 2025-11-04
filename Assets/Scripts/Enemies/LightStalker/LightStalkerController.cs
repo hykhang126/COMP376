@@ -23,7 +23,15 @@ public class LightStalkerController : MonoBehaviour
     [Header("Respawn/Spawners")]
     public Transform[] spawners;
 
-    [Header("Flee behavior (on being lit)")]
+  [Header("Flashlight slowdown buffer")]
+  [Tooltip("Seconds to stay slowed after leaving light")]
+  public float slowdownBufferDuration = 2f;
+  [Tooltip("Speed while in slowdown buffer")]
+  public float slowdownSpeedMultiplier = 0.5f;
+  private float slowdownTimer = 0f;
+  private bool isInSlowdownBuffer = false;
+
+  [Header("Flee behavior (on being lit)")]
     [Tooltip("How long to run away before despawning")]
     public float fleeDuration = 2.5f;
     [Tooltip("Multiplier applied to agent.speed while fleeing")]
@@ -136,7 +144,24 @@ public class LightStalkerController : MonoBehaviour
         // END body collider initialization
     }
 
-    void OnDestroy()
+  void Update()
+  {
+    // Handle slowdown buffer timer
+    if (isInSlowdownBuffer && !isFleeing)
+    {
+      slowdownTimer -= Time.deltaTime;
+      if (slowdownTimer <= 0f)
+      {
+        isInSlowdownBuffer = false;
+        if (!isInBeam && agent != null)
+        {
+          agent.speed = (enemyConfig != null ? enemyConfig.moveSpeed : moveSpeed);
+        }
+      }
+    }
+  }
+
+  void OnDestroy()
     {
         if (lightDetector != null)
         {
@@ -171,16 +196,21 @@ public class LightStalkerController : MonoBehaviour
             agent.speed = (enemyConfig != null ? enemyConfig.moveSpeed : moveSpeed) * inBeamSpeedMultiplier;
     }
 
-    //Return enemy to normal speed
-    private void HandleLightExit()
-    {
-        if (isFleeing) return;
-        isInBeam = false;
-        if (agent != null)
-            agent.speed = (enemyConfig != null ? enemyConfig.moveSpeed : moveSpeed);
-    }
+  // Returns enemy to normal speed or triggers slowdown buffer
+  private void HandleLightExit()
+  {
+    if (isFleeing) return;
 
-    public void StartFlee()
+    isInBeam = false;
+
+    // Start slowdown buffer
+    isInSlowdownBuffer = true;
+    slowdownTimer = slowdownBufferDuration;
+    if (agent != null)
+      agent.speed = (enemyConfig != null ? enemyConfig.moveSpeed : moveSpeed) * slowdownSpeedMultiplier;
+  }
+
+  public void StartFlee()
     {
         if (isFleeing) return;
         isFleeing = true;

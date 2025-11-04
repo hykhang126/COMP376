@@ -66,6 +66,7 @@ public class LightDetector : MonoBehaviour
             if (lightTimer > 0f)
             {
                 lightTimer = Mathf.Max(0f, lightTimer - lightDecayPerSecond * Time.deltaTime);
+                
             }
             // Note: do NOT reset hasTriggeredThisExposure here; reset when beam fully exits in HandleBeamExit
         }
@@ -113,10 +114,10 @@ public class LightDetector : MonoBehaviour
         if (col == null) return false;
 
         if (col.transform == this.transform) return true;
-        if (col.transform.IsChildOf(this.transform)) return true;
-        if (this.transform.IsChildOf(col.transform)) return true;
+        //if (col.transform.IsChildOf(this.transform)) return true;
+        //if (this.transform.IsChildOf(col.transform)) return true;
 
-        return false;
+    return false;
     }
 
     private void TriggerScared()
