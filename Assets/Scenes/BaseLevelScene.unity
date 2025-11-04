@@ -3852,7 +3852,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4395965178007330038, guid: 60a43cfd1362b7b4899f19278f4d23e1, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.412
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4395965178007330038, guid: 60a43cfd1362b7b4899f19278f4d23e1, type: 3}
       propertyPath: m_LocalPosition.z
@@ -3906,6 +3906,10 @@ PrefabInstance:
       propertyPath: 'spawners.Array.data[2]'
       value: 
       objectReference: {fileID: 1349130313}
+    - target: {fileID: 8337238520577210330, guid: 60a43cfd1362b7b4899f19278f4d23e1, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 5ca0b81b5909dc64190e8eb42a10f728, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
