@@ -28,8 +28,8 @@ public class Flashlight : MonoBehaviour
   [Header("Events")]
   public UnityEvent OnFirstWarning;
   public UnityEvent OnLastWarning;
-  public UnityEvent OnBatteryInsert;
   public UnityEvent OnBatteryEmpty;
+  public UnityEvent OnBatteryRecharged;
 
   //Minimal beam events for detectors to subscribe
   public ColliderEvent OnBeamEnter = new ColliderEvent();
@@ -58,6 +58,8 @@ public class Flashlight : MonoBehaviour
 
     if (FlashlightSpotLight != null)
       FlashlightSpotLight.enabled = false;
+
+    Inventory.rechargeEvent.AddListener(HandleBatteryInventorySelect);
   }
 
   void Update()
@@ -71,7 +73,6 @@ public class Flashlight : MonoBehaviour
 
       TimeLeft -= Time.deltaTime;
       TimeLeft = Mathf.Max(TimeLeft, 0f);
-
       if (!FirstWarningFlag && TimeLeft < FIRST_WARNING_TIME && TimeLeft >= LAST_WARNING_TIME)
       {
         FirstWarningFlag = true;
@@ -189,7 +190,7 @@ public class Flashlight : MonoBehaviour
     FirstWarningFlag = false;
     LastWarningFlag = false;
     TimeLeft = maxBattery;
-    OnBatteryInsert?.Invoke();
+    OnBatteryRecharged?.Invoke();
     Debug.Log("Battery inserted");
   }
 
@@ -201,5 +202,6 @@ public class Flashlight : MonoBehaviour
       OnBeamExit?.Invoke(lastHit);
       lastHit = null;
     }
+    Inventory.rechargeEvent.RemoveListener(HandleBatteryInventorySelect);
   }
 }
