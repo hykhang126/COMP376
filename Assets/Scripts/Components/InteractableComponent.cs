@@ -26,6 +26,10 @@ public class InteractableComponent : MonoBehaviour
         interactionTriggered.AddListener(OnInteractionTriggered);
 
         _collider = GetComponent<Collider>();
+        if(_collider == null)
+        {
+            Debug.LogError("Cannot Find Collider Component");
+        }
     }
 
     public void AttempyTriggerInteraction()

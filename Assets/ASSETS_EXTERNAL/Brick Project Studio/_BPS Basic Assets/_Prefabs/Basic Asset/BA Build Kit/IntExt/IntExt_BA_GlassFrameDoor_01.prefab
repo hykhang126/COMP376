@@ -158,6 +158,7 @@ MonoBehaviour:
   closeAnimation: Closing
   openSound: {fileID: 0}
   closeSound: {fileID: 0}
+  navObstacle: {fileID: 0}
 --- !u!114 &5763859536797687249
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -193,6 +194,7 @@ MonoBehaviour:
       m_Calls: []
   cooldown: 1
   isOneShot: 0
+  isCoolingDown: 0
 --- !u!1 &6214028149360454276
 GameObject:
   m_ObjectHideFlags: 0
@@ -529,6 +531,7 @@ MonoBehaviour:
   closeAnimation: Closing 1
   openSound: {fileID: 0}
   closeSound: {fileID: 0}
+  navObstacle: {fileID: 0}
 --- !u!114 &2612822870258048604
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -564,6 +567,7 @@ MonoBehaviour:
       m_Calls: []
   cooldown: 1
   isOneShot: 0
+  isCoolingDown: 0
 --- !u!1 &6214766920575356516
 GameObject:
   m_ObjectHideFlags: 0

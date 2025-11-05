@@ -43,8 +43,9 @@ public class TVInteractable : Interactable
             Debug.LogError("VideoPlayer component not found on the screen object.");
             return;
         }
-        
+
         _screenRenderer.material = TVOffMaterial;
+        Debug.Log("Changing material to TVOFF");
 
         audioSource = GetComponent<AudioSource>();
         if (audioSource == null)
