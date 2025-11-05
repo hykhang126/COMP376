@@ -19,7 +19,7 @@ public class InteractableComponent : MonoBehaviour
     [SerializeField] public float cooldown = 1.0f;
     [SerializeField] public bool isOneShot = false;
 
-    private bool isCoolingDown = false;
+    public bool isCoolingDown = false;
 
     void Start()
     {

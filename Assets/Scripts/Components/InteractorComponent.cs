@@ -1,3 +1,4 @@
+using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -20,8 +21,15 @@ public class InteractorComponent : MonoBehaviour
 
     private PlayerInputHandler playerInputHandler;
 
+    private Material interact_material;
+
     void Start()
     {
+        interact_material = Resources.Load<Material>("Materials/interact_glow");
+        if(interact_material == null)
+        {
+            Debug.LogError("Could not load interact_glow.mat. It must be inside a Resources/ folder!");
+        }
         // Grab the PlayerInputHandler from Player Instance
         if (Player.InstanceReference != null)
         {
@@ -62,36 +70,83 @@ public class InteractorComponent : MonoBehaviour
 
     private void OnInteractTriggered(InputAction.CallbackContext context)
     {
-        // Check which action was triggered by its name
-        if (canInteractorTrigger)
+        if (_interactable_component != null)
         {
-            // Invoke trigger event in InteractableComponent
+            var renderer = _interactable_component.GetComponentInChildren<Renderer>();
+            RemoveGlow(renderer, interact_material);
             _interactable_component.AttempyTriggerInteraction();
         }
     }
 
     void OnTriggerEnter(Collider other)
     {
-        if (other.GetComponentInParent<InteractableComponent>() != null && !canInteractorTrigger)
+        if (other.GetComponentInParent<InteractableComponent>() != null)
         {
             _interactable_component = other.gameObject.GetComponent<InteractableComponent>();
-            if (_interactable_component != null)
+            if (_interactable_component != null && !_interactable_component.isCoolingDown)
             {
-                canInteractorTrigger = true;   
+                canInteractorTrigger = true;
                 _interactable_component.interactionEntered.Invoke();
+                var renderer = other.GetComponentInChildren<Renderer>();
+                AddGlow(renderer, interact_material);
             }
         }
     }
 
+   void OnTriggerStay(Collider other)
+    {
+        var interactable = other.GetComponentInParent<InteractableComponent>();
+        
+        if (interactable == null || interactable != _interactable_component)
+            return;
+        if (_interactable_component.isCoolingDown) 
+            return;
+
+        var renderer = other.GetComponentInChildren<Renderer>();
+        AddGlow(renderer, interact_material); // will no-op if already present
+    }
+
+    
     void OnTriggerExit(Collider other)
     {
         _interactable_component = other.gameObject.GetComponent<InteractableComponent>();
-        if (_interactable_component != null && canInteractorTrigger)
+        if (_interactable_component != null)
         {
             _interactable_component.interactionExited.Invoke();
-            _interactable_component = null;
+            
+            var renderer = _interactable_component.GetComponentInChildren<Renderer>();
+            RemoveGlow(renderer, interact_material);
+
             canInteractorTrigger = false;
+            _interactable_component = null;
+            
         }
+    }
+
+    bool AddGlow(Renderer r, Material glow)
+    {
+        if (!r || !glow) return false;
+        var mats = r.sharedMaterials.ToList();
+        if (!mats.Contains(glow))
+        {
+            mats.Add(glow);
+            r.sharedMaterials = mats.ToArray();
+            return true;
+        }
+        return false;
+    }
+
+    bool RemoveGlow(Renderer r, Material glow)
+    {
+        if (!r || !glow) return false;
+        var mats = r.sharedMaterials.ToList();
+        if (mats.Contains(glow))
+        {
+            mats.Remove(glow);
+            r.sharedMaterials = mats.ToArray();
+            return true;
+        }
+        return false;
     }
 
     void OnValidate()
