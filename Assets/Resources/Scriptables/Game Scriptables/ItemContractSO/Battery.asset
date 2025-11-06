@@ -15,5 +15,5 @@ MonoBehaviour:
   _name: Battery
   _description: Combine with Flashlight to recharge Flashlight
   _meshRef: {fileID: 2534964839176971238, guid: d364f8ab873150bfdb54bdf05308455c, type: 3}
-  _material: {fileID: -6478536213147159724, guid: d364f8ab873150bfdb54bdf05308455c, type: 3}
+  _material: {fileID: 2100000, guid: 790e3aa5886d8c708b4036fd67664d81, type: 2}
   _id: a060f77f-642c-40ce-9e2b-af00f96c6284

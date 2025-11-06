@@ -166,7 +166,9 @@ public class Inventory : MonoBehaviour
         }
 
         itemPreviewPlaceholder.GetComponent<MeshFilter>().mesh = items[currentItemIndex].MeshRef;
-        itemPreviewPlaceholder.GetComponent<MeshRenderer>().material = items[currentItemIndex].Material;
+        Debug.Log("The item's material is: "+ items[currentItemIndex].Material);
+        Material newMaterial = new Material(items[currentItemIndex].Material);
+        itemPreviewPlaceholder.GetComponent<MeshRenderer>().material = newMaterial;
     }
 
     private void CloseInventory()
