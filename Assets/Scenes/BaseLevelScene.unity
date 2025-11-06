@@ -7947,9 +7947,17 @@ PrefabInstance:
       propertyPath: m_Center.z
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 5680160801128194814, guid: a134cc40a117af44daa5d51a4d3e902a, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5892630267381453625, guid: a134cc40a117af44daa5d51a4d3e902a, type: 3}
       propertyPath: beamRange
       value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5892630267381453625, guid: a134cc40a117af44daa5d51a4d3e902a, type: 3}
+      propertyPath: maxBattery
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 6335204541154062239, guid: a134cc40a117af44daa5d51a4d3e902a, type: 3}
       propertyPath: m_LocalScale.x
@@ -8107,7 +8115,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 5680160801128194814, guid: a134cc40a117af44daa5d51a4d3e902a, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
