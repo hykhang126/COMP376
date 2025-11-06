@@ -87,4 +87,30 @@ public class ItemInteractable : Interactable
         Debug.LogWarning("Item prefab not found for key: " + itemKey);
         return null;
     }
+
+    private void OnValidate()
+    {
+        if(itemContractSO != null)
+        {
+            if (itemContractSO.MeshRef != null)
+            {
+                GetComponent<MeshFilter>().mesh = itemContractSO.MeshRef;
+            }
+            else
+            {
+                Debug.LogWarning("MeshRef is not assigned in ItemContractSO: " + itemContractSO.Name);
+            }
+
+            if (itemContractSO.Material != null)
+            {
+                _meshRenderer = GetComponent<MeshRenderer>();
+                _meshRenderer.material = itemContractSO.Material;
+            }
+            else
+            {
+                Debug.LogWarning("Material is not assigned in ItemContractSO: " + itemContractSO.Name);
+            }
+            GetComponent<MeshCollider>().sharedMesh = GetComponent<MeshFilter>().sharedMesh;
+        }
+    }
 }
