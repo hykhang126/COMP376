@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -79,47 +80,66 @@ public class InteractorComponent : MonoBehaviour
     }
 
     void OnTriggerEnter(Collider other)
-    {
-        if (other.GetComponentInParent<InteractableComponent>() != null)
+    {   
+        var interactable = other.GetComponentInParent<InteractableComponent>();
+        if (interactable != null && !interactable.isCoolingDown)
         {
-            _interactable_component = other.gameObject.GetComponent<InteractableComponent>();
-            if (_interactable_component != null && !_interactable_component.isCoolingDown)
+            // new interactable hit, change to that one
+            var renderer = other.GetComponentInChildren<Renderer>();
+            if(_interactable_component != null)
             {
-                canInteractorTrigger = true;
-                _interactable_component.interactionEntered.Invoke();
-                var renderer = other.GetComponentInChildren<Renderer>();
-                AddGlow(renderer, interact_material);
+                RemoveGlow(renderer, interact_material);
+                _interactable_component.interactionExited.Invoke();
             }
+            _interactable_component = interactable;
+            AddGlow(renderer, interact_material);
+            _interactable_component.interactionEntered.Invoke();
         }
     }
 
    void OnTriggerStay(Collider other)
     {
+        Renderer renderer = null;
         var interactable = other.GetComponentInParent<InteractableComponent>();
-        
-        if (interactable == null || interactable != _interactable_component)
+        if (interactable == null)
             return;
-        if (_interactable_component.isCoolingDown) 
+        //Debug.LogWarning(String.Format("Staying in matched object: {0}", interactable.name));
+        if (interactable.isCoolingDown)
+        {
             return;
-
-        var renderer = other.GetComponentInChildren<Renderer>();
+        }
+        if (_interactable_component == null)
+        {
+            _interactable_component = interactable;
+            _interactable_component.interactionEntered.Invoke();
+        }
+        else if (_interactable_component != interactable)
+        {
+            RaycastHit hit;
+            Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit);
+            if (hit.collider.GetComponentInParent<InteractableComponent>() == interactable)
+            {
+                renderer = _interactable_component.GetComponentInChildren<Renderer>();
+                _interactable_component.interactionExited.Invoke();
+                RemoveGlow(renderer, interact_material);
+                _interactable_component = interactable;
+                _interactable_component.interactionEntered.Invoke();
+            }
+        }
+        renderer = _interactable_component.GetComponentInChildren<Renderer>();
         AddGlow(renderer, interact_material); // will no-op if already present
     }
 
     
     void OnTriggerExit(Collider other)
     {
-        _interactable_component = other.gameObject.GetComponent<InteractableComponent>();
-        if (_interactable_component != null)
+        var renderer = other.GetComponentInChildren<Renderer>();
+        RemoveGlow(renderer, interact_material);
+        if (_interactable_component == other.GetComponentInParent<InteractableComponent>() && _interactable_component != null)
         {
-            _interactable_component.interactionExited.Invoke();
-            
-            var renderer = _interactable_component.GetComponentInChildren<Renderer>();
-            RemoveGlow(renderer, interact_material);
-
             canInteractorTrigger = false;
+            _interactable_component.interactionExited.Invoke();
             _interactable_component = null;
-            
         }
     }
 
