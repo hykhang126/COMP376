@@ -7891,6 +7891,18 @@ PrefabInstance:
       propertyPath: flashlight
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 481674546160595529, guid: a134cc40a117af44daa5d51a4d3e902a, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.002
+      objectReference: {fileID: 0}
+    - target: {fileID: 481674546160595529, guid: a134cc40a117af44daa5d51a4d3e902a, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.193
+      objectReference: {fileID: 0}
+    - target: {fileID: 481674546160595529, guid: a134cc40a117af44daa5d51a4d3e902a, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.0021
+      objectReference: {fileID: 0}
     - target: {fileID: 972639073029162981, guid: a134cc40a117af44daa5d51a4d3e902a, type: 3}
       propertyPath: m_Name
       value: Player
@@ -8013,15 +8025,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7093812255644744325, guid: a134cc40a117af44daa5d51a4d3e902a, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.101
+      value: 0.012
       objectReference: {fileID: 0}
     - target: {fileID: 7093812255644744325, guid: a134cc40a117af44daa5d51a4d3e902a, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.194
+      value: -0.283
       objectReference: {fileID: 0}
     - target: {fileID: 7093812255644744325, guid: a134cc40a117af44daa5d51a4d3e902a, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.003
+      value: -0.024
       objectReference: {fileID: 0}
     - target: {fileID: 7093812255644744325, guid: a134cc40a117af44daa5d51a4d3e902a, type: 3}
       propertyPath: m_LocalRotation.w
