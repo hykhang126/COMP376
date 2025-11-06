@@ -3137,6 +3137,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 66358229}
     m_Modifications:
+    - target: {fileID: 5125514356775105557, guid: 93fff0c48f8f7d745878a75914323ea3, type: 3}
+      propertyPath: interactionTriggered.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgument
+      value: 
+      objectReference: {fileID: 1117987154}
     - target: {fileID: 5169008638321569393, guid: 93fff0c48f8f7d745878a75914323ea3, type: 3}
       propertyPath: itemContractSO
       value: 
@@ -13626,6 +13630,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 66358229}
     m_Modifications:
+    - target: {fileID: 5125514356775105557, guid: 93fff0c48f8f7d745878a75914323ea3, type: 3}
+      propertyPath: interactionTriggered.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgument
+      value: 
+      objectReference: {fileID: 1117987154}
     - target: {fileID: 5923601551872337811, guid: 93fff0c48f8f7d745878a75914323ea3, type: 3}
       propertyPath: m_Name
       value: Item
