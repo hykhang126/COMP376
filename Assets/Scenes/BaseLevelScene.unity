@@ -7375,6 +7375,10 @@ PrefabInstance:
       propertyPath: m_StaticEditorFlags
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 8581095331791830030, guid: 56a93cd127ed0184982c13ec0a61cfa5, type: 3}
+      propertyPath: isCameraFeed
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8890821166399119553, guid: 56a93cd127ed0184982c13ec0a61cfa5, type: 3}
       propertyPath: m_Name
       value: TV_Apt_01
