@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Grabbable
   - enemy
+  - flashlightTag
   layers:
   - Default
   - TransparentFX

@@ -8031,7 +8031,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3030522681464480912, guid: a134cc40a117af44daa5d51a4d3e902a, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3030522681464480912, guid: a134cc40a117af44daa5d51a4d3e902a, type: 3}
+      propertyPath: m_TagString
+      value: flashlightTag
       objectReference: {fileID: 0}
     - target: {fileID: 3692463945112656143, guid: a134cc40a117af44daa5d51a4d3e902a, type: 3}
       propertyPath: m_Height
@@ -8257,7 +8261,7 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 5892630267381453625, guid: a134cc40a117af44daa5d51a4d3e902a, type: 3}
   m_PrefabInstance: {fileID: 1334365940}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 1934005229}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0b2691b4f5132e64ca39a8d3bb880765, type: 3}
@@ -9161,12 +9165,16 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1117987154}
     - target: {fileID: 5169008638321569393, guid: 93fff0c48f8f7d745878a75914323ea3, type: 3}
+      propertyPath: Flashlight
+      value: 
+      objectReference: {fileID: 1934005229}
+    - target: {fileID: 5169008638321569393, guid: 93fff0c48f8f7d745878a75914323ea3, type: 3}
       propertyPath: itemContractSO
       value: 
       objectReference: {fileID: 11400000, guid: 3dbb71b85a532acf6be8782c3f7f6a4e, type: 2}
     - target: {fileID: 5923601551872337811, guid: 93fff0c48f8f7d745878a75914323ea3, type: 3}
       propertyPath: m_Name
-      value: Item (2)
+      value: FlashLightItem
       objectReference: {fileID: 0}
     - target: {fileID: 7174248521134920700, guid: 93fff0c48f8f7d745878a75914323ea3, type: 3}
       propertyPath: m_LocalPosition.x
@@ -14044,6 +14052,11 @@ Mesh:
       - serializedVersion: 1
         m_IndexStart: 0
         m_IndexCount: 0
+--- !u!1 &1934005229 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3030522681464480912, guid: a134cc40a117af44daa5d51a4d3e902a, type: 3}
+  m_PrefabInstance: {fileID: 1334365940}
+  m_PrefabAsset: {fileID: 0}
 --- !u!43 &1968857272
 Mesh:
   m_ObjectHideFlags: 0
