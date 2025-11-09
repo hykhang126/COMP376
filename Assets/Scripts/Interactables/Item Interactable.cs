@@ -11,6 +11,8 @@ public class ItemInteractable : Interactable
 
     [SerializeField] private ItemContractSO itemContractSO;
 
+    [SerializeField] private GameObject Flashlight;
+
     MeshFilter _meshFilter;
 
     MeshRenderer _meshRenderer;
@@ -68,6 +70,11 @@ public class ItemInteractable : Interactable
             player.inventory.AddItem(itemContractSO);
             // player.inventory.AddItem(item.itemName, item.itemKey, item);
             Destroy(gameObject);
+            if (this.gameObject.name == "FlashLightItem")
+              {
+                Debug.Log("flashlight picked up");
+                Flashlight.SetActive(true);
+              }
         }
     }
 
