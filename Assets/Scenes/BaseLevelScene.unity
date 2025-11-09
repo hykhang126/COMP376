@@ -8029,13 +8029,17 @@ PrefabInstance:
       propertyPath: m_LocalPosition.z
       value: -0.036
       objectReference: {fileID: 0}
+    - target: {fileID: 3030522681464480912, guid: a134cc40a117af44daa5d51a4d3e902a, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3692463945112656143, guid: a134cc40a117af44daa5d51a4d3e902a, type: 3}
       propertyPath: m_Height
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 3692463945112656143, guid: a134cc40a117af44daa5d51a4d3e902a, type: 3}
       propertyPath: m_Radius
-      value: 0
+      value: 0.25
       objectReference: {fileID: 0}
     - target: {fileID: 3692463945112656143, guid: a134cc40a117af44daa5d51a4d3e902a, type: 3}
       propertyPath: m_Center.x
@@ -8056,6 +8060,34 @@ PrefabInstance:
     - target: {fileID: 5892630267381453625, guid: a134cc40a117af44daa5d51a4d3e902a, type: 3}
       propertyPath: maxBattery
       value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 5892630267381453625, guid: a134cc40a117af44daa5d51a4d3e902a, type: 3}
+      propertyPath: OnBatteryRecharged.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5892630267381453625, guid: a134cc40a117af44daa5d51a4d3e902a, type: 3}
+      propertyPath: OnBatteryRecharged.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5892630267381453625, guid: a134cc40a117af44daa5d51a4d3e902a, type: 3}
+      propertyPath: OnBatteryRecharged.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1898161601}
+    - target: {fileID: 5892630267381453625, guid: a134cc40a117af44daa5d51a4d3e902a, type: 3}
+      propertyPath: OnBatteryRecharged.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5892630267381453625, guid: a134cc40a117af44daa5d51a4d3e902a, type: 3}
+      propertyPath: OnBatteryRecharged.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: HandleBatteryInsert
+      objectReference: {fileID: 0}
+    - target: {fileID: 5892630267381453625, guid: a134cc40a117af44daa5d51a4d3e902a, type: 3}
+      propertyPath: OnBatteryRecharged.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: BatteryIndicator, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 5892630267381453625, guid: a134cc40a117af44daa5d51a4d3e902a, type: 3}
+      propertyPath: OnBatteryRecharged.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 6335204541154062239, guid: a134cc40a117af44daa5d51a4d3e902a, type: 3}
       propertyPath: m_LocalScale.x
@@ -13645,6 +13677,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 1930471305036002317, guid: a9b92ebf67d0a7f4e8a1b3efedc9a2b4, type: 3}
   m_PrefabInstance: {fileID: 1885552569}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1898161601 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6688815378221881368, guid: a134cc40a117af44daa5d51a4d3e902a, type: 3}
+  m_PrefabInstance: {fileID: 1334365940}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: caa7d2c4021674a44b097ce9cfb87a79, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!43 &1900555456
 Mesh:
   m_ObjectHideFlags: 0
