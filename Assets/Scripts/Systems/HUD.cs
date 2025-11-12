@@ -6,24 +6,11 @@ public class HUD : MonoBehaviour
 {
     public GameObject EndGamePanel{ get; private set; }
     public GameObject EndGameVolume { get; private set; }
-
-    private TextMeshProUGUI interactPrompt;
     private Button quitGame;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        interactPrompt = transform.Find("Interact Prompt").GetComponent<TextMeshProUGUI>();
-        if (interactPrompt == null)
-        {
-            Debug.LogError("Interact Prompt TextMeshProUGUI not found in HUD.");
-        }
-        else
-        {
-            ShowInteractPrompt(false);
-            interactPrompt.text = "Press to interact";
-        }
-
         EndGamePanel = transform.Find("EndGame")?.gameObject;
 
         if (quitGame != null)
@@ -47,14 +34,6 @@ public class HUD : MonoBehaviour
         Application.Quit();
     }
 
-    public void ShowInteractPrompt(bool show)
-    {
-        if (interactPrompt != null)
-        {
-            interactPrompt.gameObject.SetActive(show);
-        }
-    }
-
     public void ShowEndGamePrompt()
     {
         Player.InstanceReference.playerInputHandler.DisableInput();
@@ -71,11 +50,5 @@ public class HUD : MonoBehaviour
             EventSystem.current.SetSelectedGameObject(quitGame.gameObject);
         #endif
         }
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }

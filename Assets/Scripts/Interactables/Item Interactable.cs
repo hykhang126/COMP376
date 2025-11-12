@@ -11,6 +11,8 @@ public class ItemInteractable : Interactable
 
     [SerializeField] private ItemContractSO itemContractSO;
 
+    [SerializeField] private GameObject Flashlight;
+
     MeshFilter _meshFilter;
 
     MeshRenderer _meshRenderer;
@@ -68,6 +70,11 @@ public class ItemInteractable : Interactable
             player.inventory.AddItem(itemContractSO);
             // player.inventory.AddItem(item.itemName, item.itemKey, item);
             Destroy(gameObject);
+            if (this.gameObject.name == "FlashLightItem")
+              {
+                Debug.Log("flashlight picked up");
+                Flashlight.SetActive(true);
+              }
         }
     }
 
@@ -86,5 +93,31 @@ public class ItemInteractable : Interactable
         }
         Debug.LogWarning("Item prefab not found for key: " + itemKey);
         return null;
+    }
+
+    private void OnValidate()
+    {
+        if(itemContractSO != null)
+        {
+            if (itemContractSO.MeshRef != null)
+            {
+                GetComponent<MeshFilter>().mesh = itemContractSO.MeshRef;
+            }
+            else
+            {
+                Debug.LogWarning("MeshRef is not assigned in ItemContractSO: " + itemContractSO.Name);
+            }
+
+            if (itemContractSO.Material != null)
+            {
+                _meshRenderer = GetComponent<MeshRenderer>();
+                _meshRenderer.material = itemContractSO.Material;
+            }
+            else
+            {
+                Debug.LogWarning("Material is not assigned in ItemContractSO: " + itemContractSO.Name);
+            }
+            GetComponent<MeshCollider>().sharedMesh = GetComponent<MeshFilter>().sharedMesh;
+        }
     }
 }

@@ -19,7 +19,7 @@ public class Flashlight : MonoBehaviour
   [SerializeField] private float FIRST_WARNING_TIME = 10.0f;
   [SerializeField] private float LAST_WARNING_TIME = 5.0f;
 
-  private bool IsActivated = false;
+  public bool IsActivated = false;
   private bool HasBatteryLeft = true;
 
   private bool FirstWarningFlag = false;
@@ -28,8 +28,8 @@ public class Flashlight : MonoBehaviour
   [Header("Events")]
   public UnityEvent OnFirstWarning;
   public UnityEvent OnLastWarning;
-  public UnityEvent OnBatteryInsert;
   public UnityEvent OnBatteryEmpty;
+  public UnityEvent OnBatteryRecharged;
 
   //Minimal beam events for detectors to subscribe
   public ColliderEvent OnBeamEnter = new ColliderEvent();
@@ -38,13 +38,11 @@ public class Flashlight : MonoBehaviour
   //Legacy single-enemy event you had (kept for compatibility if used elsewhere)
   public UnityEvent OnEnemyHit;
 
-  // public read-only API
-  public bool IsOn => IsActivated;
 
   //Raycast helpers
   [Header("Beam Detection")]
   [Tooltip("Raycast range used by CastRay (meters)")]
-  public float beamRange = 10f;
+  public float beamRange = 1f;
   [Tooltip("LayerMask to include enemies (set in inspector)")]
   public LayerMask beamHitMask = ~0;
 
@@ -60,12 +58,12 @@ public class Flashlight : MonoBehaviour
 
     if (FlashlightSpotLight != null)
       FlashlightSpotLight.enabled = false;
+
+    Inventory.rechargeEvent.AddListener(HandleBatteryInventorySelect);
   }
 
   void Update()
   {
-    HandlePlayerInput();
-
     if (!HasBatteryLeft) return;
 
     if (IsActivated)
@@ -75,7 +73,6 @@ public class Flashlight : MonoBehaviour
 
       TimeLeft -= Time.deltaTime;
       TimeLeft = Mathf.Max(TimeLeft, 0f);
-
       if (!FirstWarningFlag && TimeLeft < FIRST_WARNING_TIME && TimeLeft >= LAST_WARNING_TIME)
       {
         FirstWarningFlag = true;
@@ -120,24 +117,22 @@ public class Flashlight : MonoBehaviour
     }
   }
 
-  private void HandlePlayerInput()
+
+  // Toggle flashlight on/off. Called by PlayerInputHandler when flashlight action is triggered.
+  public void ToggleFlashlight()
   {
-    // Using legacy Input.GetMouseButtonDown for simplicity — keep as before
-    if (Input.GetMouseButtonDown(0))
+    if (!HasBatteryLeft) return;
+
+    IsActivated = !IsActivated;
+
+    if (FlashlightLight != null) FlashlightLight.SetActive(IsActivated);
+    if (FlashlightSpotLight != null) FlashlightSpotLight.enabled = IsActivated;
+
+    if (!IsActivated && lastHit != null)
     {
-      if (!HasBatteryLeft) return;
-
-      IsActivated = !IsActivated;
-
-      if (FlashlightLight != null) FlashlightLight.SetActive(IsActivated);
-      if (FlashlightSpotLight != null) FlashlightSpotLight.enabled = IsActivated;
-
-      if (!IsActivated && lastHit != null)
-      {
-        // emit exit if turned off while hitting something
-        OnBeamExit?.Invoke(lastHit);
-        lastHit = null;
-      }
+      // emit exit if turned off while hitting something
+      OnBeamExit?.Invoke(lastHit);
+      lastHit = null;
     }
   }
 
@@ -195,7 +190,7 @@ public class Flashlight : MonoBehaviour
     FirstWarningFlag = false;
     LastWarningFlag = false;
     TimeLeft = maxBattery;
-    OnBatteryInsert?.Invoke();
+    OnBatteryRecharged?.Invoke();
     Debug.Log("Battery inserted");
   }
 
@@ -207,5 +202,6 @@ public class Flashlight : MonoBehaviour
       OnBeamExit?.Invoke(lastHit);
       lastHit = null;
     }
+    Inventory.rechargeEvent.RemoveListener(HandleBatteryInventorySelect);
   }
 }

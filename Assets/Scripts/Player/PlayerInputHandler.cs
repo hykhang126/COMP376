@@ -29,6 +29,8 @@ public class PlayerInputHandler : MonoBehaviour
     public string grabAction = "Grab";
     [Tooltip("Name of the Interact action in the Player Input Action Map")]
     public string interactionAction = "Interact";
+    [Tooltip("Name of the Flashlight action in the Player Input Action Map")]
+    public string flashlightAction = "Flashlight";
     // Map names
     [Header("Input Action Map Names")]
     [Tooltip("Name of the Player Action Map")]
@@ -38,6 +40,7 @@ public class PlayerInputHandler : MonoBehaviour
     [Tooltip("Name of the Pause Action Map")]
     public string pauseActionMap = "Pause";
 
+    public Flashlight flashlight;
 
     // Private
     // Component reference
@@ -56,6 +59,16 @@ public class PlayerInputHandler : MonoBehaviour
         if (PlayerInput == null)
         {
             Debug.LogError("PlayerInput component not found on Player GameObject!");
+        }
+
+        // Auto-assign flashlight if not set
+        if (flashlight == null)
+        {
+            flashlight = UnityEngine.Object.FindFirstObjectByType<Flashlight>();
+            if (flashlight == null)
+            {
+                Debug.LogWarning("[PlayerInputHandler] No Flashlight found in scene");
+            }
         }
     }
 
@@ -84,6 +97,9 @@ public class PlayerInputHandler : MonoBehaviour
 
         // Grab
         PlayerInput.actions[grabAction].performed += OnGrab;
+
+        // Flashlight
+        PlayerInput.actions[flashlightAction].performed += OnFlashlight;
     }
 
     void OnEnable()
@@ -105,6 +121,9 @@ public class PlayerInputHandler : MonoBehaviour
 
         // Grab
         PlayerInput.actions[grabAction].performed -= OnGrab;
+
+        // Flashlight
+        PlayerInput.actions[flashlightAction].performed -= OnFlashlight;
     }
 
     #region Input Maps Control
@@ -220,6 +239,21 @@ public class PlayerInputHandler : MonoBehaviour
         if (player.IsHoldingItem())
         {
             player.DropItem();
+        }
+    }
+
+    public void OnFlashlight(InputAction.CallbackContext context)
+    {
+        // Try to find flashlight if not already assigned
+        if (flashlight == null)
+        {
+            flashlight = UnityEngine.Object.FindFirstObjectByType<Flashlight>();
+        }
+
+        // Only toggle if flashlight exists
+        if (flashlight != null)
+        {
+            flashlight.ToggleFlashlight();
         }
     }
 

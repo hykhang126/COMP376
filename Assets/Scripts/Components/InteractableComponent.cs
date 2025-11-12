@@ -19,13 +19,17 @@ public class InteractableComponent : MonoBehaviour
     [SerializeField] public float cooldown = 1.0f;
     [SerializeField] public bool isOneShot = false;
 
-    private bool isCoolingDown = false;
+    public bool isCoolingDown = false;
 
     void Start()
     {
         interactionTriggered.AddListener(OnInteractionTriggered);
 
         _collider = GetComponent<Collider>();
+        if(_collider == null)
+        {
+            Debug.LogError("Cannot Find Collider Component");
+        }
     }
 
     public void AttempyTriggerInteraction()

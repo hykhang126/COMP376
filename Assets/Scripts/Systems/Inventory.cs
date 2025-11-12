@@ -2,6 +2,8 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using System.Collections.Generic;
 using TMPro;
+using UnityEngine.Events;
+using UnityEditor.ShaderKeywordFilter;
 
 public class Inventory : MonoBehaviour
 {
@@ -20,6 +22,7 @@ public class Inventory : MonoBehaviour
 
     // Private
     private PlayerInputHandler playerInputHandler;
+    private Flashlight flashlight;
     private int currentItemIndex = 0;
     private bool isInventoryOpen = false;
     private TextMeshProUGUI itemNameText;
@@ -29,6 +32,10 @@ public class Inventory : MonoBehaviour
     private string playerMapName;
     private string inventoryMapName;
 
+    public ItemContractSO flashlightContractSO;
+
+    public static UnityEvent rechargeEvent = new UnityEvent();
+
     public void Start()
     {
         if (Player.InstanceReference != null)
@@ -37,6 +44,12 @@ public class Inventory : MonoBehaviour
             if (playerInputHandler == null)
             {
                 Debug.LogError("PlayerInputHandler is null on Player Instance Reference.");
+            }
+            else
+            {
+                // Get flashlight reference from PlayerInputHandler (may be null if not yet available)
+                flashlight = playerInputHandler.flashlight;
+                
             }
         }
         else
@@ -102,6 +115,19 @@ public class Inventory : MonoBehaviour
         if (Player.InstanceReference.stateMachine.GetCurrentStateName() == PlayerStateType.InMenu.ToString()) return;
         previousPlayerState = Player.InstanceReference.stateMachine.GetCurrentStateName();
         isInventoryOpen = true;
+
+        // Update flashlight reference if needed (in case it wasn't available at start)
+        if (flashlight == null && playerInputHandler != null)
+        {
+            flashlight = playerInputHandler.flashlight;
+        }
+
+        // Turn off flashlight when opening inventory (only if flashlight exists and is activated)
+        if (flashlight != null && flashlight.IsActivated)
+        {
+            flashlight.ToggleFlashlight();
+        }
+
         // Show the inventory UI
         inventoryUI.SetActive(true);
         Cursor.visible = true; // Make the cursor visible
@@ -138,8 +164,11 @@ public class Inventory : MonoBehaviour
         {
             itemPreviewPlaceholder.SetActive(true);
         }
-        
+
         itemPreviewPlaceholder.GetComponent<MeshFilter>().mesh = items[currentItemIndex].MeshRef;
+        Debug.Log("The item's material is: "+ items[currentItemIndex].Material);
+        Material newMaterial = new Material(items[currentItemIndex].Material);
+        itemPreviewPlaceholder.GetComponent<MeshRenderer>().material = newMaterial;
     }
 
     private void CloseInventory()
@@ -342,8 +371,24 @@ public class Inventory : MonoBehaviour
             if (result != null)
             {
                 Debug.Log("itemFromIndex: " + itemFromIndex + ". The count  is " + items.Count);
-                AddItem(result);
-                RemoveTwoItems();
+                if (result.Id == flashlightContractSO.Id)
+                {
+                    rechargeEvent?.Invoke();
+                    if (itemFrom.Id != flashlightContractSO.Id)
+                    {
+                        playerInventorySO.items.RemoveAt(itemFromIndex);
+                    }
+                    else
+                    {
+                        playerInventorySO.items.RemoveAt(itemToIndex);
+                    }
+                }
+                else
+                {
+                    AddItem(result);
+                    RemoveTwoItems();
+                }
+                
             }
             itemFrom = null;
             itemTo = null;

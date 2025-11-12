@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8e9dc5f7d7ea94c41958f79f15ca32b9, type: 3}
+  m_Name: Flashlight
+  m_EditorClassIdentifier: Assembly-CSharp::ItemContractSO
+  _name: Flashlight
+  _description: Helps you light your path, and banish your fears. Combine with a
+    battery to recharge
+  _meshRef: {fileID: -7387706064836869012, guid: e9e2facbf5eeba99fb3fa7790646df68, type: 3}
+  _material: {fileID: 2100000, guid: 9f3d038a3735ff8a7b171efd926b5886, type: 2}
+  _id: e5cc9132-c0bb-4209-8454-8404b89454ef

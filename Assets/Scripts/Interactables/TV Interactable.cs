@@ -23,6 +23,8 @@ public class TVInteractable : Interactable
 
     private bool isPlaying = false;
 
+    Light TVLight;
+
     private AudioSource audioSource;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -43,6 +45,7 @@ public class TVInteractable : Interactable
         }
 
         _screenRenderer.material = TVOffMaterial;
+        Debug.Log("Changing material to TVOFF");
 
         audioSource = GetComponent<AudioSource>();
         if (audioSource == null)

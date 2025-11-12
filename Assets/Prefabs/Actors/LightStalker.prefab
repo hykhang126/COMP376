@@ -1,0 +1,463 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &6018077579191336849
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5961090926084262749}
+  - component: {fileID: 4967722665162233801}
+  - component: {fileID: 2124289745934211797}
+  m_Layer: 10
+  m_Name: ProximityTrigger
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5961090926084262749
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6018077579191336849}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4395965178007330038}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!135 &4967722665162233801
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6018077579191336849}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 20
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &2124289745934211797
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6018077579191336849}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 50de3237b3e374215ac767aa83366135, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ProximityTrigger
+  playerTag: Player
+  OnPlayerEnter:
+    m_PersistentCalls:
+      m_Calls: []
+  OnPlayerExit:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!1 &6353983105119651536
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4395965178007330038}
+  - component: {fileID: 3752194050364853390}
+  - component: {fileID: 5028128561188652905}
+  - component: {fileID: 7013293767866104222}
+  - component: {fileID: 7071416110524938846}
+  - component: {fileID: 5658977490894596109}
+  - component: {fileID: 6330638515685503071}
+  m_Layer: 10
+  m_Name: LightStalker
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4395965178007330038
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6353983105119651536}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -25.2, y: 1.5, z: 53.79}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 6041570709652980887}
+  - {fileID: 5961090926084262749}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!136 &3752194050364853390
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6353983105119651536}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Height: 2
+  m_Direction: 1
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &5028128561188652905
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6353983105119651536}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b698efcfc9e2de99e9846d04c9cb85d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::StateMachine
+  states:
+  - stateName: ChasingPlayer
+    transitions:
+    - triggerEvent: ScaredByLight
+      toState: Scared
+    - triggerEvent: LostPlayer
+      toState: Idle
+    stateEnter:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 7071416110524938846}
+          m_TargetAssemblyTypeName: LightStalkerController, Assembly-CSharp
+          m_MethodName: OnEnterChase
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+    stateExit:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 7071416110524938846}
+          m_TargetAssemblyTypeName: LightStalkerController, Assembly-CSharp
+          m_MethodName: OnExitChase
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+    stateUpdate:
+      m_PersistentCalls:
+        m_Calls: []
+    stateFixedUpdate:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 7071416110524938846}
+          m_TargetAssemblyTypeName: LightStalkerController, Assembly-CSharp
+          m_MethodName: MoveTowardPlayer
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+  - stateName: Scared
+    transitions:
+    - triggerEvent: Respawned
+      toState: ChasingPlayer
+    stateEnter:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 7071416110524938846}
+          m_TargetAssemblyTypeName: LightStalkerController, Assembly-CSharp
+          m_MethodName: StartFlee
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+    stateExit:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 7071416110524938846}
+          m_TargetAssemblyTypeName: LightStalkerController, Assembly-CSharp
+          m_MethodName: OnExitChase
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+    stateUpdate:
+      m_PersistentCalls:
+        m_Calls: []
+    stateFixedUpdate:
+      m_PersistentCalls:
+        m_Calls: []
+  - stateName: Idle
+    transitions:
+    - triggerEvent: PlayerDetected
+      toState: ChasingPlayer
+    stateEnter:
+      m_PersistentCalls:
+        m_Calls: []
+    stateExit:
+      m_PersistentCalls:
+        m_Calls: []
+    stateUpdate:
+      m_PersistentCalls:
+        m_Calls: []
+    stateFixedUpdate:
+      m_PersistentCalls:
+        m_Calls: []
+  globalTransitions:
+  - triggerEvent: ScaredByLight
+    toState: Scared
+  currentState:
+    stateName: 
+    transitions: []
+    stateEnter:
+      m_PersistentCalls:
+        m_Calls: []
+    stateExit:
+      m_PersistentCalls:
+        m_Calls: []
+    stateUpdate:
+      m_PersistentCalls:
+        m_Calls: []
+    stateFixedUpdate:
+      m_PersistentCalls:
+        m_Calls: []
+--- !u!114 &7013293767866104222
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6353983105119651536}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fd508e67534ed401d9ac59b0e1690822, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LightDetector
+  playerFlashlight: {fileID: 0}
+  enemyConfig: {fileID: 11400000, guid: f30fa4de4f01f402ba58fa22a0f068a0, type: 2}
+  OnScaredByLight:
+    m_PersistentCalls:
+      m_Calls: []
+  OnLightEnter:
+    m_PersistentCalls:
+      m_Calls: []
+  OnLightExit:
+    m_PersistentCalls:
+      m_Calls: []
+  lightDecayPerSecond: 0.5
+--- !u!114 &7071416110524938846
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6353983105119651536}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fe4b85ec797d494ab1370b9afc049f5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LightStalkerController
+  moveSpeed: 3
+  stoppingDistance: 1.2
+  enemyConfig: {fileID: 11400000, guid: f30fa4de4f01f402ba58fa22a0f068a0, type: 2}
+  spawners:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  fleeDuration: 4.5
+  fleeSpeedMultiplier: 3
+  fleeDistanceMultiplier: 4
+  inBeamSpeedMultiplier: 0.25
+  originalAgentSpeed: 3
+  proximityTriggerOverride: {fileID: 2124289745934211797}
+  hushClip: {fileID: 8300000, guid: 5254e618a1fa1a548959f70cf3b594ba, type: 3}
+  whisperClip: {fileID: 8300000, guid: 0f17b49ced158df43a5909068b2e6fa8, type: 3}
+  hushVolume: 0.5
+  whisperVolume: 1
+  crossfadeTime: 0.25
+  proximityCheckInterval: 0.18
+  useOcclusionRaycast: 1
+  occlusionMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  fleeScreechClip: {fileID: 8300000, guid: 111cb335d900e3146b681d864ab64f8a, type: 3}
+  fleeScreechVolume: 1
+--- !u!54 &5658977490894596109
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6353983105119651536}
+  serializedVersion: 5
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!195 &6330638515685503071
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6353983105119651536}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 0.5
+  m_Speed: 3.5
+  m_Acceleration: 8
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 2
+  m_BaseOffset: 1
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4
+--- !u!1001 &6079087573164630908
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 4395965178007330038}
+    m_Modifications:
+    - target: {fileID: -8679921383154817045, guid: c792bb4c04283fd40be3508de2dfecbe, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: c792bb4c04283fd40be3508de2dfecbe, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.36
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: c792bb4c04283fd40be3508de2dfecbe, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: c792bb4c04283fd40be3508de2dfecbe, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: c792bb4c04283fd40be3508de2dfecbe, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: c792bb4c04283fd40be3508de2dfecbe, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: c792bb4c04283fd40be3508de2dfecbe, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: c792bb4c04283fd40be3508de2dfecbe, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: c792bb4c04283fd40be3508de2dfecbe, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: c792bb4c04283fd40be3508de2dfecbe, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -3321919801592875672, guid: c792bb4c04283fd40be3508de2dfecbe, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -3321919801592875672, guid: c792bb4c04283fd40be3508de2dfecbe, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 47.601
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: c792bb4c04283fd40be3508de2dfecbe, type: 3}
+      propertyPath: m_Name
+      value: T-Pose(w skin)
+      objectReference: {fileID: 0}
+    - target: {fileID: 5866666021909216657, guid: c792bb4c04283fd40be3508de2dfecbe, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 5ca0b81b5909dc64190e8eb42a10f728, type: 2}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: c792bb4c04283fd40be3508de2dfecbe, type: 3}
+--- !u!4 &6041570709652980887 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: c792bb4c04283fd40be3508de2dfecbe, type: 3}
+  m_PrefabInstance: {fileID: 6079087573164630908}
+  m_PrefabAsset: {fileID: 0}

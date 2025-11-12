@@ -6,7 +6,7 @@ public class ItemSpawner : MonoBehaviour
     private AudioSource successSource;
 
     [SerializeField] private AudioClip successClip;
-    private GameObject key;
+    [SerializeField] private GameObject[] itemsToActivate;
 
     private bool hasSpawnedKey = false; // prevent multiple spawns
 
@@ -20,9 +20,10 @@ public class ItemSpawner : MonoBehaviour
 
         successSource = GetComponent<AudioSource>();
 
-        key = transform.Find("Key")?.gameObject;
-
-        key.SetActive(false);
+        foreach (var item in itemsToActivate)
+        {
+            item.SetActive(false);
+        }
     }
 
     void Update()
@@ -40,7 +41,10 @@ public class ItemSpawner : MonoBehaviour
         Vector2 offset = Random.insideUnitCircle * 1.5f;
         Vector3 spawnPos = transform.position + new Vector3(offset.x, 0f, offset.y);
 
-        key.SetActive(true);
+        foreach (var item in itemsToActivate)
+        {
+            item.SetActive(true);
+        }
         successSource.PlayOneShot(successClip);
     }
 }
