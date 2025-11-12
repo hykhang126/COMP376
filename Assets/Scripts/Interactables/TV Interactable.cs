@@ -19,8 +19,6 @@ public class TVInteractable : Interactable
 
     [SerializeField] private bool isCameraFeed = false;
 
-    [SerializeField] private AudioClip demonHeartBeat;
-
     private bool isPlaying = false;
 
     Light TVLight;
@@ -51,11 +49,6 @@ public class TVInteractable : Interactable
         if (audioSource == null)
         {
             Debug.LogError("AudioSource component not found on the TVInteractable object.");
-        }
-
-        if (demonHeartBeat == null)
-        {
-            Debug.LogError("Demon heartbeat audio clip not assigned in the TVInteractable object.");
         }
     }
 
@@ -91,13 +84,5 @@ public class TVInteractable : Interactable
         {
             _screenRenderer.material = TVCameraFeedMaterial;
         }
-    }
-
-    public void StartDemonEvent(Player player)
-    {
-        audioSource.clip = demonHeartBeat;
-        audioSource.loop = true;
-        audioSource.Play();
-        StartCoroutine(WaitForVideoToStart());
     }
 }
