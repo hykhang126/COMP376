@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 4a2745afb2b16124999296ea735a28ca
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 100100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 38741
+  packageName: PBR Electronics Pack
+  packageVersion: 1.1
+  assetPath: Assets/PBR Electronics Pack/Prefabs/Washing_machine.prefab
+  uploadId: 323192
