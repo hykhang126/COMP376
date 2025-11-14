@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -107,6 +108,13 @@ public class LightStalkerController : MonoBehaviour
     private Vector3 initialPosition;
     private Quaternion initialRotation;
 
+    // list of player behaviours disabled during jumpscare (restored afterwards)
+    private List<MonoBehaviour> disabledPlayerBehaviours = new List<MonoBehaviour>();
+    private CharacterController cachedPlayerController = null;
+    private Collider[] cachedPlayerColliders = null;
+    [Tooltip("Distance threshold (meters) for the manual contact check fallback.")]
+    public float manualContactDistanceThreshold = 0.12f; // tweak in inspector if needed
+
     void Awake()
     {
         stateMachine = GetComponent<StateMachine>();
@@ -185,6 +193,14 @@ public class LightStalkerController : MonoBehaviour
                 }
             }
         }
+
+        // manual contact fallback to catch missed collision events
+        // Only run when not already in a jumpscare and not fleeing (keeps behavior identical otherwise)
+        if (!jumpscarePlaying && !isFleeing)
+        {
+            TryManualContactCheck();
+        }
+        // ------------------------------------------------------------------------------------
     }
 
     void OnDestroy()
@@ -700,6 +716,9 @@ public class LightStalkerController : MonoBehaviour
             yield break;
         }
 
+        // disable player controls while we animate the camera
+        DisablePlayerControlsForJumpscare();
+
         // SAVE camera parent & local transform (so we can reattach cleanly)
         Transform camParent = cam.transform.parent;
         Vector3 camLocalPos = cam.transform.localPosition;
@@ -790,6 +809,9 @@ public class LightStalkerController : MonoBehaviour
             cam.fieldOfView = camStartFOV;
         }
 
+        //restore player controls after camera restored 
+        RestorePlayerControlsAfterJumpscare();
+        
         // Teleport player and reset stalker (done after jumpscare finishes)
         FinishJumpscareTeleportAndReset(playerCollider);
 
@@ -947,4 +969,131 @@ public class LightStalkerController : MonoBehaviour
             }
         }
     }
+
+    // Manual contact fallback + player-freeze helpers
+    private GameObject FindPlayerRootGameObject()
+    {
+        if (Player.InstanceReference != null) return Player.InstanceReference.gameObject;
+
+        var found = GameObject.FindWithTag("Player");
+        if (found != null) return found;
+
+        if (player != null)
+        {
+            var colliders = Physics.OverlapSphere(player.position, 0.1f);
+            if (colliders != null && colliders.Length > 0) return colliders[0].gameObject;
+        }
+
+        return null;
+    }
+
+    private Collider[] FindPlayerColliders()
+    {
+        if (cachedPlayerColliders != null && cachedPlayerColliders.Length > 0) return cachedPlayerColliders;
+
+        var rootGO = FindPlayerRootGameObject();
+        if (rootGO == null) return new Collider[0];
+
+        cachedPlayerColliders = rootGO.GetComponentsInChildren<Collider>(true);
+        return cachedPlayerColliders;
+    }
+
+    private void TryManualContactCheck()
+    {
+        var playerCols = FindPlayerColliders();
+        if (playerCols == null || playerCols.Length == 0) return;
+        if (bodyColliders == null || bodyColliders.Length == 0) return;
+
+        foreach (var pc in playerCols)
+        {
+            if (pc == null) continue;
+            foreach (var bc in bodyColliders)
+            {
+                if (bc == null) continue;
+
+                // First try ComputePenetration (accurate)
+                if (Physics.ComputePenetration(
+                    bc, bc.transform.position, bc.transform.rotation,
+                    pc, pc.transform.position, pc.transform.rotation,
+                    out Vector3 outDir, out float outDistance))
+                {
+                    HandlePlayerTouch(pc);
+                    return;
+                }
+
+                // Fallback: closest-point distance check (works for near-contact)
+                Vector3 pcClosest = pc.ClosestPoint(bc.transform.position);
+                Vector3 bcClosest = bc.ClosestPoint(pc.transform.position);
+                float d = Vector3.Distance(pcClosest, bcClosest);
+                if (d <= manualContactDistanceThreshold)
+                {
+                    HandlePlayerTouch(pc);
+                    return;
+                }
+            }
+        }
+    }
+
+    private void DisablePlayerControlsForJumpscare()
+    {
+        disabledPlayerBehaviours.Clear();
+        var root = FindPlayerRootGameObject();
+        if (root == null) return;
+
+        // Disable CharacterController (safe)
+        cachedPlayerController = root.GetComponentInChildren<CharacterController>();
+        if (cachedPlayerController != null) cachedPlayerController.enabled = false;
+
+        // Disable heuristically-named MonoBehaviours that likely control input/look/movement.
+        var mbs = root.GetComponentsInChildren<MonoBehaviour>(true);
+        foreach (var mb in mbs)
+        {
+            if (mb == null) continue;
+            // never disable the Player class itself if present
+            if (mb is Player) continue;
+
+            string name = mb.GetType().Name.ToLowerInvariant();
+            // heuristic matches for common movement/look controllers
+            if (name.Contains("mouse") || name.Contains("look") || name.Contains("camera") ||
+                name.Contains("input") || name.Contains("controller") || name.Contains("movement") ||
+                name.Contains("firstperson") || name.Contains("fps"))
+            {
+                if (mb.enabled)
+                {
+                    mb.enabled = false;
+                    disabledPlayerBehaviours.Add(mb);
+                }
+            }
+        }
+
+        // lock/hide cursor during jumpscare
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+    }
+
+    private void RestorePlayerControlsAfterJumpscare()
+    {
+        // re-enable previously disabled components
+        foreach (var mb in disabledPlayerBehaviours)
+        {
+            if (mb == null) continue;
+            mb.enabled = true;
+        }
+        disabledPlayerBehaviours.Clear();
+
+        // restore CharacterController
+        if (cachedPlayerController != null)
+        {
+            cachedPlayerController.enabled = true;
+            cachedPlayerController = null;
+        }
+
+        // restore cursor
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+
+        // clear cached player colliders so FindPlayerColliders re-fetches them next time (defensive)
+        cachedPlayerColliders = null;
+    }
+
 }
