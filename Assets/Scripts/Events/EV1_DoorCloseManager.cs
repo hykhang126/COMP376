@@ -52,12 +52,6 @@ public class EV1_DoorCloseManager : MonoBehaviour
     {
         if (!other.CompareTag("Player")) return;
 
-        if (creatureEvent != null)
-            creatureEvent.ActivateCreature();
-
-        if (tVInteractable != null)
-            tVInteractable.StartDemonEvent(player);
-
         StartCoroutine(CloseDoorsContinous(waitTime));
 
         foreach (var itemFlood in keyfloodEvents)
