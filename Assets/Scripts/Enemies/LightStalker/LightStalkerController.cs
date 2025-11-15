@@ -89,8 +89,35 @@ public class LightStalkerController : MonoBehaviour
     public float jumpscareFOV = 30f;
     [Tooltip("Optional small camera shake intensity during jumpscare")]
     public float jumpscareShakeIntensity = 0.05f;
+    [Tooltip("Tweak this until the face is centered")]
+    public float jumpscareHeadOffset = 1.0f; // tweak this until the face is centered
+
     [Tooltip("Player respawn point (player-only spawner)")]
     public Transform playerRespawnPoint;
+
+    // --- Jumpscare freeze helpers ---
+    private Rigidbody[] frozenPlayerRigidbodies = new Rigidbody[0];
+    private RigidbodyConstraints[] frozenPlayerRbConstraints = new RigidbodyConstraints[0];
+    private bool[] frozenPlayerWasKinematic = new bool[0];
+    private Vector3[] frozenPlayerVel = new Vector3[0];
+    private Vector3[] frozenPlayerAngVel = new Vector3[0];
+
+    private Rigidbody frozenEnemyRb = null;
+    private bool frozenEnemyWasKinematic = false;
+    private Vector3 frozenEnemyVelocity = Vector3.zero;
+    private Vector3 frozenEnemyAngVelocity = Vector3.zero;
+    private bool agentWasEnabled = true;
+    private Animator frozenEnemyAnimator = null;
+    private bool frozenEnemyAnimatorWasEnabled = false;
+
+    // remember navmesh-agent update flags so we can restore them
+    private bool agentUpdatePositionWas = true;
+    private bool agentUpdateRotationWas = true;
+
+    // anchor lock used during jumpscare to keep player exactly where they were
+    private GameObject frozenPlayerRootGO = null;
+    private Vector3 frozenPlayerAnchorPos;
+    private Quaternion frozenPlayerAnchorRot;
     // ----------------------------------------------------------
 
     // runtime
@@ -108,8 +135,6 @@ public class LightStalkerController : MonoBehaviour
     private Vector3 initialPosition;
     private Quaternion initialRotation;
 
-    // list of player behaviours disabled during jumpscare (restored afterwards)
-    private List<MonoBehaviour> disabledPlayerBehaviours = new List<MonoBehaviour>();
     private CharacterController cachedPlayerController = null;
     private Collider[] cachedPlayerColliders = null;
     [Tooltip("Distance threshold (meters) for the manual contact check fallback.")]
@@ -180,6 +205,13 @@ public class LightStalkerController : MonoBehaviour
 
     void Update()
     {
+        // If jumpscare is playing and we have a frozen root, lock its transform so it can't move
+        if (jumpscarePlaying && frozenPlayerRootGO != null)
+        {
+            frozenPlayerRootGO.transform.position = frozenPlayerAnchorPos;
+            frozenPlayerRootGO.transform.rotation = frozenPlayerAnchorRot;
+        }
+
         // Handle slowdown buffer timer
         if (isInSlowdownBuffer && !isFleeing)
         {
@@ -201,6 +233,22 @@ public class LightStalkerController : MonoBehaviour
             TryManualContactCheck();
         }
         // ------------------------------------------------------------------------------------
+    }
+
+    void FixedUpdate()
+    {
+        if (jumpscarePlaying && frozenPlayerRootGO != null)
+        {
+            frozenPlayerRootGO.transform.SetPositionAndRotation(frozenPlayerAnchorPos, frozenPlayerAnchorRot);
+        }
+    }
+
+    void LateUpdate()
+    {
+        if (jumpscarePlaying && frozenPlayerRootGO != null)
+        {
+            frozenPlayerRootGO.transform.SetPositionAndRotation(frozenPlayerAnchorPos, frozenPlayerAnchorRot);
+        }
     }
 
     void OnDestroy()
@@ -438,8 +486,14 @@ public class LightStalkerController : MonoBehaviour
     // Called by state machine's stateUpdate (ChasingPlayer)
     public void MoveTowardPlayer()
     {
-        if (player == null) player = Camera.main?.transform ?? Object.FindFirstObjectByType<Player>()?.transform;
+       if (player == null) player = Camera.main?.transform ?? Object.FindFirstObjectByType<Player>()?.transform;
         if (player == null || agent == null) return;
+
+        // Defensive: do nothing if the agent component is disabled or not on a navmesh
+        if (!agent.enabled) return;
+    #if UNITY_2021_1_OR_NEWER
+        if (!agent.isOnNavMesh) return;
+    #endif
 
         float sqrDist = (player.position - transform.position).sqrMagnitude;
         if (sqrDist <= (stoppingDistance * stoppingDistance))
@@ -718,6 +772,7 @@ public class LightStalkerController : MonoBehaviour
 
         // disable player controls while we animate the camera
         DisablePlayerControlsForJumpscare();
+        FreezeActorsForJumpscare(playerCollider);
 
         // SAVE camera parent & local transform (so we can reattach cleanly)
         Transform camParent = cam.transform.parent;
@@ -731,10 +786,13 @@ public class LightStalkerController : MonoBehaviour
         cam.transform.SetParent(null, true);
 
         // Compute desired camera position: move camera along vector towards stalker to cameraDistance
-        Vector3 stalkerHead = transform.position + Vector3.up * 0.6f; // approximate head offset (tweak if necessary)
+        Vector3 stalkerHead = transform.position + Vector3.up * jumpscareHeadOffset;
         Vector3 dirFromStalkerToCam = (camStartPos - stalkerHead);
         if (dirFromStalkerToCam.sqrMagnitude < 0.001f) dirFromStalkerToCam = transform.forward * -1f;
-        Vector3 camTargetPos = stalkerHead + dirFromStalkerToCam.normalized * jumpscareCameraDistance;
+        // slightly closer and higher so capsule is not in frame
+        Vector3 dirNorm = dirFromStalkerToCam.normalized;
+        float closeDistance = Mathf.Max(0.8f, jumpscareCameraDistance * 0.9f); // ensure not too close
+        Vector3 camTargetPos = stalkerHead + dirNorm * closeDistance + Vector3.up * 0.15f;
         Quaternion camTargetRot = Quaternion.LookRotation(stalkerHead - camTargetPos);
 
         float half = jumpscareDuration * 0.5f;
@@ -809,7 +867,7 @@ public class LightStalkerController : MonoBehaviour
             cam.fieldOfView = camStartFOV;
         }
 
-        //restore player controls after camera restored 
+        RestoreActorsAfterJumpscare();
         RestorePlayerControlsAfterJumpscare();
         
         // Teleport player and reset stalker (done after jumpscare finishes)
@@ -1036,7 +1094,6 @@ public class LightStalkerController : MonoBehaviour
 
     private void DisablePlayerControlsForJumpscare()
     {
-        disabledPlayerBehaviours.Clear();
         var root = FindPlayerRootGameObject();
         if (root == null) return;
 
@@ -1044,26 +1101,22 @@ public class LightStalkerController : MonoBehaviour
         cachedPlayerController = root.GetComponentInChildren<CharacterController>();
         if (cachedPlayerController != null) cachedPlayerController.enabled = false;
 
-        // Disable heuristically-named MonoBehaviours that likely control input/look/movement.
-        var mbs = root.GetComponentsInChildren<MonoBehaviour>(true);
-        foreach (var mb in mbs)
-        {
-            if (mb == null) continue;
-            // never disable the Player class itself if present
-            if (mb is Player) continue;
+        // disable the PlayerInput component (Unity Input System) to stop callbacks
+        var pi = root.GetComponentInChildren<UnityEngine.InputSystem.PlayerInput>();
+        if (pi != null)
+            pi.enabled = false;
 
-            string name = mb.GetType().Name.ToLowerInvariant();
-            // heuristic matches for common movement/look controllers
-            if (name.Contains("mouse") || name.Contains("look") || name.Contains("camera") ||
-                name.Contains("input") || name.Contains("controller") || name.Contains("movement") ||
-                name.Contains("firstperson") || name.Contains("fps"))
-            {
-                if (mb.enabled)
-                {
-                    mb.enabled = false;
-                    disabledPlayerBehaviours.Add(mb);
-                }
-            }
+        // disable PlayerInputHandler instance, call its DisableInput
+        var inputHandler = root.GetComponentInChildren<PlayerInputHandler>();
+        if (inputHandler != null)
+            inputHandler.DisableInput();
+
+        // clear the player's cached input so movement stops immediately
+        var playerComp = root.GetComponentInChildren<Player>();
+        if (playerComp != null)
+        {
+            playerComp.movementInput = Vector2.zero;
+            playerComp.lookInput = Vector2.zero;
         }
 
         // lock/hide cursor during jumpscare
@@ -1071,21 +1124,27 @@ public class LightStalkerController : MonoBehaviour
         Cursor.visible = false;
     }
 
+
     private void RestorePlayerControlsAfterJumpscare()
     {
-        // re-enable previously disabled components
-        foreach (var mb in disabledPlayerBehaviours)
-        {
-            if (mb == null) continue;
-            mb.enabled = true;
-        }
-        disabledPlayerBehaviours.Clear();
-
         // restore CharacterController
         if (cachedPlayerController != null)
         {
             cachedPlayerController.enabled = true;
             cachedPlayerController = null;
+        }
+
+        // re-enable PlayerInput and PlayerInputHandler if present
+        var root = FindPlayerRootGameObject();
+        if (root != null)
+        {
+            var pi = root.GetComponentInChildren<UnityEngine.InputSystem.PlayerInput>();
+            if (pi != null)
+                pi.enabled = true;
+
+            var inputHandler = root.GetComponentInChildren<PlayerInputHandler>();
+            if (inputHandler != null)
+                inputHandler.EnableInput();
         }
 
         // restore cursor
@@ -1094,6 +1153,179 @@ public class LightStalkerController : MonoBehaviour
 
         // clear cached player colliders so FindPlayerColliders re-fetches them next time (defensive)
         cachedPlayerColliders = null;
+    }
+
+
+    // Freezes player & enemy physics/movement so nothing moves while we animate the camera.
+    private void FreezeActorsForJumpscare(Collider playerCollider)
+    {
+        // --- PLAYER ---
+        GameObject playerRoot = null;
+        if (playerCollider != null) playerRoot = playerCollider.GetComponentInParent<Transform>()?.gameObject;
+        if (playerRoot == null) playerRoot = FindPlayerRootGameObject();
+
+        if (playerRoot != null)
+        {
+            frozenPlayerRootGO = playerRoot;
+            frozenPlayerAnchorPos = playerRoot.transform.position;
+            frozenPlayerAnchorRot = playerRoot.transform.rotation;
+
+            var rbs = playerRoot.GetComponentsInChildren<Rigidbody>(true);
+            frozenPlayerRigidbodies = rbs ?? new Rigidbody[0];
+            int n = frozenPlayerRigidbodies.Length;
+            frozenPlayerWasKinematic = new bool[n];
+            frozenPlayerVel = new Vector3[n];
+            frozenPlayerAngVel = new Vector3[n];
+            frozenPlayerRbConstraints = new RigidbodyConstraints[n];
+
+            for (int i = 0; i < n; i++)
+            {
+                var rb = frozenPlayerRigidbodies[i];
+                if (rb == null) continue;
+
+                // remember whether it was kinematic before we touch it
+                frozenPlayerWasKinematic[i] = rb.isKinematic;
+                frozenPlayerRbConstraints[i] = rb.constraints;
+
+                // Only read / set velocities on NON-kinematic bodies to avoid warnings
+                if (!rb.isKinematic)
+                {
+                    // store velocities so we can restore them later
+                    frozenPlayerVel[i] = rb.linearVelocity;
+                    frozenPlayerAngVel[i] = rb.angularVelocity;
+
+                    // stop motion
+                    rb.linearVelocity = Vector3.zero;
+                    rb.angularVelocity = Vector3.zero;
+
+                    // now make kinematic and freeze constraints so other forces won't move it
+                    rb.isKinematic = true;
+                    rb.constraints = RigidbodyConstraints.FreezeAll;
+                }
+                else
+                {
+                    // body already kinematic — store zero velocities and still ensure constraints
+                    frozenPlayerVel[i] = Vector3.zero;
+                    frozenPlayerAngVel[i] = Vector3.zero;
+                    rb.constraints = RigidbodyConstraints.FreezeAll;
+                }
+            }
+        }
+        else
+        {
+            frozenPlayerRigidbodies = new Rigidbody[0];
+        }
+
+        // --- ENEMY ---
+        frozenEnemyRb = GetComponent<Rigidbody>();
+        if (frozenEnemyRb != null)
+        {
+            frozenEnemyWasKinematic = frozenEnemyRb.isKinematic;
+            // store velocities only if non-kinematic
+            if (!frozenEnemyRb.isKinematic)
+            {
+                frozenEnemyVelocity = frozenEnemyRb.linearVelocity;
+                frozenEnemyAngVelocity = frozenEnemyRb.angularVelocity;
+
+                frozenEnemyRb.linearVelocity = Vector3.zero;
+                frozenEnemyRb.angularVelocity = Vector3.zero;
+                frozenEnemyRb.isKinematic = true;
+                frozenEnemyRb.Sleep();
+            }
+            else
+            {
+                frozenEnemyVelocity = Vector3.zero;
+                frozenEnemyAngVelocity = Vector3.zero;
+                // keep it kinematic and sleeping
+                frozenEnemyRb.Sleep();
+            }
+        }
+
+        // --- NAVMESH AGENT: do NOT disable the component (avoids exceptions). ---
+        if (agent != null)
+        {
+            agentWasEnabled = agent.enabled;
+            // store update flags and then stop agent from updating transform
+            agentUpdatePositionWas = agent.updatePosition;
+            agentUpdateRotationWas = agent.updateRotation;
+
+            agent.isStopped = true;
+            agent.updatePosition = false;
+            agent.updateRotation = false;
+        }
+
+        // Optionally disable animator
+        frozenEnemyAnimator = GetComponentInChildren<Animator>();
+        if (frozenEnemyAnimator != null)
+        {
+            frozenEnemyAnimatorWasEnabled = frozenEnemyAnimator.enabled;
+            frozenEnemyAnimator.enabled = false;
+        }
+    }
+
+
+    // Restores player & enemy physics/movement state stored by FreezeActorsForJumpscare
+    private void RestoreActorsAfterJumpscare()
+    {
+        // --- PLAYER ---
+        for (int i = 0; i < frozenPlayerRigidbodies.Length; i++)
+        {
+            var rb = frozenPlayerRigidbodies[i];
+            if (rb == null) continue;
+
+            // restore constraints & kinematic flag first
+            bool wasKin = (i < frozenPlayerWasKinematic.Length) ? frozenPlayerWasKinematic[i] : false;
+            rb.constraints = (i < frozenPlayerRbConstraints.Length) ? frozenPlayerRbConstraints[i] : RigidbodyConstraints.None;
+            rb.isKinematic = wasKin;
+
+            // restore velocities only if the body is non-kinematic now
+            if (!rb.isKinematic)
+            {
+                rb.linearVelocity = (i < frozenPlayerVel.Length) ? frozenPlayerVel[i] : Vector3.zero;
+                rb.angularVelocity = (i < frozenPlayerAngVel.Length) ? frozenPlayerAngVel[i] : Vector3.zero;
+            }
+        }
+
+        // clear arrays
+        frozenPlayerRigidbodies = new Rigidbody[0];
+        frozenPlayerWasKinematic = new bool[0];
+        frozenPlayerVel = new Vector3[0];
+        frozenPlayerAngVel = new Vector3[0];
+        frozenPlayerRbConstraints = new RigidbodyConstraints[0];
+
+        frozenPlayerRootGO = null;
+
+        // --- ENEMY ---
+        if (frozenEnemyRb != null)
+        {
+            frozenEnemyRb.isKinematic = frozenEnemyWasKinematic;
+            if (!frozenEnemyRb.isKinematic)
+            {
+                frozenEnemyRb.linearVelocity = frozenEnemyVelocity;
+                frozenEnemyRb.angularVelocity = frozenEnemyAngVelocity;
+            }
+            frozenEnemyRb.WakeUp();
+            frozenEnemyRb = null;
+        }
+
+        // restore agent: re-enable update flags (we keep it stopped; state machine / movement logic will resume it)
+        if (agent != null)
+        {
+            // restore the update flags we changed earlier
+            agent.updatePosition = agentUpdatePositionWas;
+            agent.updateRotation = agentUpdateRotationWas;
+
+            // keep the agent stopped now — other code (OnEnterChase / StartFlee etc.) will set isStopped = false when appropriate
+            agent.isStopped = true;
+            agent.enabled = agentWasEnabled; // harmless if already true
+        }
+
+        // restore animator
+        if (frozenEnemyAnimator != null)
+        {
+            frozenEnemyAnimator.enabled = frozenEnemyAnimatorWasEnabled;
+            frozenEnemyAnimator = null;
+        }
     }
 
 }
