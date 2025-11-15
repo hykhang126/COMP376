@@ -84,7 +84,7 @@ public class LightStalkerController : MonoBehaviour
     [Tooltip("How long the jumpscare camera animation should last (seconds)")]
     public float jumpscareDuration = 2.2f;
     [Tooltip("Distance from the stalker to place the camera during the close-up")]
-    public float jumpscareCameraDistance = 2.0f;
+    public float jumpscareCameraDistance = 1.0f;
     [Tooltip("Target FOV for the close-up (lower = more zoom)")]
     public float jumpscareFOV = 30f;
     [Tooltip("Optional small camera shake intensity during jumpscare")]
