@@ -202,8 +202,6 @@ public class LightStalkerController : MonoBehaviour
         }
         bodyColliders = list.ToArray();
         // END body collider initialization
-
-         DebugLogHeadInfo();
     }
 
     void Update()
@@ -1377,49 +1375,6 @@ public class LightStalkerController : MonoBehaviour
         }
     }
 
-    // --- DEBUG HELPERS (paste into LightStalkerController) ---
-
-    // Useful for one-time logs at Start to confirm the assigned Transform is correct
-    private void DebugLogHeadInfo()
-    {
-        if (jumpscareHeadTarget == null)
-        {
-            Debug.Log($"[LightStalker] jumpscareHeadTarget is NULL on {name}. (Inspector not set)");
-            return;
-        }
-
-        Transform t = jumpscareHeadTarget;
-        string path = GetTransformPath(t);
-        Vector3 worldPos = t.position;
-        Vector3 localPos = t.localPosition;
-        Vector3 forward = t.forward;
-        Vector3 up = t.up;
-        Vector3 lossy = t.lossyScale;
-
-        Debug.Log($"[LightStalker] Head target info for '{t.name}' on '{name}':\n" +
-                $" Path: {path}\n" +
-                $" WorldPos: {worldPos}\n" +
-                $" LocalPos: {localPos}\n" +
-                $" Forward: {forward}\n" +
-                $" Up: {up}\n" +
-                $" LossyScale: {lossy}\n" +
-                $" InstanceID: {t.GetInstanceID()}");
-    }
-
-    // Build a human-readable hierarchy path for a Transform
-    private string GetTransformPath(Transform t)
-    {
-        if (t == null) return "(null)";
-        string path = t.name;
-        Transform cur = t.parent;
-        while (cur != null)
-        {
-            path = cur.name + "/" + path;
-            cur = cur.parent;
-        }
-        return path;
-    }
-
     // Draw gizmos in the scene view so you can see exactly where the code thinks the head is
     void OnDrawGizmosSelected()
     {
@@ -1437,26 +1392,5 @@ public class LightStalkerController : MonoBehaviour
             }
         }
     }
-
-    // Robust head world position getter: prefer explicit head transform, but fall back to renderer bounds center
-    private Vector3 GetHeadWorldPosition()
-    {
-        if (jumpscareHeadTarget != null)
-        {
-            // quick sanity: if target is extremely far from the model root or below root, we still return it
-            return jumpscareHeadTarget.position;
-        }
-
-        // fallback: try to find a Renderer on the model and use its bounds center
-        var rend = GetComponentInChildren<Renderer>();
-        if (rend != null)
-        {
-            return rend.bounds.center;
-        }
-
-        // final fallback: approximate using root + offset
-        return transform.position + Vector3.up * jumpscareHeadOffset;
-    }
-
 
 }
