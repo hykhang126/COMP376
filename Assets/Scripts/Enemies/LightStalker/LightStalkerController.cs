@@ -91,6 +91,7 @@ public class LightStalkerController : MonoBehaviour
     public float jumpscareShakeIntensity = 0.05f;
     [Tooltip("Tweak this until the face is centered")]
     public float jumpscareHeadOffset = 1.0f; // tweak this until the face is centered
+    public Transform jumpscareHeadTarget; 
 
     [Tooltip("Player respawn point (player-only spawner)")]
     public Transform playerRespawnPoint;
@@ -201,6 +202,8 @@ public class LightStalkerController : MonoBehaviour
         }
         bodyColliders = list.ToArray();
         // END body collider initialization
+
+         DebugLogHeadInfo();
     }
 
     void Update()
@@ -729,6 +732,37 @@ public class LightStalkerController : MonoBehaviour
             HandlePlayerTouch(other);
     }
 
+    // Determine whether the provided player collider is actually touching one of the non-trigger body colliders of this enemy.
+    // Uses ComputePenetration first (accurate overlap check), and a ClosestPoint distance fallback for near-contact.
+    private bool IsPlayerTouchingBody(Collider playerCollider)
+    {
+        if (playerCollider == null || bodyColliders == null || bodyColliders.Length == 0) return false;
+
+        // First try ComputePenetration for each body collider
+        foreach (var bc in bodyColliders)
+        {
+            if (bc == null) continue;
+
+            // If colliders overlap (ComputePenetration returns true), treat as touching
+            if (Physics.ComputePenetration(
+                bc, bc.transform.position, bc.transform.rotation,
+                playerCollider, playerCollider.transform.position, playerCollider.transform.rotation,
+                out Vector3 outDir, out float outDistance))
+            {
+                return true;
+            }
+
+            // fallback: if closest point on body collider to player's collider bounds is essentially at/inside player's collider position -> touching
+            Vector3 playerClosest = playerCollider.ClosestPoint(bc.transform.position);
+            Vector3 bodyClosest = bc.ClosestPoint(playerCollider.transform.position);
+            float dist = Vector3.Distance(playerClosest, bodyClosest);
+            // small threshold (tweak if needed). This detects near-contact even without penetration.
+            if (dist < 0.1f) return true;
+        }
+
+        return false;
+    }
+
     // Centralized touch handling — starts jumpscare sequence
     private void HandlePlayerTouch(Collider playerCollider)
     {
@@ -742,25 +776,16 @@ public class LightStalkerController : MonoBehaviour
     private IEnumerator DoJumpscare(Collider playerCollider)
     {
         jumpscarePlaying = true;
-
-        // Prevent other behaviors while jumpscare is running
         isFleeing = true;
 
-        // Stop agent
-        if (agent != null)
-        {
-            agent.isStopped = true;
-        }
+        if (agent != null) agent.isStopped = true;
 
-        // Stop proximity audio immediately
         playerInsideProximity = false;
         StopProximityCoroutine();
 
-        // Play jumpscare sound at the stalker's position
         if (jumpscareClip != null)
             AudioSource.PlayClipAtPoint(jumpscareClip, transform.position, Mathf.Clamp01(jumpscareVolume));
 
-        // Camera fallback checks
         Camera cam = Camera.main;
         if (cam == null)
         {
@@ -770,11 +795,10 @@ public class LightStalkerController : MonoBehaviour
             yield break;
         }
 
-        // disable player controls while we animate the camera
         DisablePlayerControlsForJumpscare();
         FreezeActorsForJumpscare(playerCollider);
 
-        // SAVE camera parent & local transform (so we can reattach cleanly)
+        // Save camera state
         Transform camParent = cam.transform.parent;
         Vector3 camLocalPos = cam.transform.localPosition;
         Quaternion camLocalRot = cam.transform.localRotation;
@@ -782,23 +806,81 @@ public class LightStalkerController : MonoBehaviour
         Vector3 camStartPos = cam.transform.position;
         Quaternion camStartRot = cam.transform.rotation;
 
-        // Unparent the camera so we can animate world-space cleanly
+        // Unparent for world-space animation
         cam.transform.SetParent(null, true);
 
-        // Compute desired camera position: move camera along vector towards stalker to cameraDistance
-        Vector3 stalkerHead = transform.position + Vector3.up * jumpscareHeadOffset;
-        Vector3 dirFromStalkerToCam = (camStartPos - stalkerHead);
-        if (dirFromStalkerToCam.sqrMagnitude < 0.001f) dirFromStalkerToCam = transform.forward * -1f;
-        // slightly closer and higher so capsule is not in frame
-        Vector3 dirNorm = dirFromStalkerToCam.normalized;
-        float closeDistance = Mathf.Max(0.8f, jumpscareCameraDistance * 0.9f); // ensure not too close
-        Vector3 camTargetPos = stalkerHead + dirNorm * closeDistance + Vector3.up * 0.15f;
+        // HEAD TARGET (prefer assigned transform)
+        Vector3 stalkerHead;
+        if (jumpscareHeadTarget != null)
+            stalkerHead = jumpscareHeadTarget.position;
+        else
+            stalkerHead = transform.position + Vector3.up * jumpscareHeadOffset;
+
+        //compute the horizontal vector from *camera position* to the stalker head (Horizontal rotation)
+        Vector3 toHead = stalkerHead - camStartPos;
+        Vector3 horizDir = new Vector3(toHead.x, 0f, toHead.z);
+
+        //fallback 1: use camera forward projected horizontally if above fails
+        if (horizDir.sqrMagnitude < 0.0001f)
+        {
+            Vector3 camForward = camStartRot * Vector3.forward;
+            horizDir = new Vector3(camForward.x, 0f, camForward.z);
+        }
+
+        // fallback 2: fallback to stalker forward
+        if (horizDir.sqrMagnitude < 0.0001f)
+        {
+            horizDir = new Vector3(transform.forward.x, 0f, transform.forward.z);
+        }
+
+        horizDir = horizDir.normalized;
+
+        //a small upward nudge plus ensure we never place camera lower than the head
+        float verticalNudge = 0.18f;            
+        float minHeightAboveHead = 0.14f;  
+        float minDistance = Mathf.Max(0.6f, jumpscareCameraDistance * 0.6f);
+        float desiredDistance = Mathf.Max(minDistance, jumpscareCameraDistance);
+
+        // place camera at a point in front of the head along horizDir (so it approaches from player's horizontal position)
+        Vector3 camTargetPos = stalkerHead - horizDir * desiredDistance + Vector3.up * verticalNudge;
         Quaternion camTargetRot = Quaternion.LookRotation(stalkerHead - camTargetPos);
+
+        // ensure camera sits above the head by at least minHeightAboveHead
+        if (camTargetPos.y < stalkerHead.y + minHeightAboveHead)
+            camTargetPos.y = stalkerHead.y + minHeightAboveHead;
+
+        // collision check: spherecast from head toward desired camera to avoid clipping into floor/walls/capsule
+        float sphereRadius = 0.12f; // small radius to detect obstacles
+        Vector3 from = stalkerHead;
+        Vector3 dir = (camTargetPos - from);
+        float dist = dir.magnitude;
+        if (dist > 0.001f)
+        {
+            dir /= dist;
+            if (Physics.SphereCast(from, sphereRadius, dir, out RaycastHit hit, dist))
+            {
+                // ignore hits that are part of the stalker itself
+                if (!hit.collider.transform.IsChildOf(transform))
+                {
+                    // put camera just before the hit point and nudge it up
+                    camTargetPos = hit.point - dir * 0.08f;
+                    camTargetPos.y = Mathf.Max(camTargetPos.y, stalkerHead.y + minHeightAboveHead);
+                    camTargetRot = Quaternion.LookRotation(stalkerHead - camTargetPos);
+                }
+            }
+        }
+
+        // ensure not too close
+        if (Vector3.Distance(camTargetPos, stalkerHead) < minDistance)
+        {
+            camTargetPos = stalkerHead - horizDir * minDistance + Vector3.up * verticalNudge;
+            camTargetRot = Quaternion.LookRotation(stalkerHead - camTargetPos);
+        }
 
         float half = jumpscareDuration * 0.5f;
         float t = 0f;
 
-        // Move camera into position (first half of duration)
+        // animate camera
         while (t < half)
         {
             t += Time.deltaTime;
@@ -808,22 +890,18 @@ public class LightStalkerController : MonoBehaviour
             cam.transform.rotation = Quaternion.Slerp(camStartRot, camTargetRot, a);
             cam.fieldOfView = Mathf.Lerp(camStartFOV, jumpscareFOV, a);
 
-            // small shake toward end
             if (a > 0.6f && jumpscareShakeIntensity > 0f)
-            {
                 cam.transform.position += (Random.insideUnitSphere * jumpscareShakeIntensity * (a - 0.6f) * 2f);
-            }
 
             yield return null;
         }
 
-        // hold the close-up for the remaining time
+        // hold
         float holdTime = Mathf.Max(0f, jumpscareDuration - t);
         float holdTimer = 0f;
         while (holdTimer < holdTime)
         {
             holdTimer += Time.deltaTime;
-            // small procedural jitter
             if (cam != null && jumpscareShakeIntensity > 0f)
             {
                 cam.transform.position = camTargetPos + Random.insideUnitSphere * (jumpscareShakeIntensity * 0.5f);
@@ -832,7 +910,7 @@ public class LightStalkerController : MonoBehaviour
             yield return null;
         }
 
-        // restore camera (smoothly back)
+        // restore smoothly
         float restoreTime = 0.45f;
         float rt = 0f;
         Vector3 curPos = cam.transform.position;
@@ -849,7 +927,7 @@ public class LightStalkerController : MonoBehaviour
             yield return null;
         }
 
-        // Reattach camera to its original parent and restore local transform if possible.
+        // reattach camera
         if (cam != null)
         {
             if (camParent != null)
@@ -869,12 +947,12 @@ public class LightStalkerController : MonoBehaviour
 
         RestoreActorsAfterJumpscare();
         RestorePlayerControlsAfterJumpscare();
-        
-        // Teleport player and reset stalker (done after jumpscare finishes)
         FinishJumpscareTeleportAndReset(playerCollider);
 
         jumpscarePlaying = false;
     }
+
+
 
     // Helper to safely teleport player to playerRespawnPoint and reset stalker position
     private void FinishJumpscareTeleportAndReset(Collider playerCollider)
@@ -930,36 +1008,7 @@ public class LightStalkerController : MonoBehaviour
         if (whisperSource != null && !whisperSource.isPlaying) whisperSource.Play();
     }
 
-    // Determine whether the provided player collider is actually touching one of the non-trigger body colliders of this enemy.
-    // Uses ComputePenetration first (accurate overlap check), and a ClosestPoint distance fallback for near-contact.
-    private bool IsPlayerTouchingBody(Collider playerCollider)
-    {
-        if (playerCollider == null || bodyColliders == null || bodyColliders.Length == 0) return false;
-
-        // First try ComputePenetration for each body collider
-        foreach (var bc in bodyColliders)
-        {
-            if (bc == null) continue;
-
-            // If colliders overlap (ComputePenetration returns true), treat as touching
-            if (Physics.ComputePenetration(
-                bc, bc.transform.position, bc.transform.rotation,
-                playerCollider, playerCollider.transform.position, playerCollider.transform.rotation,
-                out Vector3 outDir, out float outDistance))
-            {
-                return true;
-            }
-
-            // fallback: if closest point on body collider to player's collider bounds is essentially at/inside player's collider position -> touching
-            Vector3 playerClosest = playerCollider.ClosestPoint(bc.transform.position);
-            Vector3 bodyClosest = bc.ClosestPoint(playerCollider.transform.position);
-            float dist = Vector3.Distance(playerClosest, bodyClosest);
-            // small threshold (tweak if needed). This detects near-contact even without penetration.
-            if (dist < 0.1f) return true;
-        }
-
-        return false;
-    }
+    
 
     // -------------------------
     // Helpers for respawn re-initialization
@@ -1327,5 +1376,87 @@ public class LightStalkerController : MonoBehaviour
             frozenEnemyAnimator = null;
         }
     }
+
+    // --- DEBUG HELPERS (paste into LightStalkerController) ---
+
+    // Useful for one-time logs at Start to confirm the assigned Transform is correct
+    private void DebugLogHeadInfo()
+    {
+        if (jumpscareHeadTarget == null)
+        {
+            Debug.Log($"[LightStalker] jumpscareHeadTarget is NULL on {name}. (Inspector not set)");
+            return;
+        }
+
+        Transform t = jumpscareHeadTarget;
+        string path = GetTransformPath(t);
+        Vector3 worldPos = t.position;
+        Vector3 localPos = t.localPosition;
+        Vector3 forward = t.forward;
+        Vector3 up = t.up;
+        Vector3 lossy = t.lossyScale;
+
+        Debug.Log($"[LightStalker] Head target info for '{t.name}' on '{name}':\n" +
+                $" Path: {path}\n" +
+                $" WorldPos: {worldPos}\n" +
+                $" LocalPos: {localPos}\n" +
+                $" Forward: {forward}\n" +
+                $" Up: {up}\n" +
+                $" LossyScale: {lossy}\n" +
+                $" InstanceID: {t.GetInstanceID()}");
+    }
+
+    // Build a human-readable hierarchy path for a Transform
+    private string GetTransformPath(Transform t)
+    {
+        if (t == null) return "(null)";
+        string path = t.name;
+        Transform cur = t.parent;
+        while (cur != null)
+        {
+            path = cur.name + "/" + path;
+            cur = cur.parent;
+        }
+        return path;
+    }
+
+    // Draw gizmos in the scene view so you can see exactly where the code thinks the head is
+    void OnDrawGizmosSelected()
+    {
+        if (jumpscareHeadTarget != null)
+        {
+            // small sphere at assigned head pivot
+            Gizmos.color = Color.yellow;
+            Gizmos.DrawSphere(jumpscareHeadTarget.position, 0.06f);
+
+            // draw a line from the main camera to the head pivot (if camera exists)
+            if (Camera.main != null)
+            {
+                Gizmos.color = Color.cyan;
+                Gizmos.DrawLine(Camera.main.transform.position, jumpscareHeadTarget.position);
+            }
+        }
+    }
+
+    // Robust head world position getter: prefer explicit head transform, but fall back to renderer bounds center
+    private Vector3 GetHeadWorldPosition()
+    {
+        if (jumpscareHeadTarget != null)
+        {
+            // quick sanity: if target is extremely far from the model root or below root, we still return it
+            return jumpscareHeadTarget.position;
+        }
+
+        // fallback: try to find a Renderer on the model and use its bounds center
+        var rend = GetComponentInChildren<Renderer>();
+        if (rend != null)
+        {
+            return rend.bounds.center;
+        }
+
+        // final fallback: approximate using root + offset
+        return transform.position + Vector3.up * jumpscareHeadOffset;
+    }
+
 
 }
