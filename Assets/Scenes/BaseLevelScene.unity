@@ -6175,7 +6175,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7071416110524938846, guid: 60a43cfd1362b7b4899f19278f4d23e1, type: 3}
       propertyPath: manualContactDistanceThreshold
-      value: 12
+      value: 0.12
       objectReference: {fileID: 0}
     - target: {fileID: 8337238520577210330, guid: 60a43cfd1362b7b4899f19278f4d23e1, type: 3}
       propertyPath: m_Controller

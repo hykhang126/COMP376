@@ -139,7 +139,7 @@ public class LightStalkerController : MonoBehaviour
     private CharacterController cachedPlayerController = null;
     private Collider[] cachedPlayerColliders = null;
     [Tooltip("Distance threshold (meters) for the manual contact check fallback.")]
-    public float manualContactDistanceThreshold = 0.12f; // tweak in inspector if needed
+    public float manualContactDistanceThreshold = 0.12f; 
 
     void Awake()
     {
