@@ -97,6 +97,39 @@
     </xs:complexContent>
   </xs:complexType>
   <xs:element name="GroupBox" substitutionGroup="engine:VisualElement" type="engine:GroupBoxType" />
+  <xs:simpleType name="Scroller_direction_Type">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Horizontal" />
+      <xs:enumeration value="Vertical" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:complexType name="ScrollerType">
+    <xs:complexContent mixed="false">
+      <xs:restriction base="engine:VisualElementType">
+        <xs:attribute default="" name="name" type="xs:string" use="optional" />
+        <xs:attribute default="true" name="enabled" type="xs:boolean" use="optional" />
+        <xs:attribute default="" name="view-data-key" type="xs:string" use="optional" />
+        <xs:attribute default="Position" name="picking-mode" type="engine:VisualElement_picking-mode_Type" use="optional" />
+        <xs:attribute default="" name="tooltip" type="xs:string" use="optional" />
+        <xs:attribute default="None" name="usage-hints" type="engine:VisualElement_usage-hints_Type" use="optional" />
+        <xs:attribute default="0" name="tabindex" type="xs:int" use="optional" />
+        <xs:attribute default="false" name="focusable" type="xs:boolean" use="optional" />
+        <xs:attribute default="Inherit" name="language-direction" type="engine:VisualElement_language-direction_Type" use="optional" />
+        <xs:attribute default="" name="data-source" type="xs:string" use="optional" />
+        <xs:attribute default="" name="data-source-path" type="xs:string" use="optional" />
+        <xs:attribute default="" name="data-source-type" type="xs:string" use="optional" />
+        <xs:attribute default="0" name="low-value" type="xs:float" use="optional" />
+        <xs:attribute default="0" name="high-value" type="xs:float" use="optional" />
+        <xs:attribute default="Vertical" name="direction" type="engine:Scroller_direction_Type" use="optional" />
+        <xs:attribute default="0" name="value" type="xs:float" use="optional" />
+        <xs:attribute default="" name="content-container" type="xs:string" use="optional" />
+        <xs:attribute default="" name="class" type="xs:string" use="optional" />
+        <xs:attribute default="" name="style" type="xs:string" use="optional" />
+        <xs:anyAttribute processContents="lax" />
+      </xs:restriction>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="Scroller" substitutionGroup="engine:VisualElement" type="engine:ScrollerType" />
   <xs:simpleType name="TwoPaneSplitView_orientation_Type">
     <xs:restriction base="xs:string">
       <xs:enumeration value="Horizontal" />
@@ -129,6 +162,32 @@
     </xs:complexContent>
   </xs:complexType>
   <xs:element name="TwoPaneSplitView" substitutionGroup="engine:VisualElement" type="engine:TwoPaneSplitViewType" />
+  <xs:complexType name="BoundsFieldType">
+    <xs:complexContent mixed="false">
+      <xs:restriction base="engine:VisualElementType">
+        <xs:attribute default="" name="name" type="xs:string" use="optional" />
+        <xs:attribute default="true" name="enabled" type="xs:boolean" use="optional" />
+        <xs:attribute default="" name="view-data-key" type="xs:string" use="optional" />
+        <xs:attribute default="Position" name="picking-mode" type="engine:VisualElement_picking-mode_Type" use="optional" />
+        <xs:attribute default="" name="tooltip" type="xs:string" use="optional" />
+        <xs:attribute default="None" name="usage-hints" type="engine:VisualElement_usage-hints_Type" use="optional" />
+        <xs:attribute default="0" name="tabindex" type="xs:int" use="optional" />
+        <xs:attribute default="true" name="focusable" type="xs:boolean" use="optional" />
+        <xs:attribute default="Inherit" name="language-direction" type="engine:VisualElement_language-direction_Type" use="optional" />
+        <xs:attribute default="" name="data-source" type="xs:string" use="optional" />
+        <xs:attribute default="" name="data-source-path" type="xs:string" use="optional" />
+        <xs:attribute default="" name="data-source-type" type="xs:string" use="optional" />
+        <xs:attribute default="" name="binding-path" type="xs:string" use="optional" />
+        <xs:attribute default="" name="label" type="xs:string" use="optional" />
+        <xs:attribute default="Center: (0.00, 0.00, 0.00), Extents: (0.00, 0.00, 0.00)" name="value" type="xs:string" use="optional" />
+        <xs:attribute default="" name="content-container" type="xs:string" use="optional" />
+        <xs:attribute default="" name="class" type="xs:string" use="optional" />
+        <xs:attribute default="" name="style" type="xs:string" use="optional" />
+        <xs:anyAttribute processContents="lax" />
+      </xs:restriction>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="BoundsField" substitutionGroup="engine:VisualElement" type="engine:BoundsFieldType" />
   <xs:simpleType name="UnsignedLongField_vertical-scroller-visibility_Type">
     <xs:restriction base="xs:string">
       <xs:enumeration value="Auto" />
@@ -195,7 +254,7 @@
     </xs:complexContent>
   </xs:complexType>
   <xs:element name="UnsignedLongField" substitutionGroup="engine:VisualElement" type="engine:UnsignedLongFieldType" />
-  <xs:complexType name="BoundsFieldType">
+  <xs:complexType name="ButtonType">
     <xs:complexContent mixed="false">
       <xs:restriction base="engine:VisualElementType">
         <xs:attribute default="" name="name" type="xs:string" use="optional" />
@@ -211,8 +270,15 @@
         <xs:attribute default="" name="data-source-path" type="xs:string" use="optional" />
         <xs:attribute default="" name="data-source-type" type="xs:string" use="optional" />
         <xs:attribute default="" name="binding-path" type="xs:string" use="optional" />
-        <xs:attribute default="" name="label" type="xs:string" use="optional" />
-        <xs:attribute default="Center: (0.00, 0.00, 0.00), Extents: (0.00, 0.00, 0.00)" name="value" type="xs:string" use="optional" />
+        <xs:attribute default="" name="text" type="xs:string" use="optional" />
+        <xs:attribute default="true" name="enable-rich-text" type="xs:boolean" use="optional" />
+        <xs:attribute default="true" name="emoji-fallback-support" type="xs:boolean" use="optional" />
+        <xs:attribute default="false" name="parse-escape-sequences" type="xs:boolean" use="optional" />
+        <xs:attribute default="false" name="selectable" type="xs:boolean" use="optional" />
+        <xs:attribute default="true" name="double-click-selects-word" type="xs:boolean" use="optional" />
+        <xs:attribute default="true" name="triple-click-selects-line" type="xs:boolean" use="optional" />
+        <xs:attribute default="true" name="display-tooltip-when-elided" type="xs:boolean" use="optional" />
+        <xs:attribute default="" name="icon-image" type="xs:string" use="optional" />
         <xs:attribute default="" name="content-container" type="xs:string" use="optional" />
         <xs:attribute default="" name="class" type="xs:string" use="optional" />
         <xs:attribute default="" name="style" type="xs:string" use="optional" />
@@ -220,41 +286,7 @@
       </xs:restriction>
     </xs:complexContent>
   </xs:complexType>
-  <xs:element name="BoundsField" substitutionGroup="engine:VisualElement" type="engine:BoundsFieldType" />
-  <xs:simpleType name="DataBinding_update-trigger_Type">
-    <xs:restriction base="xs:string">
-      <xs:enumeration value="WhenDirty" />
-      <xs:enumeration value="OnSourceChanged" />
-      <xs:enumeration value="EveryUpdate" />
-    </xs:restriction>
-  </xs:simpleType>
-  <xs:simpleType name="DataBinding_binding-mode_Type">
-    <xs:restriction base="xs:string">
-      <xs:enumeration value="TwoWay" />
-      <xs:enumeration value="ToSource" />
-      <xs:enumeration value="ToTarget" />
-      <xs:enumeration value="ToTargetOnce" />
-    </xs:restriction>
-  </xs:simpleType>
-  <xs:complexType name="DataBindingType">
-    <xs:complexContent mixed="false">
-      <xs:restriction base="engine:VisualElementType">
-        <xs:attribute default="" name="property" type="xs:string" use="optional" />
-        <xs:attribute default="OnSourceChanged" name="update-trigger" type="engine:DataBinding_update-trigger_Type" use="optional" />
-        <xs:attribute default="" name="data-source-path" type="xs:string" use="optional" />
-        <xs:attribute default="" name="data-source" type="xs:string" use="optional" />
-        <xs:attribute default="" name="data-source-type" type="xs:string" use="optional" />
-        <xs:attribute default="TwoWay" name="binding-mode" type="engine:DataBinding_binding-mode_Type" use="optional" />
-        <xs:attribute default="" name="source-to-ui-converters" type="xs:string" use="optional" />
-        <xs:attribute default="" name="ui-to-source-converters" type="xs:string" use="optional" />
-        <xs:attribute default="" name="content-container" type="xs:string" use="optional" />
-        <xs:attribute default="" name="class" type="xs:string" use="optional" />
-        <xs:attribute default="" name="style" type="xs:string" use="optional" />
-        <xs:anyAttribute processContents="lax" />
-      </xs:restriction>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:element name="DataBinding" substitutionGroup="engine:VisualElement" type="engine:DataBindingType" />
+  <xs:element name="Button" substitutionGroup="engine:VisualElement" type="engine:ButtonType" />
   <xs:simpleType name="MultiColumnListView_virtualization-method_Type">
     <xs:restriction base="xs:string">
       <xs:enumeration value="FixedHeight" />
@@ -335,67 +367,6 @@
     </xs:complexContent>
   </xs:complexType>
   <xs:element name="MultiColumnListView" substitutionGroup="engine:VisualElement" type="engine:MultiColumnListViewType" />
-  <xs:complexType name="ButtonType">
-    <xs:complexContent mixed="false">
-      <xs:restriction base="engine:VisualElementType">
-        <xs:attribute default="" name="name" type="xs:string" use="optional" />
-        <xs:attribute default="true" name="enabled" type="xs:boolean" use="optional" />
-        <xs:attribute default="" name="view-data-key" type="xs:string" use="optional" />
-        <xs:attribute default="Position" name="picking-mode" type="engine:VisualElement_picking-mode_Type" use="optional" />
-        <xs:attribute default="" name="tooltip" type="xs:string" use="optional" />
-        <xs:attribute default="None" name="usage-hints" type="engine:VisualElement_usage-hints_Type" use="optional" />
-        <xs:attribute default="0" name="tabindex" type="xs:int" use="optional" />
-        <xs:attribute default="true" name="focusable" type="xs:boolean" use="optional" />
-        <xs:attribute default="Inherit" name="language-direction" type="engine:VisualElement_language-direction_Type" use="optional" />
-        <xs:attribute default="" name="data-source" type="xs:string" use="optional" />
-        <xs:attribute default="" name="data-source-path" type="xs:string" use="optional" />
-        <xs:attribute default="" name="data-source-type" type="xs:string" use="optional" />
-        <xs:attribute default="" name="binding-path" type="xs:string" use="optional" />
-        <xs:attribute default="" name="text" type="xs:string" use="optional" />
-        <xs:attribute default="true" name="enable-rich-text" type="xs:boolean" use="optional" />
-        <xs:attribute default="true" name="emoji-fallback-support" type="xs:boolean" use="optional" />
-        <xs:attribute default="false" name="parse-escape-sequences" type="xs:boolean" use="optional" />
-        <xs:attribute default="false" name="selectable" type="xs:boolean" use="optional" />
-        <xs:attribute default="true" name="double-click-selects-word" type="xs:boolean" use="optional" />
-        <xs:attribute default="true" name="triple-click-selects-line" type="xs:boolean" use="optional" />
-        <xs:attribute default="true" name="display-tooltip-when-elided" type="xs:boolean" use="optional" />
-        <xs:attribute default="" name="icon-image" type="xs:string" use="optional" />
-        <xs:attribute default="" name="content-container" type="xs:string" use="optional" />
-        <xs:attribute default="" name="class" type="xs:string" use="optional" />
-        <xs:attribute default="" name="style" type="xs:string" use="optional" />
-        <xs:anyAttribute processContents="lax" />
-      </xs:restriction>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:element name="Button" substitutionGroup="engine:VisualElement" type="engine:ButtonType" />
-  <xs:complexType name="EnumFieldType">
-    <xs:complexContent mixed="false">
-      <xs:restriction base="engine:VisualElementType">
-        <xs:attribute default="" name="name" type="xs:string" use="optional" />
-        <xs:attribute default="true" name="enabled" type="xs:boolean" use="optional" />
-        <xs:attribute default="" name="view-data-key" type="xs:string" use="optional" />
-        <xs:attribute default="Position" name="picking-mode" type="engine:VisualElement_picking-mode_Type" use="optional" />
-        <xs:attribute default="" name="tooltip" type="xs:string" use="optional" />
-        <xs:attribute default="None" name="usage-hints" type="engine:VisualElement_usage-hints_Type" use="optional" />
-        <xs:attribute default="0" name="tabindex" type="xs:int" use="optional" />
-        <xs:attribute default="true" name="focusable" type="xs:boolean" use="optional" />
-        <xs:attribute default="Inherit" name="language-direction" type="engine:VisualElement_language-direction_Type" use="optional" />
-        <xs:attribute default="" name="data-source" type="xs:string" use="optional" />
-        <xs:attribute default="" name="data-source-path" type="xs:string" use="optional" />
-        <xs:attribute default="" name="data-source-type" type="xs:string" use="optional" />
-        <xs:attribute default="" name="binding-path" type="xs:string" use="optional" />
-        <xs:attribute default="" name="label" type="xs:string" use="optional" />
-        <xs:attribute default="" name="value" type="xs:string" use="optional" />
-        <xs:attribute default="" name="type" type="xs:string" use="optional" />
-        <xs:attribute default="false" name="include-obsolete-values" type="xs:boolean" use="optional" />
-        <xs:attribute default="" name="content-container" type="xs:string" use="optional" />
-        <xs:attribute default="" name="class" type="xs:string" use="optional" />
-        <xs:attribute default="" name="style" type="xs:string" use="optional" />
-        <xs:anyAttribute processContents="lax" />
-      </xs:restriction>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:element name="EnumField" substitutionGroup="engine:VisualElement" type="engine:EnumFieldType" />
   <xs:simpleType name="ScrollView_mode_Type">
     <xs:restriction base="xs:string">
       <xs:enumeration value="Vertical" />
@@ -467,7 +438,7 @@
     </xs:complexContent>
   </xs:complexType>
   <xs:element name="ScrollView" substitutionGroup="engine:VisualElement" type="engine:ScrollViewType" />
-  <xs:complexType name="BindableElementType">
+  <xs:complexType name="EnumFieldType">
     <xs:complexContent mixed="false">
       <xs:restriction base="engine:VisualElementType">
         <xs:attribute default="" name="name" type="xs:string" use="optional" />
@@ -477,12 +448,16 @@
         <xs:attribute default="" name="tooltip" type="xs:string" use="optional" />
         <xs:attribute default="None" name="usage-hints" type="engine:VisualElement_usage-hints_Type" use="optional" />
         <xs:attribute default="0" name="tabindex" type="xs:int" use="optional" />
-        <xs:attribute default="false" name="focusable" type="xs:boolean" use="optional" />
+        <xs:attribute default="true" name="focusable" type="xs:boolean" use="optional" />
         <xs:attribute default="Inherit" name="language-direction" type="engine:VisualElement_language-direction_Type" use="optional" />
         <xs:attribute default="" name="data-source" type="xs:string" use="optional" />
         <xs:attribute default="" name="data-source-path" type="xs:string" use="optional" />
         <xs:attribute default="" name="data-source-type" type="xs:string" use="optional" />
         <xs:attribute default="" name="binding-path" type="xs:string" use="optional" />
+        <xs:attribute default="" name="label" type="xs:string" use="optional" />
+        <xs:attribute default="" name="value" type="xs:string" use="optional" />
+        <xs:attribute default="" name="type" type="xs:string" use="optional" />
+        <xs:attribute default="false" name="include-obsolete-values" type="xs:boolean" use="optional" />
         <xs:attribute default="" name="content-container" type="xs:string" use="optional" />
         <xs:attribute default="" name="class" type="xs:string" use="optional" />
         <xs:attribute default="" name="style" type="xs:string" use="optional" />
@@ -490,7 +465,7 @@
       </xs:restriction>
     </xs:complexContent>
   </xs:complexType>
-  <xs:element name="BindableElement" substitutionGroup="engine:VisualElement" type="engine:BindableElementType" />
+  <xs:element name="EnumField" substitutionGroup="engine:VisualElement" type="engine:EnumFieldType" />
   <xs:simpleType name="Slider_direction_Type">
     <xs:restriction base="xs:string">
       <xs:enumeration value="Horizontal" />
@@ -530,6 +505,54 @@
     </xs:complexContent>
   </xs:complexType>
   <xs:element name="Slider" substitutionGroup="engine:VisualElement" type="engine:SliderType" />
+  <xs:complexType name="BindableElementType">
+    <xs:complexContent mixed="false">
+      <xs:restriction base="engine:VisualElementType">
+        <xs:attribute default="" name="name" type="xs:string" use="optional" />
+        <xs:attribute default="true" name="enabled" type="xs:boolean" use="optional" />
+        <xs:attribute default="" name="view-data-key" type="xs:string" use="optional" />
+        <xs:attribute default="Position" name="picking-mode" type="engine:VisualElement_picking-mode_Type" use="optional" />
+        <xs:attribute default="" name="tooltip" type="xs:string" use="optional" />
+        <xs:attribute default="None" name="usage-hints" type="engine:VisualElement_usage-hints_Type" use="optional" />
+        <xs:attribute default="0" name="tabindex" type="xs:int" use="optional" />
+        <xs:attribute default="false" name="focusable" type="xs:boolean" use="optional" />
+        <xs:attribute default="Inherit" name="language-direction" type="engine:VisualElement_language-direction_Type" use="optional" />
+        <xs:attribute default="" name="data-source" type="xs:string" use="optional" />
+        <xs:attribute default="" name="data-source-path" type="xs:string" use="optional" />
+        <xs:attribute default="" name="data-source-type" type="xs:string" use="optional" />
+        <xs:attribute default="" name="binding-path" type="xs:string" use="optional" />
+        <xs:attribute default="" name="content-container" type="xs:string" use="optional" />
+        <xs:attribute default="" name="class" type="xs:string" use="optional" />
+        <xs:attribute default="" name="style" type="xs:string" use="optional" />
+        <xs:anyAttribute processContents="lax" />
+      </xs:restriction>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="BindableElement" substitutionGroup="engine:VisualElement" type="engine:BindableElementType" />
+  <xs:complexType name="TabViewType">
+    <xs:complexContent mixed="false">
+      <xs:restriction base="engine:VisualElementType">
+        <xs:attribute default="" name="name" type="xs:string" use="optional" />
+        <xs:attribute default="true" name="enabled" type="xs:boolean" use="optional" />
+        <xs:attribute default="" name="view-data-key" type="xs:string" use="optional" />
+        <xs:attribute default="Position" name="picking-mode" type="engine:VisualElement_picking-mode_Type" use="optional" />
+        <xs:attribute default="" name="tooltip" type="xs:string" use="optional" />
+        <xs:attribute default="None" name="usage-hints" type="engine:VisualElement_usage-hints_Type" use="optional" />
+        <xs:attribute default="0" name="tabindex" type="xs:int" use="optional" />
+        <xs:attribute default="false" name="focusable" type="xs:boolean" use="optional" />
+        <xs:attribute default="Inherit" name="language-direction" type="engine:VisualElement_language-direction_Type" use="optional" />
+        <xs:attribute default="" name="data-source" type="xs:string" use="optional" />
+        <xs:attribute default="" name="data-source-path" type="xs:string" use="optional" />
+        <xs:attribute default="" name="data-source-type" type="xs:string" use="optional" />
+        <xs:attribute default="false" name="reorderable" type="xs:boolean" use="optional" />
+        <xs:attribute default="" name="content-container" type="xs:string" use="optional" />
+        <xs:attribute default="" name="class" type="xs:string" use="optional" />
+        <xs:attribute default="" name="style" type="xs:string" use="optional" />
+        <xs:anyAttribute processContents="lax" />
+      </xs:restriction>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="TabView" substitutionGroup="engine:VisualElement" type="engine:TabViewType" />
   <xs:complexType name="Vector3IntFieldType">
     <xs:complexContent mixed="false">
       <xs:restriction base="engine:VisualElementType">
@@ -1076,55 +1099,32 @@
     </xs:complexContent>
   </xs:complexType>
   <xs:element name="TextField" substitutionGroup="engine:VisualElement" type="engine:TextFieldType" />
-  <xs:complexType name="TabViewType">
-    <xs:complexContent mixed="false">
-      <xs:restriction base="engine:VisualElementType">
-        <xs:attribute default="" name="name" type="xs:string" use="optional" />
-        <xs:attribute default="true" name="enabled" type="xs:boolean" use="optional" />
-        <xs:attribute default="" name="view-data-key" type="xs:string" use="optional" />
-        <xs:attribute default="Position" name="picking-mode" type="engine:VisualElement_picking-mode_Type" use="optional" />
-        <xs:attribute default="" name="tooltip" type="xs:string" use="optional" />
-        <xs:attribute default="None" name="usage-hints" type="engine:VisualElement_usage-hints_Type" use="optional" />
-        <xs:attribute default="0" name="tabindex" type="xs:int" use="optional" />
-        <xs:attribute default="false" name="focusable" type="xs:boolean" use="optional" />
-        <xs:attribute default="Inherit" name="language-direction" type="engine:VisualElement_language-direction_Type" use="optional" />
-        <xs:attribute default="" name="data-source" type="xs:string" use="optional" />
-        <xs:attribute default="" name="data-source-path" type="xs:string" use="optional" />
-        <xs:attribute default="" name="data-source-type" type="xs:string" use="optional" />
-        <xs:attribute default="false" name="reorderable" type="xs:boolean" use="optional" />
-        <xs:attribute default="" name="content-container" type="xs:string" use="optional" />
-        <xs:attribute default="" name="class" type="xs:string" use="optional" />
-        <xs:attribute default="" name="style" type="xs:string" use="optional" />
-        <xs:anyAttribute processContents="lax" />
-      </xs:restriction>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:element name="TabView" substitutionGroup="engine:VisualElement" type="engine:TabViewType" />
-  <xs:simpleType name="Scroller_direction_Type">
+  <xs:simpleType name="DataBinding_update-trigger_Type">
     <xs:restriction base="xs:string">
-      <xs:enumeration value="Horizontal" />
-      <xs:enumeration value="Vertical" />
+      <xs:enumeration value="WhenDirty" />
+      <xs:enumeration value="OnSourceChanged" />
+      <xs:enumeration value="EveryUpdate" />
     </xs:restriction>
   </xs:simpleType>
-  <xs:complexType name="ScrollerType">
+  <xs:simpleType name="DataBinding_binding-mode_Type">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="TwoWay" />
+      <xs:enumeration value="ToSource" />
+      <xs:enumeration value="ToTarget" />
+      <xs:enumeration value="ToTargetOnce" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:complexType name="DataBindingType">
     <xs:complexContent mixed="false">
       <xs:restriction base="engine:VisualElementType">
-        <xs:attribute default="" name="name" type="xs:string" use="optional" />
-        <xs:attribute default="true" name="enabled" type="xs:boolean" use="optional" />
-        <xs:attribute default="" name="view-data-key" type="xs:string" use="optional" />
-        <xs:attribute default="Position" name="picking-mode" type="engine:VisualElement_picking-mode_Type" use="optional" />
-        <xs:attribute default="" name="tooltip" type="xs:string" use="optional" />
-        <xs:attribute default="None" name="usage-hints" type="engine:VisualElement_usage-hints_Type" use="optional" />
-        <xs:attribute default="0" name="tabindex" type="xs:int" use="optional" />
-        <xs:attribute default="false" name="focusable" type="xs:boolean" use="optional" />
-        <xs:attribute default="Inherit" name="language-direction" type="engine:VisualElement_language-direction_Type" use="optional" />
-        <xs:attribute default="" name="data-source" type="xs:string" use="optional" />
+        <xs:attribute default="" name="property" type="xs:string" use="optional" />
+        <xs:attribute default="OnSourceChanged" name="update-trigger" type="engine:DataBinding_update-trigger_Type" use="optional" />
         <xs:attribute default="" name="data-source-path" type="xs:string" use="optional" />
+        <xs:attribute default="" name="data-source" type="xs:string" use="optional" />
         <xs:attribute default="" name="data-source-type" type="xs:string" use="optional" />
-        <xs:attribute default="0" name="low-value" type="xs:float" use="optional" />
-        <xs:attribute default="0" name="high-value" type="xs:float" use="optional" />
-        <xs:attribute default="Vertical" name="direction" type="engine:Scroller_direction_Type" use="optional" />
-        <xs:attribute default="0" name="value" type="xs:float" use="optional" />
+        <xs:attribute default="TwoWay" name="binding-mode" type="engine:DataBinding_binding-mode_Type" use="optional" />
+        <xs:attribute default="" name="source-to-ui-converters" type="xs:string" use="optional" />
+        <xs:attribute default="" name="ui-to-source-converters" type="xs:string" use="optional" />
         <xs:attribute default="" name="content-container" type="xs:string" use="optional" />
         <xs:attribute default="" name="class" type="xs:string" use="optional" />
         <xs:attribute default="" name="style" type="xs:string" use="optional" />
@@ -1132,7 +1132,7 @@
       </xs:restriction>
     </xs:complexContent>
   </xs:complexType>
-  <xs:element name="Scroller" substitutionGroup="engine:VisualElement" type="engine:ScrollerType" />
+  <xs:element name="DataBinding" substitutionGroup="engine:VisualElement" type="engine:DataBindingType" />
   <xs:simpleType name="MultiColumnTreeView_virtualization-method_Type">
     <xs:restriction base="xs:string">
       <xs:enumeration value="FixedHeight" />
@@ -1594,29 +1594,6 @@
     </xs:complexContent>
   </xs:complexType>
   <xs:element name="FloatField" substitutionGroup="engine:VisualElement" type="engine:FloatFieldType" />
-  <xs:complexType name="ImageType">
-    <xs:complexContent mixed="false">
-      <xs:restriction base="engine:VisualElementType">
-        <xs:attribute default="" name="name" type="xs:string" use="optional" />
-        <xs:attribute default="true" name="enabled" type="xs:boolean" use="optional" />
-        <xs:attribute default="" name="view-data-key" type="xs:string" use="optional" />
-        <xs:attribute default="Position" name="picking-mode" type="engine:VisualElement_picking-mode_Type" use="optional" />
-        <xs:attribute default="" name="tooltip" type="xs:string" use="optional" />
-        <xs:attribute default="None" name="usage-hints" type="engine:VisualElement_usage-hints_Type" use="optional" />
-        <xs:attribute default="0" name="tabindex" type="xs:int" use="optional" />
-        <xs:attribute default="false" name="focusable" type="xs:boolean" use="optional" />
-        <xs:attribute default="Inherit" name="language-direction" type="engine:VisualElement_language-direction_Type" use="optional" />
-        <xs:attribute default="" name="data-source" type="xs:string" use="optional" />
-        <xs:attribute default="" name="data-source-path" type="xs:string" use="optional" />
-        <xs:attribute default="" name="data-source-type" type="xs:string" use="optional" />
-        <xs:attribute default="" name="content-container" type="xs:string" use="optional" />
-        <xs:attribute default="" name="class" type="xs:string" use="optional" />
-        <xs:attribute default="" name="style" type="xs:string" use="optional" />
-        <xs:anyAttribute processContents="lax" />
-      </xs:restriction>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:element name="Image" substitutionGroup="engine:VisualElement" type="engine:ImageType" />
   <xs:complexType name="RepeatButtonType">
     <xs:complexContent mixed="false">
       <xs:restriction base="engine:VisualElementType">
@@ -2045,6 +2022,29 @@
     </xs:complexContent>
   </xs:complexType>
   <xs:element name="Foldout" substitutionGroup="engine:VisualElement" type="engine:FoldoutType" />
+  <xs:complexType name="ImageType">
+    <xs:complexContent mixed="false">
+      <xs:restriction base="engine:VisualElementType">
+        <xs:attribute default="" name="name" type="xs:string" use="optional" />
+        <xs:attribute default="true" name="enabled" type="xs:boolean" use="optional" />
+        <xs:attribute default="" name="view-data-key" type="xs:string" use="optional" />
+        <xs:attribute default="Position" name="picking-mode" type="engine:VisualElement_picking-mode_Type" use="optional" />
+        <xs:attribute default="" name="tooltip" type="xs:string" use="optional" />
+        <xs:attribute default="None" name="usage-hints" type="engine:VisualElement_usage-hints_Type" use="optional" />
+        <xs:attribute default="0" name="tabindex" type="xs:int" use="optional" />
+        <xs:attribute default="false" name="focusable" type="xs:boolean" use="optional" />
+        <xs:attribute default="Inherit" name="language-direction" type="engine:VisualElement_language-direction_Type" use="optional" />
+        <xs:attribute default="" name="data-source" type="xs:string" use="optional" />
+        <xs:attribute default="" name="data-source-path" type="xs:string" use="optional" />
+        <xs:attribute default="" name="data-source-type" type="xs:string" use="optional" />
+        <xs:attribute default="" name="content-container" type="xs:string" use="optional" />
+        <xs:attribute default="" name="class" type="xs:string" use="optional" />
+        <xs:attribute default="" name="style" type="xs:string" use="optional" />
+        <xs:anyAttribute processContents="lax" />
+      </xs:restriction>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="Image" substitutionGroup="engine:VisualElement" type="engine:ImageType" />
   <xs:simpleType name="Columns_stretch-mode_Type">
     <xs:restriction base="xs:string">
       <xs:enumeration value="Grow" />

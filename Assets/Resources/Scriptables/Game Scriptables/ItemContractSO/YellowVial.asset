@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8e9dc5f7d7ea94c41958f79f15ca32b9, type: 3}
+  m_Name: YellowVial
+  m_EditorClassIdentifier: Assembly-CSharp::ItemContractSO
+  _name: Yellow Vial
+  _description: Use it on a painting to paint it yellow
+  _meshRef: {fileID: 1917029493789446750, guid: 0a77190ec0f307e41b8f54603c9a2cd6, type: 3}
+  _material: {fileID: 2100000, guid: e3df53038b800424daac4653ff785962, type: 2}
+  _id: 2dc036f8-c275-4504-9722-b2c68060e761

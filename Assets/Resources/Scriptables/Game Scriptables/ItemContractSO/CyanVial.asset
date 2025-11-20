@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8e9dc5f7d7ea94c41958f79f15ca32b9, type: 3}
+  m_Name: CyanVial
+  m_EditorClassIdentifier: Assembly-CSharp::ItemContractSO
+  _name: Cyan Vial
+  _description: Use it on a painting to paint it cyan
+  _meshRef: {fileID: 1917029493789446750, guid: 0a77190ec0f307e41b8f54603c9a2cd6, type: 3}
+  _material: {fileID: 2100000, guid: 1977a135cb76bad4cba14ac9eb8672d5, type: 2}
+  _id: f5d534fd-2bbb-4468-9409-768a1e91f925
