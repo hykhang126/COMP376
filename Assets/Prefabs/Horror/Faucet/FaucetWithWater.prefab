@@ -289,6 +289,12 @@ GameObject:
   - component: {fileID: 2757776162903329830}
   - component: {fileID: 4179865947640551326}
   - component: {fileID: 8296991180068680314}
+  - component: {fileID: 4491711150413187651}
+  - component: {fileID: 4686260017310037033}
+  - component: {fileID: 4089000696932024638}
+  - component: {fileID: 5536589505814361557}
+  - component: {fileID: 1965565961913637750}
+  - component: {fileID: 7896748658384348586}
   m_Layer: 0
   m_Name: Faucet_Handle
   m_TagString: Untagged
@@ -367,6 +373,124 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &4491711150413187651
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2077602763571593762}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ffcc19e1f234a80409f0d675c991600d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AnimationInteractable
+--- !u!64 &4686260017310037033
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2077602763571593762}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -6942817635960948391, guid: 2a83511a782a6aa4dafed1f5a2bd3803, type: 3}
+--- !u!114 &4089000696932024638
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2077602763571593762}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dac6a2a551bef7a40bdee364f1ba7aa3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Faucet
+  waterStream: {fileID: 0}
+--- !u!64 &5536589505814361557
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2077602763571593762}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -6942817635960948391, guid: 2a83511a782a6aa4dafed1f5a2bd3803, type: 3}
+--- !u!114 &1965565961913637750
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2077602763571593762}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dac6a2a551bef7a40bdee364f1ba7aa3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Faucet
+  waterStream: {fileID: 2634182642820935357}
+--- !u!114 &7896748658384348586
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2077602763571593762}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec0db2d74fc68d141b7083fe24cfb009, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::InteractableComponent
+  interactionTriggered:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1965565961913637750}
+        m_TargetAssemblyTypeName: Faucet, Assembly-CSharp
+        m_MethodName: Interact
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: Player, Assembly-CSharp
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  interactionEntered:
+    m_PersistentCalls:
+      m_Calls: []
+  interactionExited:
+    m_PersistentCalls:
+      m_Calls: []
+  cooldown: 1
+  isOneShot: 0
+  isCoolingDown: 0
 --- !u!1 &2461174222019316023
 GameObject:
   m_ObjectHideFlags: 0
@@ -686,7 +810,7 @@ Transform:
   - {fileID: 7136025281837665716}
   - {fileID: 6023488203196026543}
   - {fileID: 6114489719191490905}
-  - {fileID: 7081716942955877364}
+  - {fileID: 1950992052071096782}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &7493253554538675493
@@ -1261,7 +1385,7 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 8281742534907519844, guid: 2a83511a782a6aa4dafed1f5a2bd3803, type: 3}
---- !u!1001 &6368956607732782840
+--- !u!1001 &1146351964713391075
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -1269,57 +1393,62 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 8165546350542183887}
     m_Modifications:
-    - target: {fileID: 1106218286425735050, guid: c4e7de47c2d00c7419ad7b8907cb7ae3, type: 3}
-      propertyPath: m_Name
-      value: FaucetWater
-      objectReference: {fileID: 0}
-    - target: {fileID: 4189548596658046220, guid: c4e7de47c2d00c7419ad7b8907cb7ae3, type: 3}
+    - target: {fileID: 1512076870229619245, guid: 71b9e4ed4492bed42ae5d0c34c0684f2, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.04643631
+      value: -0.0532
       objectReference: {fileID: 0}
-    - target: {fileID: 4189548596658046220, guid: c4e7de47c2d00c7419ad7b8907cb7ae3, type: 3}
+    - target: {fileID: 1512076870229619245, guid: 71b9e4ed4492bed42ae5d0c34c0684f2, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.5894375
+      value: 1.5867
       objectReference: {fileID: 0}
-    - target: {fileID: 4189548596658046220, guid: c4e7de47c2d00c7419ad7b8907cb7ae3, type: 3}
+    - target: {fileID: 1512076870229619245, guid: 71b9e4ed4492bed42ae5d0c34c0684f2, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.0071849823
+      value: 0.0028
       objectReference: {fileID: 0}
-    - target: {fileID: 4189548596658046220, guid: c4e7de47c2d00c7419ad7b8907cb7ae3, type: 3}
+    - target: {fileID: 1512076870229619245, guid: 71b9e4ed4492bed42ae5d0c34c0684f2, type: 3}
       propertyPath: m_LocalRotation.w
       value: 0.6941235
       objectReference: {fileID: 0}
-    - target: {fileID: 4189548596658046220, guid: c4e7de47c2d00c7419ad7b8907cb7ae3, type: 3}
+    - target: {fileID: 1512076870229619245, guid: 71b9e4ed4492bed42ae5d0c34c0684f2, type: 3}
       propertyPath: m_LocalRotation.x
       value: 0.71985596
       objectReference: {fileID: 0}
-    - target: {fileID: 4189548596658046220, guid: c4e7de47c2d00c7419ad7b8907cb7ae3, type: 3}
+    - target: {fileID: 1512076870229619245, guid: 71b9e4ed4492bed42ae5d0c34c0684f2, type: 3}
       propertyPath: m_LocalRotation.y
       value: -0
       objectReference: {fileID: 0}
-    - target: {fileID: 4189548596658046220, guid: c4e7de47c2d00c7419ad7b8907cb7ae3, type: 3}
+    - target: {fileID: 1512076870229619245, guid: 71b9e4ed4492bed42ae5d0c34c0684f2, type: 3}
       propertyPath: m_LocalRotation.z
       value: -0
       objectReference: {fileID: 0}
-    - target: {fileID: 4189548596658046220, guid: c4e7de47c2d00c7419ad7b8907cb7ae3, type: 3}
+    - target: {fileID: 1512076870229619245, guid: 71b9e4ed4492bed42ae5d0c34c0684f2, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
       value: 92.08499
       objectReference: {fileID: 0}
-    - target: {fileID: 4189548596658046220, guid: c4e7de47c2d00c7419ad7b8907cb7ae3, type: 3}
+    - target: {fileID: 1512076870229619245, guid: 71b9e4ed4492bed42ae5d0c34c0684f2, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4189548596658046220, guid: c4e7de47c2d00c7419ad7b8907cb7ae3, type: 3}
+    - target: {fileID: 1512076870229619245, guid: 71b9e4ed4492bed42ae5d0c34c0684f2, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3127422432613727582, guid: 71b9e4ed4492bed42ae5d0c34c0684f2, type: 3}
+      propertyPath: m_Name
+      value: FaucetBlood
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: c4e7de47c2d00c7419ad7b8907cb7ae3, type: 3}
---- !u!4 &7081716942955877364 stripped
+  m_SourcePrefab: {fileID: 100100000, guid: 71b9e4ed4492bed42ae5d0c34c0684f2, type: 3}
+--- !u!4 &1950992052071096782 stripped
 Transform:
-  m_CorrespondingSourceObject: {fileID: 4189548596658046220, guid: c4e7de47c2d00c7419ad7b8907cb7ae3, type: 3}
-  m_PrefabInstance: {fileID: 6368956607732782840}
+  m_CorrespondingSourceObject: {fileID: 1512076870229619245, guid: 71b9e4ed4492bed42ae5d0c34c0684f2, type: 3}
+  m_PrefabInstance: {fileID: 1146351964713391075}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &2634182642820935357 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3127422432613727582, guid: 71b9e4ed4492bed42ae5d0c34c0684f2, type: 3}
+  m_PrefabInstance: {fileID: 1146351964713391075}
   m_PrefabAsset: {fileID: 0}

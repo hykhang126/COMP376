@@ -246,68 +246,6 @@ Light:
   m_LightUnit: 1
   m_LuxAtDistance: 1
   m_EnableSpotReflector: 1
---- !u!1001 &67696930
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 220687679}
-    m_Modifications:
-    - target: {fileID: 1512076870229619245, guid: 71b9e4ed4492bed42ae5d0c34c0684f2, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -0.0532
-      objectReference: {fileID: 0}
-    - target: {fileID: 1512076870229619245, guid: 71b9e4ed4492bed42ae5d0c34c0684f2, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 1.5867
-      objectReference: {fileID: 0}
-    - target: {fileID: 1512076870229619245, guid: 71b9e4ed4492bed42ae5d0c34c0684f2, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0.0028
-      objectReference: {fileID: 0}
-    - target: {fileID: 1512076870229619245, guid: 71b9e4ed4492bed42ae5d0c34c0684f2, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 0.6941235
-      objectReference: {fileID: 0}
-    - target: {fileID: 1512076870229619245, guid: 71b9e4ed4492bed42ae5d0c34c0684f2, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0.71985596
-      objectReference: {fileID: 0}
-    - target: {fileID: 1512076870229619245, guid: 71b9e4ed4492bed42ae5d0c34c0684f2, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1512076870229619245, guid: 71b9e4ed4492bed42ae5d0c34c0684f2, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1512076870229619245, guid: 71b9e4ed4492bed42ae5d0c34c0684f2, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 92.08499
-      objectReference: {fileID: 0}
-    - target: {fileID: 1512076870229619245, guid: 71b9e4ed4492bed42ae5d0c34c0684f2, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1512076870229619245, guid: 71b9e4ed4492bed42ae5d0c34c0684f2, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3127422432613727582, guid: 71b9e4ed4492bed42ae5d0c34c0684f2, type: 3}
-      propertyPath: m_Name
-      value: FaucetBlood
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 71b9e4ed4492bed42ae5d0c34c0684f2, type: 3}
---- !u!4 &67696931 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 1512076870229619245, guid: 71b9e4ed4492bed42ae5d0c34c0684f2, type: 3}
-  m_PrefabInstance: {fileID: 67696930}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &178589272
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -706,6 +644,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: FaucetWithBlood
       objectReference: {fileID: 0}
+    - target: {fileID: 4089000696932024638, guid: d1bc482c988f5d5419aa1bf83d7ef6c0, type: 3}
+      propertyPath: waterStream
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 7896748658384348586, guid: d1bc482c988f5d5419aa1bf83d7ef6c0, type: 3}
+      propertyPath: interactionTriggered.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgument
+      value: 
+      objectReference: {fileID: 1117987154}
     - target: {fileID: 8165546350542183887, guid: d1bc482c988f5d5419aa1bf83d7ef6c0, type: 3}
       propertyPath: m_LocalPosition.x
       value: -11.339319
@@ -747,19 +693,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects:
-    - {fileID: 6285063421272025458, guid: d1bc482c988f5d5419aa1bf83d7ef6c0, type: 3}
-    m_AddedGameObjects:
-    - targetCorrespondingSourceObject: {fileID: 8165546350542183887, guid: d1bc482c988f5d5419aa1bf83d7ef6c0, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 67696931}
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d1bc482c988f5d5419aa1bf83d7ef6c0, type: 3}
---- !u!4 &220687679 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 8165546350542183887, guid: d1bc482c988f5d5419aa1bf83d7ef6c0, type: 3}
-  m_PrefabInstance: {fileID: 220687678}
-  m_PrefabAsset: {fileID: 0}
 --- !u!224 &263242802 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 1194730440599208670, guid: 362beb73c011ce44a8ccad713fa18763, type: 3}
@@ -3078,6 +3015,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 6657174798109738687, guid: 741ae51b41ef07c44980de958e080a1d, type: 3}
+      propertyPath: m_ProvidesContacts
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6657174798109738687, guid: 741ae51b41ef07c44980de958e080a1d, type: 3}
+      propertyPath: m_ExcludeLayers.m_Bits
+      value: 128
+      objectReference: {fileID: 0}
     - target: {fileID: 7257803912071708158, guid: 741ae51b41ef07c44980de958e080a1d, type: 3}
       propertyPath: m_LocalPosition.x
       value: 4.25
@@ -3620,6 +3565,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 9106203516055157820, guid: d1bc482c988f5d5419aa1bf83d7ef6c0, type: 3}
+      propertyPath: interactionTriggered.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgument
+      value: 
+      objectReference: {fileID: 1117987154}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
