@@ -516,7 +516,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
-  m_Resource: {fileID: 0}
+  m_Resource: {fileID: 8300000, guid: 95d9547bc546f0f4eb13c68b70991621, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
@@ -622,7 +622,7 @@ MonoBehaviour:
         m_MethodName: PlayOneShot
         m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgument: {fileID: 8300000, guid: 95d9547bc546f0f4eb13c68b70991621, type: 3}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.AudioClip, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
@@ -2558,11 +2558,6 @@ Mesh:
       - serializedVersion: 1
         m_IndexStart: 0
         m_IndexCount: 0
---- !u!4 &202949153 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 4111786731952637460, guid: 60a43cfd1362b7b4899f19278f4d23e1, type: 3}
-  m_PrefabInstance: {fileID: 966064876}
-  m_PrefabAsset: {fileID: 0}
 --- !u!43 &203336099
 Mesh:
   m_ObjectHideFlags: 0
@@ -6128,7 +6123,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6353983105119651536, guid: 60a43cfd1362b7b4899f19278f4d23e1, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6353983105119651536, guid: 60a43cfd1362b7b4899f19278f4d23e1, type: 3}
       propertyPath: m_TagString
@@ -6153,7 +6148,7 @@ PrefabInstance:
     - target: {fileID: 7071416110524938846, guid: 60a43cfd1362b7b4899f19278f4d23e1, type: 3}
       propertyPath: jumpscareHeadTarget
       value: 
-      objectReference: {fileID: 7306262}
+      objectReference: {fileID: 0}
     - target: {fileID: 7071416110524938846, guid: 60a43cfd1362b7b4899f19278f4d23e1, type: 3}
       propertyPath: slowdownBufferDuration
       value: 1
@@ -6188,10 +6183,7 @@ PrefabInstance:
       objectReference: {fileID: 9100000, guid: 5ca0b81b5909dc64190e8eb42a10f728, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects:
-    - targetCorrespondingSourceObject: {fileID: 4111786731952637460, guid: 60a43cfd1362b7b4899f19278f4d23e1, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 7306262}
+    m_AddedGameObjects: []
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 6353983105119651536, guid: 60a43cfd1362b7b4899f19278f4d23e1, type: 3}
       insertIndex: 1
@@ -9233,7 +9225,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
-  m_Resource: {fileID: 0}
+  m_Resource: {fileID: 8300000, guid: 95d9547bc546f0f4eb13c68b70991621, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
@@ -9339,7 +9331,7 @@ MonoBehaviour:
         m_MethodName: PlayOneShot
         m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgument: {fileID: 8300000, guid: 95d9547bc546f0f4eb13c68b70991621, type: 3}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.AudioClip, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
