@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -23,22 +24,23 @@ public class LightStalkerController : MonoBehaviour
     [Header("Respawn/Spawners")]
     public Transform[] spawners;
 
-  [Header("Flashlight slowdown buffer")]
-  [Tooltip("Seconds to stay slowed after leaving light")]
-  public float slowdownBufferDuration = 2f;
-  [Tooltip("Speed while in slowdown buffer")]
-  public float slowdownSpeedMultiplier = 0.5f;
-  private float slowdownTimer = 0f;
-  private bool isInSlowdownBuffer = false;
+    [Header("Flashlight slowdown buffer")]
+    [Tooltip("Seconds to stay slowed after leaving light")]
+    public float slowdownBufferDuration = 2f;
+    [Tooltip("Speed while in slowdown buffer")]
+    public float slowdownSpeedMultiplier = 0.5f;
+    private float slowdownTimer = 0f;
+    private bool isInSlowdownBuffer = false;
 
-  [Header("Flee behavior (on being lit)")]
+    [Header("Flee behavior (on being lit)")]
     [Tooltip("How long to run away before despawning")]
     public float fleeDuration = 2.5f;
     [Tooltip("Multiplier applied to agent.speed while fleeing")]
     public float fleeSpeedMultiplier = 2.0f;
-  [Tooltip("Multiply the computed flee distance (1 = unchanged, 4 = four times as far)")]
-  public float fleeDistanceMultiplier = 4f;
-  [Header("Light effect")]
+    [Tooltip("Multiply the computed flee distance (1 = unchanged, 4 = four times as far)")]
+    public float fleeDistanceMultiplier = 4f;
+
+    [Header("Light effect")]
     [Tooltip("Multiplier applied to agent.speed while the enemy is under the flashlight beam")]
     public float inBeamSpeedMultiplier = 0.25f;
     public float originalAgentSpeed = 3f;
@@ -73,6 +75,52 @@ public class LightStalkerController : MonoBehaviour
     [Range(0f,1f)]
     public float fleeScreechVolume = 1f;
 
+    // -------------------- JUMPSCARE FIELDS --------------------
+    [Header("Jumpscare (player death)")]
+    [Tooltip("Loud sound played during jumpscare")]
+    public AudioClip jumpscareClip;
+    [Range(0f,1f)]
+    public float jumpscareVolume = 1f;
+    [Tooltip("How long the jumpscare camera animation should last (seconds)")]
+    public float jumpscareDuration = 2.2f;
+    [Tooltip("Distance from the stalker to place the camera during the close-up")]
+    public float jumpscareCameraDistance = 1.0f;
+    [Tooltip("Target FOV for the close-up (lower = more zoom)")]
+    public float jumpscareFOV = 30f;
+    [Tooltip("Optional small camera shake intensity during jumpscare")]
+    public float jumpscareShakeIntensity = 0.05f;
+    [Tooltip("Tweak this until the face is centered")]
+    public float jumpscareHeadOffset = 1.0f; // tweak this until the face is centered
+    public Transform jumpscareHeadTarget; 
+
+    [Tooltip("Player respawn point (player-only spawner)")]
+    public Transform playerRespawnPoint;
+
+    // --- Jumpscare freeze helpers ---
+    private Rigidbody[] frozenPlayerRigidbodies = new Rigidbody[0];
+    private RigidbodyConstraints[] frozenPlayerRbConstraints = new RigidbodyConstraints[0];
+    private bool[] frozenPlayerWasKinematic = new bool[0];
+    private Vector3[] frozenPlayerVel = new Vector3[0];
+    private Vector3[] frozenPlayerAngVel = new Vector3[0];
+
+    private Rigidbody frozenEnemyRb = null;
+    private bool frozenEnemyWasKinematic = false;
+    private Vector3 frozenEnemyVelocity = Vector3.zero;
+    private Vector3 frozenEnemyAngVelocity = Vector3.zero;
+    private bool agentWasEnabled = true;
+    private Animator frozenEnemyAnimator = null;
+    private bool frozenEnemyAnimatorWasEnabled = false;
+
+    // remember navmesh-agent update flags so we can restore them
+    private bool agentUpdatePositionWas = true;
+    private bool agentUpdateRotationWas = true;
+
+    // anchor lock used during jumpscare to keep player exactly where they were
+    private GameObject frozenPlayerRootGO = null;
+    private Vector3 frozenPlayerAnchorPos;
+    private Quaternion frozenPlayerAnchorRot;
+    // ----------------------------------------------------------
+
     // runtime
     private AudioSource hushSource;
     private AudioSource whisperSource;
@@ -83,9 +131,17 @@ public class LightStalkerController : MonoBehaviour
     // colliders considered "body" / capable of directly touching the player
     private Collider[] bodyColliders;
 
+    // jumpscare internal
+    private bool jumpscarePlaying = false;
+    private Vector3 initialPosition;
+    private Quaternion initialRotation;
 
+    private CharacterController cachedPlayerController = null;
+    private Collider[] cachedPlayerColliders = null;
+    [Tooltip("Distance threshold (meters) for the manual contact check fallback.")]
+    public float manualContactDistanceThreshold = 0.12f; 
 
-  void Awake()
+    void Awake()
     {
         stateMachine = GetComponent<StateMachine>();
         lightDetector = GetComponent<LightDetector>();
@@ -94,6 +150,10 @@ public class LightStalkerController : MonoBehaviour
 
     void Start()
     {
+        // cache initial transform so we can reset after jumpscare
+        initialPosition = transform.position;
+        initialRotation = transform.rotation;
+
         player = Camera.main?.transform;
 
         if (lightDetector != null)
@@ -144,24 +204,55 @@ public class LightStalkerController : MonoBehaviour
         // END body collider initialization
     }
 
-  void Update()
-  {
-    // Handle slowdown buffer timer
-    if (isInSlowdownBuffer && !isFleeing)
+    void Update()
     {
-      slowdownTimer -= Time.deltaTime;
-      if (slowdownTimer <= 0f)
-      {
-        isInSlowdownBuffer = false;
-        if (!isInBeam && agent != null)
+        // If jumpscare is playing and we have a frozen root, lock its transform so it can't move
+        if (jumpscarePlaying && frozenPlayerRootGO != null)
         {
-          agent.speed = (enemyConfig != null ? enemyConfig.moveSpeed : moveSpeed);
+            frozenPlayerRootGO.transform.position = frozenPlayerAnchorPos;
+            frozenPlayerRootGO.transform.rotation = frozenPlayerAnchorRot;
         }
-      }
-    }
-  }
 
-  void OnDestroy()
+        // Handle slowdown buffer timer
+        if (isInSlowdownBuffer && !isFleeing)
+        {
+            slowdownTimer -= Time.deltaTime;
+            if (slowdownTimer <= 0f)
+            {
+                isInSlowdownBuffer = false;
+                if (!isInBeam && agent != null)
+                {
+                    agent.speed = (enemyConfig != null ? enemyConfig.moveSpeed : moveSpeed);
+                }
+            }
+        }
+
+        // manual contact fallback to catch missed collision events
+        // Only run when not already in a jumpscare and not fleeing (keeps behavior identical otherwise)
+        if (!jumpscarePlaying && !isFleeing)
+        {
+            TryManualContactCheck();
+        }
+        // ------------------------------------------------------------------------------------
+    }
+
+    void FixedUpdate()
+    {
+        if (jumpscarePlaying && frozenPlayerRootGO != null)
+        {
+            frozenPlayerRootGO.transform.SetPositionAndRotation(frozenPlayerAnchorPos, frozenPlayerAnchorRot);
+        }
+    }
+
+    void LateUpdate()
+    {
+        if (jumpscarePlaying && frozenPlayerRootGO != null)
+        {
+            frozenPlayerRootGO.transform.SetPositionAndRotation(frozenPlayerAnchorPos, frozenPlayerAnchorRot);
+        }
+    }
+
+    void OnDestroy()
     {
         if (lightDetector != null)
         {
@@ -196,21 +287,20 @@ public class LightStalkerController : MonoBehaviour
             agent.speed = (enemyConfig != null ? enemyConfig.moveSpeed : moveSpeed) * inBeamSpeedMultiplier;
     }
 
-  // Returns enemy to normal speed or triggers slowdown buffer
-  private void HandleLightExit()
-  {
-    if (isFleeing) return;
+    //Return enemy to normal speed or triggers slowdown buffer
+    private void HandleLightExit()
+    {
+        if (isFleeing) return;
+        isInBeam = false;
+        // Start slowdown buffer
+        isInSlowdownBuffer = true;
+        slowdownTimer = slowdownBufferDuration;
+        if (agent != null)
+            agent.speed = (enemyConfig != null ? enemyConfig.moveSpeed : moveSpeed) * slowdownSpeedMultiplier;
+    }
 
-    isInBeam = false;
-
-    // Start slowdown buffer
-    isInSlowdownBuffer = true;
-    slowdownTimer = slowdownBufferDuration;
-    if (agent != null)
-      agent.speed = (enemyConfig != null ? enemyConfig.moveSpeed : moveSpeed) * slowdownSpeedMultiplier;
-  }
-
-  public void StartFlee()
+    // Called by the StateMachine's 'Scared' state's stateEnter event
+    public void StartFlee()
     {
         if (isFleeing) return;
         isFleeing = true;
@@ -319,6 +409,7 @@ public class LightStalkerController : MonoBehaviour
         Debug.Log($"[StartFlee] No reachable spawner found for {name} — despawning immediately.");
         CompleteFleeAndDespawn();
     }
+
     private IEnumerator WaitForArrivalAndDespawn(float maxWait, Vector3 destination, float arrivalThreshold)
     {
         float t = 0f;
@@ -361,7 +452,6 @@ public class LightStalkerController : MonoBehaviour
         CompleteFleeAndDespawn();
     }
 
-
     //--FALLBACK FLEE METHOD (Instant despawn). USE IF OTHER 2 DONT WORK---
     // private void StartFlee()
     // {
@@ -374,8 +464,8 @@ public class LightStalkerController : MonoBehaviour
     //     CompleteFleeAndDespawn();
     // }
 
-  // Called when fleeing time completes
-  private void CompleteFleeAndDespawn()
+    // Called when fleeing time completes
+    private void CompleteFleeAndDespawn()
     {
         isFleeing = false;
         if (agent != null)
@@ -397,8 +487,14 @@ public class LightStalkerController : MonoBehaviour
     // Called by state machine's stateUpdate (ChasingPlayer)
     public void MoveTowardPlayer()
     {
-        if (player == null) player = Camera.main?.transform ?? Object.FindFirstObjectByType<Player>()?.transform;
+       if (player == null) player = Camera.main?.transform ?? Object.FindFirstObjectByType<Player>()?.transform;
         if (player == null || agent == null) return;
+
+        // Defensive: do nothing if the agent component is disabled or not on a navmesh
+        if (!agent.enabled) return;
+    #if UNITY_2021_1_OR_NEWER
+        if (!agent.isOnNavMesh) return;
+    #endif
 
         float sqrDist = (player.position - transform.position).sqrMagnitude;
         if (sqrDist <= (stoppingDistance * stoppingDistance))
@@ -610,7 +706,7 @@ public class LightStalkerController : MonoBehaviour
     }
 
     // -------------------------
-    // Player contact / jumpscare placeholder
+    // Player contact / jumpscare
     // -------------------------
     // Fires when the enemy physically touches the player (Collision)
     void OnCollisionEnter(Collision collision)
@@ -632,16 +728,6 @@ public class LightStalkerController : MonoBehaviour
         // OnTrigger events may be fired from the proximity trigger. Ensure the player is actually touching a body collider.
         if (IsPlayerTouchingBody(other))
             HandlePlayerTouch(other);
-    }
-
-    // Centralized touch handling — placeholder: log a jumpscare event.
-    // Does nothing if the stalker is currently fleeing.
-    private void HandlePlayerTouch(Collider playerCollider)
-    {
-        if (isFleeing) return; // fleeing enemies cannot kill/damage
-
-        // Placeholder: substitute actual damage/jumpscare logic here.
-        Debug.Log($"{name}: Player touched! (jumpscare placeholder)");
     }
 
     // Determine whether the provided player collider is actually touching one of the non-trigger body colliders of this enemy.
@@ -674,6 +760,253 @@ public class LightStalkerController : MonoBehaviour
 
         return false;
     }
+
+    // Centralized touch handling — starts jumpscare sequence
+    private void HandlePlayerTouch(Collider playerCollider)
+    {
+        if (isFleeing) return; // fleeing enemies cannot kill/damage
+        if (jumpscarePlaying) return; // already playing
+
+        // Start jumpscare coroutine
+        StartCoroutine(DoJumpscare(playerCollider));
+    }
+
+    private IEnumerator DoJumpscare(Collider playerCollider)
+    {
+        jumpscarePlaying = true;
+        isFleeing = true;
+
+        if (agent != null) agent.isStopped = true;
+
+        playerInsideProximity = false;
+        StopProximityCoroutine();
+
+        if (jumpscareClip != null)
+            AudioSource.PlayClipAtPoint(jumpscareClip, transform.position, Mathf.Clamp01(jumpscareVolume));
+
+        Camera cam = Camera.main;
+        if (cam == null)
+        {
+            Debug.LogWarning("[LightStalker] Jumpscare: no Camera.main found. Teleporting player & resetting stalker.");
+            FinishJumpscareTeleportAndReset(playerCollider);
+            jumpscarePlaying = false;
+            yield break;
+        }
+
+        DisablePlayerControlsForJumpscare();
+        FreezeActorsForJumpscare(playerCollider);
+
+        // Save camera state
+        Transform camParent = cam.transform.parent;
+        Vector3 camLocalPos = cam.transform.localPosition;
+        Quaternion camLocalRot = cam.transform.localRotation;
+        float camStartFOV = cam.fieldOfView;
+        Vector3 camStartPos = cam.transform.position;
+        Quaternion camStartRot = cam.transform.rotation;
+
+        // Unparent for world-space animation
+        cam.transform.SetParent(null, true);
+
+        // HEAD TARGET (prefer assigned transform)
+        Vector3 stalkerHead;
+        if (jumpscareHeadTarget != null)
+            stalkerHead = jumpscareHeadTarget.position;
+        else
+            stalkerHead = transform.position + Vector3.up * jumpscareHeadOffset;
+
+        //compute the horizontal vector from *camera position* to the stalker head (Horizontal rotation)
+        Vector3 toHead = stalkerHead - camStartPos;
+        Vector3 horizDir = new Vector3(toHead.x, 0f, toHead.z);
+
+        //fallback 1: use camera forward projected horizontally if above fails
+        if (horizDir.sqrMagnitude < 0.0001f)
+        {
+            Vector3 camForward = camStartRot * Vector3.forward;
+            horizDir = new Vector3(camForward.x, 0f, camForward.z);
+        }
+
+        // fallback 2: fallback to stalker forward
+        if (horizDir.sqrMagnitude < 0.0001f)
+        {
+            horizDir = new Vector3(transform.forward.x, 0f, transform.forward.z);
+        }
+
+        horizDir = horizDir.normalized;
+
+        //a small upward nudge plus ensure we never place camera lower than the head
+        float verticalNudge = 0.18f;            
+        float minHeightAboveHead = 0.14f;  
+        float minDistance = Mathf.Max(0.6f, jumpscareCameraDistance * 0.6f);
+        float desiredDistance = Mathf.Max(minDistance, jumpscareCameraDistance);
+
+        // place camera at a point in front of the head along horizDir (so it approaches from player's horizontal position)
+        Vector3 camTargetPos = stalkerHead - horizDir * desiredDistance + Vector3.up * verticalNudge;
+        Quaternion camTargetRot = Quaternion.LookRotation(stalkerHead - camTargetPos);
+
+        // ensure camera sits above the head by at least minHeightAboveHead
+        if (camTargetPos.y < stalkerHead.y + minHeightAboveHead)
+            camTargetPos.y = stalkerHead.y + minHeightAboveHead;
+
+        // collision check: spherecast from head toward desired camera to avoid clipping into floor/walls/capsule
+        float sphereRadius = 0.12f; // small radius to detect obstacles
+        Vector3 from = stalkerHead;
+        Vector3 dir = (camTargetPos - from);
+        float dist = dir.magnitude;
+        if (dist > 0.001f)
+        {
+            dir /= dist;
+            if (Physics.SphereCast(from, sphereRadius, dir, out RaycastHit hit, dist))
+            {
+                // ignore hits that are part of the stalker itself
+                if (!hit.collider.transform.IsChildOf(transform))
+                {
+                    // put camera just before the hit point and nudge it up
+                    camTargetPos = hit.point - dir * 0.08f;
+                    camTargetPos.y = Mathf.Max(camTargetPos.y, stalkerHead.y + minHeightAboveHead);
+                    camTargetRot = Quaternion.LookRotation(stalkerHead - camTargetPos);
+                }
+            }
+        }
+
+        // ensure not too close
+        if (Vector3.Distance(camTargetPos, stalkerHead) < minDistance)
+        {
+            camTargetPos = stalkerHead - horizDir * minDistance + Vector3.up * verticalNudge;
+            camTargetRot = Quaternion.LookRotation(stalkerHead - camTargetPos);
+        }
+
+        float half = jumpscareDuration * 0.5f;
+        float t = 0f;
+
+        // animate camera
+        while (t < half)
+        {
+            t += Time.deltaTime;
+            float a = Mathf.Clamp01(t / half);
+            if (cam == null) break;
+            cam.transform.position = Vector3.Lerp(camStartPos, camTargetPos, a);
+            cam.transform.rotation = Quaternion.Slerp(camStartRot, camTargetRot, a);
+            cam.fieldOfView = Mathf.Lerp(camStartFOV, jumpscareFOV, a);
+
+            if (a > 0.6f && jumpscareShakeIntensity > 0f)
+                cam.transform.position += (Random.insideUnitSphere * jumpscareShakeIntensity * (a - 0.6f) * 2f);
+
+            yield return null;
+        }
+
+        // hold
+        float holdTime = Mathf.Max(0f, jumpscareDuration - t);
+        float holdTimer = 0f;
+        while (holdTimer < holdTime)
+        {
+            holdTimer += Time.deltaTime;
+            if (cam != null && jumpscareShakeIntensity > 0f)
+            {
+                cam.transform.position = camTargetPos + Random.insideUnitSphere * (jumpscareShakeIntensity * 0.5f);
+                cam.transform.rotation = camTargetRot;
+            }
+            yield return null;
+        }
+
+        // restore smoothly
+        float restoreTime = 0.45f;
+        float rt = 0f;
+        Vector3 curPos = cam.transform.position;
+        Quaternion curRot = cam.transform.rotation;
+        float curFOV = cam.fieldOfView;
+        while (rt < restoreTime)
+        {
+            rt += Time.deltaTime;
+            float a = Mathf.Clamp01(rt / restoreTime);
+            if (cam == null) break;
+            cam.transform.position = Vector3.Lerp(curPos, camStartPos, a);
+            cam.transform.rotation = Quaternion.Slerp(curRot, camStartRot, a);
+            cam.fieldOfView = Mathf.Lerp(curFOV, camStartFOV, a);
+            yield return null;
+        }
+
+        // reattach camera
+        if (cam != null)
+        {
+            if (camParent != null)
+            {
+                cam.transform.SetParent(camParent, true);
+                cam.transform.localPosition = camLocalPos;
+                cam.transform.localRotation = camLocalRot;
+            }
+            else
+            {
+                cam.transform.SetParent(null);
+                cam.transform.position = camStartPos;
+                cam.transform.rotation = camStartRot;
+            }
+            cam.fieldOfView = camStartFOV;
+        }
+
+        RestoreActorsAfterJumpscare();
+        RestorePlayerControlsAfterJumpscare();
+        FinishJumpscareTeleportAndReset(playerCollider);
+
+        jumpscarePlaying = false;
+    }
+
+
+
+    // Helper to safely teleport player to playerRespawnPoint and reset stalker position
+    private void FinishJumpscareTeleportAndReset(Collider playerCollider)
+    {
+        // Find the root Player object if possible
+        Player rootPlayer = null;
+        if (playerCollider != null)
+        {
+            rootPlayer = playerCollider.GetComponentInParent<Player>();
+        }
+        if (rootPlayer == null)
+        {
+            rootPlayer = Player.InstanceReference;
+        }
+
+        // Teleport root Player to configured respawn point (if present)
+        if (playerRespawnPoint != null && rootPlayer != null)
+        {
+            var playerGO = rootPlayer.gameObject;
+            // If there is a CharacterController, disable while teleporting to avoid issues
+            var cc = playerGO.GetComponent<CharacterController>();
+            if (cc != null) cc.enabled = false;
+
+            playerGO.transform.position = playerRespawnPoint.position;
+            playerGO.transform.rotation = playerRespawnPoint.rotation;
+
+            if (cc != null) cc.enabled = true;
+        }
+        else
+        {
+            Debug.LogWarning("[LightStalker] Player respawn point not assigned or player root not found; skipping teleport.");
+        }
+
+        // Reset this stalker to its original position/rotation (instant)
+        transform.position = initialPosition;
+        transform.rotation = initialRotation;
+        if (agent != null)
+        {
+            agent.Warp(initialPosition);
+            agent.isStopped = true;
+            agent.speed = (enemyConfig != null ? enemyConfig.moveSpeed : moveSpeed);
+        }
+
+        // Reset internal state
+        isFleeing = false;
+        isInBeam = false;
+        isInSlowdownBuffer = false;
+
+         ReinitializeProximityAndBodies();
+
+        // Re-enable audio sources if desired
+        if (hushSource != null && !hushSource.isPlaying) hushSource.Play();
+        if (whisperSource != null && !whisperSource.isPlaying) whisperSource.Play();
+    }
+
+    
 
     // -------------------------
     // Helpers for respawn re-initialization
@@ -741,4 +1074,323 @@ public class LightStalkerController : MonoBehaviour
             }
         }
     }
+
+    // Manual contact fallback + player-freeze helpers
+    private GameObject FindPlayerRootGameObject()
+    {
+        if (Player.InstanceReference != null) return Player.InstanceReference.gameObject;
+
+        var found = GameObject.FindWithTag("Player");
+        if (found != null) return found;
+
+        if (player != null)
+        {
+            var colliders = Physics.OverlapSphere(player.position, 0.1f);
+            if (colliders != null && colliders.Length > 0) return colliders[0].gameObject;
+        }
+
+        return null;
+    }
+
+    private Collider[] FindPlayerColliders()
+    {
+        if (cachedPlayerColliders != null && cachedPlayerColliders.Length > 0) return cachedPlayerColliders;
+
+        var rootGO = FindPlayerRootGameObject();
+        if (rootGO == null) return new Collider[0];
+
+        cachedPlayerColliders = rootGO.GetComponentsInChildren<Collider>(true);
+        return cachedPlayerColliders;
+    }
+
+    private void TryManualContactCheck()
+    {
+        var playerCols = FindPlayerColliders();
+        if (playerCols == null || playerCols.Length == 0) return;
+        if (bodyColliders == null || bodyColliders.Length == 0) return;
+
+        foreach (var pc in playerCols)
+        {
+            if (pc == null) continue;
+            foreach (var bc in bodyColliders)
+            {
+                if (bc == null) continue;
+
+                // First try ComputePenetration (accurate)
+                if (Physics.ComputePenetration(
+                    bc, bc.transform.position, bc.transform.rotation,
+                    pc, pc.transform.position, pc.transform.rotation,
+                    out Vector3 outDir, out float outDistance))
+                {
+                    HandlePlayerTouch(pc);
+                    return;
+                }
+
+                // Fallback: closest-point distance check (works for near-contact)
+                Vector3 pcClosest = pc.ClosestPoint(bc.transform.position);
+                Vector3 bcClosest = bc.ClosestPoint(pc.transform.position);
+                float d = Vector3.Distance(pcClosest, bcClosest);
+                if (d <= manualContactDistanceThreshold)
+                {
+                    HandlePlayerTouch(pc);
+                    return;
+                }
+            }
+        }
+    }
+
+    private void DisablePlayerControlsForJumpscare()
+    {
+        var root = FindPlayerRootGameObject();
+        if (root == null) return;
+
+        // Disable CharacterController (safe)
+        cachedPlayerController = root.GetComponentInChildren<CharacterController>();
+        if (cachedPlayerController != null) cachedPlayerController.enabled = false;
+
+        // disable the PlayerInput component (Unity Input System) to stop callbacks
+        var pi = root.GetComponentInChildren<UnityEngine.InputSystem.PlayerInput>();
+        if (pi != null)
+            pi.enabled = false;
+
+        // disable PlayerInputHandler instance, call its DisableInput
+        var inputHandler = root.GetComponentInChildren<PlayerInputHandler>();
+        if (inputHandler != null)
+            inputHandler.DisableInput();
+
+        // clear the player's cached input so movement stops immediately
+        var playerComp = root.GetComponentInChildren<Player>();
+        if (playerComp != null)
+        {
+            playerComp.movementInput = Vector2.zero;
+            playerComp.lookInput = Vector2.zero;
+        }
+
+        // lock/hide cursor during jumpscare
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+    }
+
+
+    private void RestorePlayerControlsAfterJumpscare()
+    {
+        // restore CharacterController
+        if (cachedPlayerController != null)
+        {
+            cachedPlayerController.enabled = true;
+            cachedPlayerController = null;
+        }
+
+        // re-enable PlayerInput and PlayerInputHandler if present
+        var root = FindPlayerRootGameObject();
+        if (root != null)
+        {
+            var pi = root.GetComponentInChildren<UnityEngine.InputSystem.PlayerInput>();
+            if (pi != null)
+                pi.enabled = true;
+
+            var inputHandler = root.GetComponentInChildren<PlayerInputHandler>();
+            if (inputHandler != null)
+                inputHandler.EnableInput();
+        }
+
+        // restore cursor
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+
+        // clear cached player colliders so FindPlayerColliders re-fetches them next time (defensive)
+        cachedPlayerColliders = null;
+    }
+
+
+    // Freezes player & enemy physics/movement so nothing moves while we animate the camera.
+    private void FreezeActorsForJumpscare(Collider playerCollider)
+    {
+        // --- PLAYER ---
+        GameObject playerRoot = null;
+        if (playerCollider != null) playerRoot = playerCollider.GetComponentInParent<Transform>()?.gameObject;
+        if (playerRoot == null) playerRoot = FindPlayerRootGameObject();
+
+        if (playerRoot != null)
+        {
+            frozenPlayerRootGO = playerRoot;
+            frozenPlayerAnchorPos = playerRoot.transform.position;
+            frozenPlayerAnchorRot = playerRoot.transform.rotation;
+
+            var rbs = playerRoot.GetComponentsInChildren<Rigidbody>(true);
+            frozenPlayerRigidbodies = rbs ?? new Rigidbody[0];
+            int n = frozenPlayerRigidbodies.Length;
+            frozenPlayerWasKinematic = new bool[n];
+            frozenPlayerVel = new Vector3[n];
+            frozenPlayerAngVel = new Vector3[n];
+            frozenPlayerRbConstraints = new RigidbodyConstraints[n];
+
+            for (int i = 0; i < n; i++)
+            {
+                var rb = frozenPlayerRigidbodies[i];
+                if (rb == null) continue;
+
+                // remember whether it was kinematic before we touch it
+                frozenPlayerWasKinematic[i] = rb.isKinematic;
+                frozenPlayerRbConstraints[i] = rb.constraints;
+
+                // Only read / set velocities on NON-kinematic bodies to avoid warnings
+                if (!rb.isKinematic)
+                {
+                    // store velocities so we can restore them later
+                    frozenPlayerVel[i] = rb.linearVelocity;
+                    frozenPlayerAngVel[i] = rb.angularVelocity;
+
+                    // stop motion
+                    rb.linearVelocity = Vector3.zero;
+                    rb.angularVelocity = Vector3.zero;
+
+                    // now make kinematic and freeze constraints so other forces won't move it
+                    rb.isKinematic = true;
+                    rb.constraints = RigidbodyConstraints.FreezeAll;
+                }
+                else
+                {
+                    // body already kinematic — store zero velocities and still ensure constraints
+                    frozenPlayerVel[i] = Vector3.zero;
+                    frozenPlayerAngVel[i] = Vector3.zero;
+                    rb.constraints = RigidbodyConstraints.FreezeAll;
+                }
+            }
+        }
+        else
+        {
+            frozenPlayerRigidbodies = new Rigidbody[0];
+        }
+
+        // --- ENEMY ---
+        frozenEnemyRb = GetComponent<Rigidbody>();
+        if (frozenEnemyRb != null)
+        {
+            frozenEnemyWasKinematic = frozenEnemyRb.isKinematic;
+            // store velocities only if non-kinematic
+            if (!frozenEnemyRb.isKinematic)
+            {
+                frozenEnemyVelocity = frozenEnemyRb.linearVelocity;
+                frozenEnemyAngVelocity = frozenEnemyRb.angularVelocity;
+
+                frozenEnemyRb.linearVelocity = Vector3.zero;
+                frozenEnemyRb.angularVelocity = Vector3.zero;
+                frozenEnemyRb.isKinematic = true;
+                frozenEnemyRb.Sleep();
+            }
+            else
+            {
+                frozenEnemyVelocity = Vector3.zero;
+                frozenEnemyAngVelocity = Vector3.zero;
+                // keep it kinematic and sleeping
+                frozenEnemyRb.Sleep();
+            }
+        }
+
+        // --- NAVMESH AGENT: do NOT disable the component (avoids exceptions). ---
+        if (agent != null)
+        {
+            agentWasEnabled = agent.enabled;
+            // store update flags and then stop agent from updating transform
+            agentUpdatePositionWas = agent.updatePosition;
+            agentUpdateRotationWas = agent.updateRotation;
+
+            agent.isStopped = true;
+            agent.updatePosition = false;
+            agent.updateRotation = false;
+        }
+
+        // Optionally disable animator
+        frozenEnemyAnimator = GetComponentInChildren<Animator>();
+        if (frozenEnemyAnimator != null)
+        {
+            frozenEnemyAnimatorWasEnabled = frozenEnemyAnimator.enabled;
+            frozenEnemyAnimator.enabled = false;
+        }
+    }
+
+
+    // Restores player & enemy physics/movement state stored by FreezeActorsForJumpscare
+    private void RestoreActorsAfterJumpscare()
+    {
+        // --- PLAYER ---
+        for (int i = 0; i < frozenPlayerRigidbodies.Length; i++)
+        {
+            var rb = frozenPlayerRigidbodies[i];
+            if (rb == null) continue;
+
+            // restore constraints & kinematic flag first
+            bool wasKin = (i < frozenPlayerWasKinematic.Length) ? frozenPlayerWasKinematic[i] : false;
+            rb.constraints = (i < frozenPlayerRbConstraints.Length) ? frozenPlayerRbConstraints[i] : RigidbodyConstraints.None;
+            rb.isKinematic = wasKin;
+
+            // restore velocities only if the body is non-kinematic now
+            if (!rb.isKinematic)
+            {
+                rb.linearVelocity = (i < frozenPlayerVel.Length) ? frozenPlayerVel[i] : Vector3.zero;
+                rb.angularVelocity = (i < frozenPlayerAngVel.Length) ? frozenPlayerAngVel[i] : Vector3.zero;
+            }
+        }
+
+        // clear arrays
+        frozenPlayerRigidbodies = new Rigidbody[0];
+        frozenPlayerWasKinematic = new bool[0];
+        frozenPlayerVel = new Vector3[0];
+        frozenPlayerAngVel = new Vector3[0];
+        frozenPlayerRbConstraints = new RigidbodyConstraints[0];
+
+        frozenPlayerRootGO = null;
+
+        // --- ENEMY ---
+        if (frozenEnemyRb != null)
+        {
+            frozenEnemyRb.isKinematic = frozenEnemyWasKinematic;
+            if (!frozenEnemyRb.isKinematic)
+            {
+                frozenEnemyRb.linearVelocity = frozenEnemyVelocity;
+                frozenEnemyRb.angularVelocity = frozenEnemyAngVelocity;
+            }
+            frozenEnemyRb.WakeUp();
+            frozenEnemyRb = null;
+        }
+
+        // restore agent: re-enable update flags (we keep it stopped; state machine / movement logic will resume it)
+        if (agent != null)
+        {
+            // restore the update flags we changed earlier
+            agent.updatePosition = agentUpdatePositionWas;
+            agent.updateRotation = agentUpdateRotationWas;
+
+            // keep the agent stopped now — other code (OnEnterChase / StartFlee etc.) will set isStopped = false when appropriate
+            agent.isStopped = true;
+            agent.enabled = agentWasEnabled; // harmless if already true
+        }
+
+        // restore animator
+        if (frozenEnemyAnimator != null)
+        {
+            frozenEnemyAnimator.enabled = frozenEnemyAnimatorWasEnabled;
+            frozenEnemyAnimator = null;
+        }
+    }
+
+    // Draw gizmos in the scene view so you can see exactly where the code thinks the head is
+    void OnDrawGizmosSelected()
+    {
+        if (jumpscareHeadTarget != null)
+        {
+            // small sphere at assigned head pivot
+            Gizmos.color = Color.yellow;
+            Gizmos.DrawSphere(jumpscareHeadTarget.position, 0.06f);
+
+            // draw a line from the main camera to the head pivot (if camera exists)
+            if (Camera.main != null)
+            {
+                Gizmos.color = Color.cyan;
+                Gizmos.DrawLine(Camera.main.transform.position, jumpscareHeadTarget.position);
+            }
+        }
+    }
+
 }
