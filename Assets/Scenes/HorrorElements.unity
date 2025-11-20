@@ -3623,8 +3623,91 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 2077602763571593762, guid: d1bc482c988f5d5419aa1bf83d7ef6c0, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6784789510311586421}
+    - targetCorrespondingSourceObject: {fileID: 2077602763571593762, guid: d1bc482c988f5d5419aa1bf83d7ef6c0, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6784789510311586425}
+    - targetCorrespondingSourceObject: {fileID: 2077602763571593762, guid: d1bc482c988f5d5419aa1bf83d7ef6c0, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6784789510311586426}
   m_SourcePrefab: {fileID: 100100000, guid: d1bc482c988f5d5419aa1bf83d7ef6c0, type: 3}
+--- !u!1 &6784789510311586420 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2077602763571593762, guid: d1bc482c988f5d5419aa1bf83d7ef6c0, type: 3}
+  m_PrefabInstance: {fileID: 6784789510311586419}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &6784789510311586421
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6784789510311586420}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec0db2d74fc68d141b7083fe24cfb009, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::InteractableComponent
+  interactionTriggered:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 6784789510311586425}
+        m_TargetAssemblyTypeName: FaucetController, Assembly-CSharp
+        m_MethodName: Interacted
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  interactionEntered:
+    m_PersistentCalls:
+      m_Calls: []
+  interactionExited:
+    m_PersistentCalls:
+      m_Calls: []
+  cooldown: 2
+  isOneShot: 0
+  isCoolingDown: 1
+--- !u!114 &6784789510311586425
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6784789510311586420}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 018e6bf4a4280974abd60e18058e9260, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FaucetController
+--- !u!65 &6784789510311586426
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6784789510311586420}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.33689263, y: 0.18399203, z: 0.36965182}
+  m_Center: {x: 0.12882541, y: 0.052375212, z: 0.18482588}
 --- !u!1001 &8052991448627875572
 PrefabInstance:
   m_ObjectHideFlags: 0
