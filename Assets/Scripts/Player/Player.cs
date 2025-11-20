@@ -235,6 +235,8 @@ public class Player : MonoBehaviour
 
     public void IdleFixedUpdate()
     {
+        if (rb == null || rb.isKinematic) return;
+
         // Rotate Body
         Quaternion currentBodyRotation = rb.transform.rotation;
         Quaternion targetBodyRotation = Quaternion.Euler(0f, currentYaw, 0f);
@@ -265,6 +267,8 @@ public class Player : MonoBehaviour
 
     public void SprintingFixedUpdate()
     {
+        if (rb == null || rb.isKinematic) return;
+        
         // Return to Idle state if player is not moving or has stopped pressing movemnet input
         if (math.abs(movementInput.magnitude) <= float.Epsilon || math.abs(rb.linearVelocity.magnitude) <= float.Epsilon)
         {
@@ -308,6 +312,8 @@ public class Player : MonoBehaviour
 
     public void CrouchFixedUpdate()
     {
+        if (rb == null || rb.isKinematic) return;
+
         //Lerp to crouch scale over 4 frames
         LerpToCrouchScale();
         // Rotate Body
