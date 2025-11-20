@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: c37f6b9c3ba887d4e954d2cb2a83116f
+timeCreated: 1437054179
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 38741
+  packageName: PBR Electronics Pack
+  packageVersion: 1.1
+  assetPath: Assets/PBR Electronics Pack/Meshes/Materials/Radiotelephone.mat
+  uploadId: 323192
