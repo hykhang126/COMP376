@@ -766,7 +766,7 @@ PrefabInstance:
       objectReference: {fileID: 1912221550}
     - target: {fileID: 8644566066862939331, guid: 86e86d4efe7a77849853179f6ca39ebd, type: 3}
       propertyPath: firstSceneGroupIndex
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8644566066862939331, guid: 86e86d4efe7a77849853179f6ca39ebd, type: 3}
       propertyPath: sceneGroups.Array.size
