@@ -1115,6 +1115,7 @@ public class LightStalkerController : MonoBehaviour
             foreach (var bc in bodyColliders)
             {
                 if (bc == null) continue;
+                if (pc.gameObject.CompareTag("MainCamera")) continue;
 
                 // First try ComputePenetration (accurate)
                 if (Physics.ComputePenetration(
@@ -1122,7 +1123,7 @@ public class LightStalkerController : MonoBehaviour
                     pc, pc.transform.position, pc.transform.rotation,
                     out Vector3 outDir, out float outDistance))
                 {
-                    HandlePlayerTouch(pc);
+          HandlePlayerTouch(pc);
                     return;
                 }
 
