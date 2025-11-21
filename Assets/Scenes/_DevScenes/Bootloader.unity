@@ -770,7 +770,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8644566066862939331, guid: 86e86d4efe7a77849853179f6ca39ebd, type: 3}
       propertyPath: sceneGroups.Array.size
-      value: 3
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 8644566066862939331, guid: 86e86d4efe7a77849853179f6ca39ebd, type: 3}
       propertyPath: sceneGroups.Array.data[0].Name
@@ -786,10 +786,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8644566066862939331, guid: 86e86d4efe7a77849853179f6ca39ebd, type: 3}
       propertyPath: sceneGroups.Array.data[3].Name
-      value: Title Screen
+      value: HorrorScene2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8644566066862939331, guid: 86e86d4efe7a77849853179f6ca39ebd, type: 3}
+      propertyPath: sceneGroups.Array.data[4].Name
+      value: Puzzle
       objectReference: {fileID: 0}
     - target: {fileID: 8644566066862939331, guid: 86e86d4efe7a77849853179f6ca39ebd, type: 3}
       propertyPath: sceneGroups.Array.data[3].Scenes.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8644566066862939331, guid: 86e86d4efe7a77849853179f6ca39ebd, type: 3}
+      propertyPath: sceneGroups.Array.data[4].Scenes.Array.size
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8644566066862939331, guid: 86e86d4efe7a77849853179f6ca39ebd, type: 3}
@@ -797,8 +805,12 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8644566066862939331, guid: 86e86d4efe7a77849853179f6ca39ebd, type: 3}
+      propertyPath: sceneGroups.Array.data[4].Scenes.Array.data[0].IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8644566066862939331, guid: 86e86d4efe7a77849853179f6ca39ebd, type: 3}
       propertyPath: sceneGroups.Array.data[0].Scenes.Array.data[0].SceneReference.guid
-      value: fcbfcaab04df9e94c843851a634c51a2
+      value: 57236f37a37df614ea8d70e9cc3184f5
       objectReference: {fileID: 0}
     - target: {fileID: 8644566066862939331, guid: 86e86d4efe7a77849853179f6ca39ebd, type: 3}
       propertyPath: sceneGroups.Array.data[1].Scenes.Array.data[0].SceneReference.guid
@@ -810,12 +822,16 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8644566066862939331, guid: 86e86d4efe7a77849853179f6ca39ebd, type: 3}
       propertyPath: sceneGroups.Array.data[3].Scenes.Array.data[0].SceneReference.guid
-      value: 3e253873f1ea427408003613efcc27be
+      value: e4463d1af77387740a3118914bd40b7f
+      objectReference: {fileID: 0}
+    - target: {fileID: 8644566066862939331, guid: 86e86d4efe7a77849853179f6ca39ebd, type: 3}
+      propertyPath: sceneGroups.Array.data[4].Scenes.Array.data[0].SceneReference.guid
+      value: 35e087b44a426754aa4069998ef48438
       objectReference: {fileID: 0}
     - target: {fileID: 8644566066862939331, guid: 86e86d4efe7a77849853179f6ca39ebd, type: 3}
       propertyPath: sceneGroups.Array.data[0].Scenes.Array.data[0].SceneReference.asset
       value: 
-      objectReference: {fileID: 102900000, guid: fcbfcaab04df9e94c843851a634c51a2, type: 3}
+      objectReference: {fileID: 102900000, guid: 57236f37a37df614ea8d70e9cc3184f5, type: 3}
     - target: {fileID: 8644566066862939331, guid: 86e86d4efe7a77849853179f6ca39ebd, type: 3}
       propertyPath: sceneGroups.Array.data[1].Scenes.Array.data[0].SceneReference.asset
       value: 
@@ -827,7 +843,11 @@ PrefabInstance:
     - target: {fileID: 8644566066862939331, guid: 86e86d4efe7a77849853179f6ca39ebd, type: 3}
       propertyPath: sceneGroups.Array.data[3].Scenes.Array.data[0].SceneReference.asset
       value: 
-      objectReference: {fileID: 102900000, guid: 3e253873f1ea427408003613efcc27be, type: 3}
+      objectReference: {fileID: 102900000, guid: e4463d1af77387740a3118914bd40b7f, type: 3}
+    - target: {fileID: 8644566066862939331, guid: 86e86d4efe7a77849853179f6ca39ebd, type: 3}
+      propertyPath: sceneGroups.Array.data[4].Scenes.Array.data[0].SceneReference.asset
+      value: 
+      objectReference: {fileID: 102900000, guid: 35e087b44a426754aa4069998ef48438, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

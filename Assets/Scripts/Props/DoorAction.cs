@@ -25,15 +25,14 @@ public class DoorAction : MonoBehaviour
 
   void Start()
 	{
-    // auto-find NavMeshObstacle in children if not explicitly assigned
-    if (navObstacle == null)
-    {
-      navObstacle = GetComponentInChildren<NavMeshObstacle>();
-    }
-    open = false;
+		if (navObstacle == null)
+			navObstacle = GetComponentInChildren<NavMeshObstacle>();
 
-		doorAudioSource = gameObject.GetComponent<AudioSource>();
-	}
+		open = false;
+
+		// find AudioSource on this GameObject first, then in children
+		doorAudioSource = GetComponent<AudioSource>() ?? GetComponentInChildren<AudioSource>();
+		}
 
 	void OnTriggerEnter(Collider other)
 	{
@@ -100,31 +99,32 @@ public class DoorAction : MonoBehaviour
 
 	public IEnumerator opening(float waitTime = 0.5f)
 	{
-    // If a NavMeshObstacle is present, disable carving so agents can pass once the door opens
-    if (navObstacle != null)
-    {
-      navObstacle.carving = false;
-    }
-    print("you are opening the door");
+		if (navObstacle != null) navObstacle.carving = false;
+
 		openandclose.Play(openAnimation);
-		/*doorAudioSource.clip = openSound;
-		doorAudioSource.pitch = Random.Range(0.9f, 1.1f);
-		doorAudioSource.Play();*/
+
+		if (doorAudioSource != null && openSound != null)
+		{
+			doorAudioSource.pitch = Random.Range(0.95f, 1.05f);
+			doorAudioSource.PlayOneShot(openSound);
+		}
+
 		open = true;
 		yield return new WaitForSeconds(waitTime);
 	}
 
 	public IEnumerator closing(float waitTime = 0.5f)
 	{
-    // If a NavMeshObstacle is present, enable carving so agents treat the doorway as blocked
-    if (navObstacle != null)
-    {
-      navObstacle.carving = true;
-    }
-    print("you are closing the door");
+		if (navObstacle != null) navObstacle.carving = true;
+
 		openandclose.Play(closeAnimation);
-		/*doorAudioSource.clip = closeSound;
-		doorAudioSource.Play();*/
+
+		if (doorAudioSource != null && closeSound != null)
+		{
+			doorAudioSource.pitch = Random.Range(0.95f, 1.05f);
+			doorAudioSource.PlayOneShot(closeSound);
+		}
+
 		open = false;
 		yield return new WaitForSeconds(waitTime);
 	}
