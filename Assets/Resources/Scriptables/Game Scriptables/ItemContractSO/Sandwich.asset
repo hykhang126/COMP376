@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8e9dc5f7d7ea94c41958f79f15ca32b9, type: 3}
+  m_Name: Sandwich
+  m_EditorClassIdentifier: Assembly-CSharp::ItemContractSO
+  _name: Sandwich
+  _description: Sandwich
+  _meshRef: {fileID: 4300000, guid: fec741b9da329714ea2dd2119d2e390a, type: 3}
+  _material: {fileID: 2100000, guid: d2f521cb274445740bdb023b2765701e, type: 2}
+  _id: d6988ddd-9713-437b-ac06-982a52f53074
