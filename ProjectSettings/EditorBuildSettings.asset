@@ -12,7 +12,7 @@ EditorBuildSettings:
     path: Assets/Scenes/BaseLevelScene.unity
     guid: fcbfcaab04df9e94c843851a634c51a2
   - enabled: 1
-    path: Assets/Scenes/HorrorElements.unity
+    path: Assets/Scenes/_DevScenes/HorrorElements.unity
     guid: 7a0e029a9633e2d47b3b01b8f6809a29
   - enabled: 1
     path: Assets/Scenes/_DevScenes/HYHY_DoorsGallore.unity
