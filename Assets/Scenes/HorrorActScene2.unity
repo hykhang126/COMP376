@@ -4307,6 +4307,11 @@ Mesh:
       - serializedVersion: 1
         m_IndexStart: 0
         m_IndexCount: 0
+--- !u!1 &609687436 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4314523255039576140, guid: ccbdcfb6e05206941b13f0a9afd9b2da, type: 3}
+  m_PrefabInstance: {fileID: 868134324097291341}
+  m_PrefabAsset: {fileID: 0}
 --- !u!43 &641247776
 Mesh:
   m_ObjectHideFlags: 0
@@ -11163,6 +11168,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2668782034785429948, guid: 953b58418fb00eb468b219fb222e5f09, type: 3}
+      propertyPath: blackBoard
+      value: 
+      objectReference: {fileID: 609687436}
     - target: {fileID: 7490979926499441466, guid: 953b58418fb00eb468b219fb222e5f09, type: 3}
       propertyPath: m_Name
       value: TASKS
@@ -11212,6 +11221,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 953b58418fb00eb468b219fb222e5f09, type: 3}
+--- !u!114 &1884309770 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2668782034785429948, guid: 953b58418fb00eb468b219fb222e5f09, type: 3}
+  m_PrefabInstance: {fileID: 1884309769}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3d1ea4e6d178a2146abcc59e6a24a2e6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
 --- !u!1001 &1885552569
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -11320,6 +11340,10 @@ PrefabInstance:
       propertyPath: inventoryUI
       value: 
       objectReference: {fileID: 899374256}
+    - target: {fileID: 6218547655644601836, guid: a9b92ebf67d0a7f4e8a1b3efedc9a2b4, type: 3}
+      propertyPath: sandwichContractSO
+      value: 
+      objectReference: {fileID: 11400000, guid: 6a7ec4a793620bd4a862eb8fb0589014, type: 2}
     - target: {fileID: 6218547655644601836, guid: a9b92ebf67d0a7f4e8a1b3efedc9a2b4, type: 3}
       propertyPath: flashlightContractSO
       value: 
@@ -12782,6 +12806,18 @@ PrefabInstance:
       propertyPath: m_VersionIndex
       value: 8695
       objectReference: {fileID: 0}
+    - target: {fileID: 353260265361149432, guid: ccbdcfb6e05206941b13f0a9afd9b2da, type: 3}
+      propertyPath: interactionTriggered.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1884309770}
+    - target: {fileID: 353260265361149432, guid: ccbdcfb6e05206941b13f0a9afd9b2da, type: 3}
+      propertyPath: interactionTriggered.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: LeaveApartment
+      objectReference: {fileID: 0}
+    - target: {fileID: 414085196456229657, guid: ccbdcfb6e05206941b13f0a9afd9b2da, type: 3}
+      propertyPath: interactionTriggered.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgument
+      value: 
+      objectReference: {fileID: 1117987154}
     - target: {fileID: 435925683471436891, guid: ccbdcfb6e05206941b13f0a9afd9b2da, type: 3}
       propertyPath: m_Mesh
       value: 
@@ -12822,6 +12858,10 @@ PrefabInstance:
       propertyPath: m_VersionIndex
       value: 14603
       objectReference: {fileID: 0}
+    - target: {fileID: 793680838206083507, guid: ccbdcfb6e05206941b13f0a9afd9b2da, type: 3}
+      propertyPath: interactionTriggered.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgument
+      value: 
+      objectReference: {fileID: 1117987154}
     - target: {fileID: 888550180946603921, guid: ccbdcfb6e05206941b13f0a9afd9b2da, type: 3}
       propertyPath: m_Mesh
       value: 
@@ -13014,6 +13054,34 @@ PrefabInstance:
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 2120625858}
+    - target: {fileID: 3536104574917960732, guid: ccbdcfb6e05206941b13f0a9afd9b2da, type: 3}
+      propertyPath: interactionTriggered.m_PersistentCalls.m_Calls.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3536104574917960732, guid: ccbdcfb6e05206941b13f0a9afd9b2da, type: 3}
+      propertyPath: interactionTriggered.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3536104574917960732, guid: ccbdcfb6e05206941b13f0a9afd9b2da, type: 3}
+      propertyPath: interactionTriggered.m_PersistentCalls.m_Calls.Array.data[1].m_Target
+      value: 
+      objectReference: {fileID: 1884309770}
+    - target: {fileID: 3536104574917960732, guid: ccbdcfb6e05206941b13f0a9afd9b2da, type: 3}
+      propertyPath: interactionTriggered.m_PersistentCalls.m_Calls.Array.data[1].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3536104574917960732, guid: ccbdcfb6e05206941b13f0a9afd9b2da, type: 3}
+      propertyPath: interactionTriggered.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
+      value: OnSinkInteract
+      objectReference: {fileID: 0}
+    - target: {fileID: 3536104574917960732, guid: ccbdcfb6e05206941b13f0a9afd9b2da, type: 3}
+      propertyPath: interactionTriggered.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
+      value: TaskManager, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 3536104574917960732, guid: ccbdcfb6e05206941b13f0a9afd9b2da, type: 3}
+      propertyPath: interactionTriggered.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 3573276759335787793, guid: ccbdcfb6e05206941b13f0a9afd9b2da, type: 3}
       propertyPath: m_Mesh
       value: 
@@ -13031,9 +13099,33 @@ PrefabInstance:
       value: 8068
       objectReference: {fileID: 0}
     - target: {fileID: 3885720531900522772, guid: ccbdcfb6e05206941b13f0a9afd9b2da, type: 3}
+      propertyPath: interactionTriggered.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3885720531900522772, guid: ccbdcfb6e05206941b13f0a9afd9b2da, type: 3}
+      propertyPath: interactionTriggered.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3885720531900522772, guid: ccbdcfb6e05206941b13f0a9afd9b2da, type: 3}
+      propertyPath: interactionTriggered.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 3885720531900522772, guid: ccbdcfb6e05206941b13f0a9afd9b2da, type: 3}
+      propertyPath: interactionTriggered.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: OnSinkInteract
+      objectReference: {fileID: 0}
+    - target: {fileID: 3885720531900522772, guid: ccbdcfb6e05206941b13f0a9afd9b2da, type: 3}
+      propertyPath: interactionTriggered.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: TaskManager, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 3885720531900522772, guid: ccbdcfb6e05206941b13f0a9afd9b2da, type: 3}
       propertyPath: interactionTriggered.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgument
       value: 
-      objectReference: {fileID: 1117987154}
+      objectReference: {fileID: 0}
+    - target: {fileID: 3885720531900522772, guid: ccbdcfb6e05206941b13f0a9afd9b2da, type: 3}
+      propertyPath: interactionTriggered.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 3916712356658824535, guid: ccbdcfb6e05206941b13f0a9afd9b2da, type: 3}
       propertyPath: m_Mesh
       value: 
@@ -13149,6 +13241,10 @@ PrefabInstance:
     - target: {fileID: 4544138815298081898, guid: ccbdcfb6e05206941b13f0a9afd9b2da, type: 3}
       propertyPath: m_VersionIndex
       value: 16044
+      objectReference: {fileID: 0}
+    - target: {fileID: 4574701060042897484, guid: ccbdcfb6e05206941b13f0a9afd9b2da, type: 3}
+      propertyPath: isLocked
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4625274376316965040, guid: ccbdcfb6e05206941b13f0a9afd9b2da, type: 3}
       propertyPath: m_Mesh
@@ -13266,6 +13362,14 @@ PrefabInstance:
       propertyPath: m_VersionIndex
       value: 6899
       objectReference: {fileID: 0}
+    - target: {fileID: 5599958561295374100, guid: ccbdcfb6e05206941b13f0a9afd9b2da, type: 3}
+      propertyPath: interactionTriggered.m_PersistentCalls.m_Calls.Array.data[1].m_Target
+      value: 
+      objectReference: {fileID: 1884309770}
+    - target: {fileID: 5599958561295374100, guid: ccbdcfb6e05206941b13f0a9afd9b2da, type: 3}
+      propertyPath: interactionTriggered.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
+      value: OnPantsPickup
+      objectReference: {fileID: 0}
     - target: {fileID: 5623515645334631105, guid: ccbdcfb6e05206941b13f0a9afd9b2da, type: 3}
       propertyPath: m_Mesh
       value: 
@@ -13334,6 +13438,14 @@ PrefabInstance:
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 780516679}
+    - target: {fileID: 7094814750745015750, guid: ccbdcfb6e05206941b13f0a9afd9b2da, type: 3}
+      propertyPath: interactionTriggered.m_PersistentCalls.m_Calls.Array.data[1].m_Target
+      value: 
+      objectReference: {fileID: 1884309770}
+    - target: {fileID: 7094814750745015750, guid: ccbdcfb6e05206941b13f0a9afd9b2da, type: 3}
+      propertyPath: interactionTriggered.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
+      value: OnShirtPickup
+      objectReference: {fileID: 0}
     - target: {fileID: 7194255077413643200, guid: ccbdcfb6e05206941b13f0a9afd9b2da, type: 3}
       propertyPath: interactionTriggered.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgument
       value: 
@@ -13490,6 +13602,14 @@ PrefabInstance:
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 1698299436}
+    - target: {fileID: 8680409389857124014, guid: ccbdcfb6e05206941b13f0a9afd9b2da, type: 3}
+      propertyPath: interactionTriggered.m_PersistentCalls.m_Calls.Array.data[1].m_Target
+      value: 
+      objectReference: {fileID: 1884309770}
+    - target: {fileID: 8680409389857124014, guid: ccbdcfb6e05206941b13f0a9afd9b2da, type: 3}
+      propertyPath: interactionTriggered.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
+      value: OnWasherInteract
+      objectReference: {fileID: 0}
     - target: {fileID: 8718074620778675476, guid: ccbdcfb6e05206941b13f0a9afd9b2da, type: 3}
       propertyPath: m_Mesh
       value: 

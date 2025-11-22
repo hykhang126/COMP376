@@ -119,7 +119,27 @@ public class TaskManager : MonoBehaviour
   public void LeaveApartment()
   {
     if (allTasksDone)
-      SceneManager.LoadScene("HorrorActScene1");
+    {
+      switch (SceneManager.GetActiveScene().name)
+      {
+        case "TutorialScene":
+          SceneManager.LoadScene("HorrorActScene1");
+          break;
+        case "HorrorActScene1":
+          SceneManager.LoadScene("HorrorActScene2");
+          break;
+        case "HorrorActScene2":
+          SceneManager.LoadScene("HorrorActScene3");
+          break;
+        case "HorrorActScene3":
+          SceneManager.LoadScene("PuzzleScene");
+          break;
+
+        default:
+          break;
+      }
+    }
+      
     else
     {
       Debug.Log("not all tasks done");
