@@ -157,6 +157,7 @@ MonoBehaviour:
   closeAnimation: Closing
   openSound: {fileID: 0}
   closeSound: {fileID: 0}
+  lockSound: {fileID: 0}
   navObstacle: {fileID: 0}
 --- !u!114 &6906744859354518210
 MonoBehaviour:
@@ -352,6 +353,7 @@ MonoBehaviour:
   closeAnimation: Closing
   openSound: {fileID: 0}
   closeSound: {fileID: 0}
+  lockSound: {fileID: 0}
   navObstacle: {fileID: 0}
 --- !u!114 &5865539747172136599
 MonoBehaviour:
@@ -1787,6 +1789,7 @@ MonoBehaviour:
   closeAnimation: 
   openSound: {fileID: 0}
   closeSound: {fileID: 0}
+  lockSound: {fileID: 0}
   navObstacle: {fileID: 0}
 --- !u!1 &566194064736802666
 GameObject:
@@ -2578,6 +2581,7 @@ MonoBehaviour:
   closeAnimation: 
   openSound: {fileID: 0}
   closeSound: {fileID: 0}
+  lockSound: {fileID: 0}
   navObstacle: {fileID: 0}
 --- !u!114 &2802548429031159564
 MonoBehaviour:
@@ -4636,6 +4640,7 @@ MonoBehaviour:
   closeAnimation: Closing
   openSound: {fileID: 0}
   closeSound: {fileID: 0}
+  lockSound: {fileID: 0}
   navObstacle: {fileID: 0}
 --- !u!114 &5655289274215558537
 MonoBehaviour:
@@ -5070,6 +5075,7 @@ MonoBehaviour:
   closeAnimation: Closing 1
   openSound: {fileID: 8300000, guid: 66f3e5a15918d4110bf16442f44e5d7b, type: 3}
   closeSound: {fileID: 8300000, guid: 1df616a0d98fd457b93f28d24a306c1a, type: 3}
+  lockSound: {fileID: 0}
   navObstacle: {fileID: 0}
 --- !u!1 &1142103781354821601
 GameObject:
@@ -13084,6 +13090,7 @@ MonoBehaviour:
   closeAnimation: Closing
   openSound: {fileID: 8300000, guid: 66f3e5a15918d4110bf16442f44e5d7b, type: 3}
   closeSound: {fileID: 8300000, guid: 1df616a0d98fd457b93f28d24a306c1a, type: 3}
+  lockSound: {fileID: 0}
   navObstacle: {fileID: 0}
 --- !u!114 &7416015619249509681
 MonoBehaviour:
@@ -23084,6 +23091,7 @@ MonoBehaviour:
   closeAnimation: Closing
   openSound: {fileID: 0}
   closeSound: {fileID: 0}
+  lockSound: {fileID: 0}
   navObstacle: {fileID: 0}
 --- !u!114 &1969246382951409930
 MonoBehaviour:
@@ -28096,6 +28104,7 @@ MonoBehaviour:
   closeAnimation: Closing
   openSound: {fileID: 0}
   closeSound: {fileID: 0}
+  lockSound: {fileID: 0}
   navObstacle: {fileID: 0}
 --- !u!114 &8851519497929435388
 MonoBehaviour:
@@ -30867,6 +30876,7 @@ GameObject:
   - component: {fileID: 4574701060042897485}
   - component: {fileID: 4574701060042897484}
   - component: {fileID: 3536104574917960732}
+  - component: {fileID: 7066095575156748994}
   m_Layer: 0
   m_Name: Door
   m_TagString: Untagged
@@ -31007,8 +31017,9 @@ MonoBehaviour:
   isLocked: 0
   openAnimation: Opening
   closeAnimation: Closing
-  openSound: {fileID: 0}
-  closeSound: {fileID: 0}
+  openSound: {fileID: 8300000, guid: 2c523563d85328f4492af20311740c61, type: 3}
+  closeSound: {fileID: 8300000, guid: 95d9547bc546f0f4eb13c68b70991621, type: 3}
+  lockSound: {fileID: 0}
   navObstacle: {fileID: 0}
 --- !u!114 &3536104574917960732
 MonoBehaviour:
@@ -31046,6 +31057,103 @@ MonoBehaviour:
   cooldown: 1
   isOneShot: 0
   isCoolingDown: 0
+--- !u!82 &7066095575156748994
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4574701060042897486}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_Resource: {fileID: 0}
+  m_PlayOnAwake: 0
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &4606943095563670181
 GameObject:
   m_ObjectHideFlags: 0
@@ -33670,6 +33778,7 @@ MonoBehaviour:
   closeAnimation: Closing
   openSound: {fileID: 0}
   closeSound: {fileID: 0}
+  lockSound: {fileID: 0}
   navObstacle: {fileID: 0}
 --- !u!114 &560683332814382758
 MonoBehaviour:
@@ -35341,6 +35450,7 @@ MonoBehaviour:
   closeAnimation: Closing
   openSound: {fileID: 0}
   closeSound: {fileID: 0}
+  lockSound: {fileID: 0}
   navObstacle: {fileID: 0}
 --- !u!114 &5997002582323135064
 MonoBehaviour:
@@ -35536,6 +35646,7 @@ MonoBehaviour:
   closeAnimation: Closing 1
   openSound: {fileID: 0}
   closeSound: {fileID: 0}
+  lockSound: {fileID: 0}
   navObstacle: {fileID: 0}
 --- !u!114 &4073058535617135061
 MonoBehaviour:
@@ -38976,6 +39087,7 @@ MonoBehaviour:
   closeAnimation: Closing
   openSound: {fileID: 0}
   closeSound: {fileID: 0}
+  lockSound: {fileID: 0}
   navObstacle: {fileID: 0}
 --- !u!114 &1450908081302869891
 MonoBehaviour:
@@ -39375,6 +39487,7 @@ MonoBehaviour:
   closeAnimation: Closing
   openSound: {fileID: 8300000, guid: 2c523563d85328f4492af20311740c61, type: 3}
   closeSound: {fileID: 8300000, guid: 95d9547bc546f0f4eb13c68b70991621, type: 3}
+  lockSound: {fileID: 0}
   navObstacle: {fileID: 0}
 --- !u!114 &9193226968197687481
 MonoBehaviour:
@@ -66630,6 +66743,7 @@ GameObject:
   - component: {fileID: 8339026284229136491}
   - component: {fileID: 8339026284229136490}
   - component: {fileID: 3572737912321175068}
+  - component: {fileID: 336699840167933528}
   m_Layer: 0
   m_Name: Door
   m_TagString: Untagged
@@ -66770,8 +66884,9 @@ MonoBehaviour:
   isLocked: 0
   openAnimation: Opening
   closeAnimation: Closing
-  openSound: {fileID: 0}
-  closeSound: {fileID: 0}
+  openSound: {fileID: 8300000, guid: 2c523563d85328f4492af20311740c61, type: 3}
+  closeSound: {fileID: 8300000, guid: 95d9547bc546f0f4eb13c68b70991621, type: 3}
+  lockSound: {fileID: 0}
   navObstacle: {fileID: 0}
 --- !u!114 &3572737912321175068
 MonoBehaviour:
@@ -66809,6 +66924,103 @@ MonoBehaviour:
   cooldown: 1
   isOneShot: 0
   isCoolingDown: 0
+--- !u!82 &336699840167933528
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8339026284229136488}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_Resource: {fileID: 0}
+  m_PlayOnAwake: 0
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &8364282729931884053
 GameObject:
   m_ObjectHideFlags: 0
@@ -67267,6 +67479,7 @@ GameObject:
   - component: {fileID: 8409400308406302544}
   - component: {fileID: 8409400308406302546}
   - component: {fileID: 353260265361149432}
+  - component: {fileID: 706130970688349007}
   m_Layer: 0
   m_Name: Door
   m_TagString: Untagged
@@ -67425,6 +67638,103 @@ MonoBehaviour:
   cooldown: 1
   isOneShot: 0
   isCoolingDown: 0
+--- !u!82 &706130970688349007
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8409400308406302545}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_Resource: {fileID: 8300000, guid: f91fc39dbbf244b8e80d9dbe330b0d25, type: 3}
+  m_PlayOnAwake: 0
+  m_Volume: 0.7
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &8411386850077033214
 GameObject:
   m_ObjectHideFlags: 0
@@ -71227,6 +71537,7 @@ MonoBehaviour:
   closeAnimation: 
   openSound: {fileID: 0}
   closeSound: {fileID: 0}
+  lockSound: {fileID: 0}
   navObstacle: {fileID: 0}
 --- !u!1 &8894306096757028474
 GameObject:
