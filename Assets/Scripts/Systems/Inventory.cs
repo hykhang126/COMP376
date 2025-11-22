@@ -33,8 +33,10 @@ public class Inventory : MonoBehaviour
     private string inventoryMapName;
 
     public ItemContractSO flashlightContractSO;
+    public ItemContractSO sandwichContractSO;
 
     public static UnityEvent rechargeEvent = new UnityEvent();
+    public static UnityEvent sandwichEvent = new UnityEvent();
 
     public void Start()
     {
@@ -383,11 +385,18 @@ public class Inventory : MonoBehaviour
                         playerInventorySO.items.RemoveAt(itemToIndex);
                     }
                 }
-                else
+
+                else if (result.Id == sandwichContractSO.Id)
                 {
-                    AddItem(result);
-                    RemoveTwoItems();
-                }
+                  sandwichEvent?.Invoke();
+                  AddItem(result);
+                  RemoveTwoItems();
+        }
+                else
+        {
+          AddItem(result);
+          RemoveTwoItems();
+        }
                 
             }
             itemFrom = null;

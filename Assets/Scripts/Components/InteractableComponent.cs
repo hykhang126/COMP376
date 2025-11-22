@@ -41,7 +41,8 @@ public class InteractableComponent : MonoBehaviour
         else
         {
             interactionTriggered.Invoke();
-            StartCoroutine(CooldownCoroutine());
+            if (this.gameObject.activeSelf)
+              StartCoroutine(CooldownCoroutine());
         }
 
     }

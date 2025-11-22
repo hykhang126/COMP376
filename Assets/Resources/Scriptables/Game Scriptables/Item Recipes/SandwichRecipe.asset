@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a37abef7c48b4bda838a0495ff5e317, type: 3}
+  m_Name: SandwichRecipe
+  m_EditorClassIdentifier: Assembly-CSharp::ItemRecipe
+  itemIngredients:
+  - {fileID: 11400000, guid: d8a51167dbeb79241aafbf662716a15b, type: 2}
+  - {fileID: 11400000, guid: 8bc6fabf007c6e247ac7b8600f6aa915, type: 2}
+  result: {fileID: 11400000, guid: 6a7ec4a793620bd4a862eb8fb0589014, type: 2}
