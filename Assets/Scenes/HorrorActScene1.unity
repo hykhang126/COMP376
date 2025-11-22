@@ -11443,6 +11443,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 899374256}
     - target: {fileID: 6218547655644601836, guid: a9b92ebf67d0a7f4e8a1b3efedc9a2b4, type: 3}
+      propertyPath: sandwichContractSO
+      value: 
+      objectReference: {fileID: 11400000, guid: 6a7ec4a793620bd4a862eb8fb0589014, type: 2}
+    - target: {fileID: 6218547655644601836, guid: a9b92ebf67d0a7f4e8a1b3efedc9a2b4, type: 3}
       propertyPath: flashlightContractSO
       value: 
       objectReference: {fileID: 11400000, guid: 3dbb71b85a532acf6be8782c3f7f6a4e, type: 2}
@@ -12160,6 +12164,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2668782034785429948, guid: 953b58418fb00eb468b219fb222e5f09, type: 3}
+      propertyPath: blackBoard
+      value: 
+      objectReference: {fileID: 868134324097291342}
     - target: {fileID: 7490979926499441466, guid: 953b58418fb00eb468b219fb222e5f09, type: 3}
       propertyPath: m_Name
       value: TASKS
@@ -12961,6 +12969,10 @@ PrefabInstance:
       propertyPath: m_VersionIndex
       value: 8785
       objectReference: {fileID: 0}
+    - target: {fileID: 414085196456229657, guid: ccbdcfb6e05206941b13f0a9afd9b2da, type: 3}
+      propertyPath: interactionTriggered.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgument
+      value: 
+      objectReference: {fileID: 1117987154}
     - target: {fileID: 435925683471436891, guid: ccbdcfb6e05206941b13f0a9afd9b2da, type: 3}
       propertyPath: m_Mesh
       value: 
@@ -13001,6 +13013,10 @@ PrefabInstance:
       propertyPath: m_VersionIndex
       value: 14693
       objectReference: {fileID: 0}
+    - target: {fileID: 793680838206083507, guid: ccbdcfb6e05206941b13f0a9afd9b2da, type: 3}
+      propertyPath: interactionTriggered.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgument
+      value: 
+      objectReference: {fileID: 1117987154}
     - target: {fileID: 888550180946603921, guid: ccbdcfb6e05206941b13f0a9afd9b2da, type: 3}
       propertyPath: m_Mesh
       value: 
@@ -13734,6 +13750,11 @@ PrefabInstance:
       addedObject: {fileID: 1725818842}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ccbdcfb6e05206941b13f0a9afd9b2da, type: 3}
+--- !u!1 &868134324097291342 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4314523255039576140, guid: ccbdcfb6e05206941b13f0a9afd9b2da, type: 3}
+  m_PrefabInstance: {fileID: 868134324097291341}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
