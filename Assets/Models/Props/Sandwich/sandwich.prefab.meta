@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: c1088612ebac05d4a958da56ca606447
+timeCreated: 1507635303
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 100100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 102301
+  packageName: Stylized Cartoony Sandwich
+  packageVersion: 1.0
+  assetPath: Assets/Models/Props/Sandwich/sandwich.prefab
+  uploadId: 207948

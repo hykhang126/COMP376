@@ -33,8 +33,10 @@ public class Inventory : MonoBehaviour
     private string inventoryMapName;
 
     public ItemContractSO flashlightContractSO;
+    public ItemContractSO sandwichContractSO;
 
     public static UnityEvent rechargeEvent = new UnityEvent();
+    public static UnityEvent sandwichEvent = new UnityEvent();
 
     public void Start()
     {
@@ -352,50 +354,123 @@ public class Inventory : MonoBehaviour
 
     public void Combine()
     {
+        if (items == null || items.Count == 0)
+        {
+            Debug.LogWarning("[Inventory] Combine aborted: inventory is empty or items list is null.");
+            ResetCombineSelection();
+            return;
+        }
+        if (currentItemIndex < 0 || currentItemIndex >= items.Count)
+        {
+            Debug.LogWarning($"[Inventory] Combine aborted: currentItemIndex ({currentItemIndex}) out of range.");
+            ResetCombineSelection();
+            return;
+        }
+
+        // First selection
         if (itemFrom == null)
         {
             itemFrom = items[currentItemIndex];
             itemFromIndex = currentItemIndex;
-            Debug.Log("ItemFrom: " + itemFrom.name + " at itemFromIndex: " + itemFromIndex);
+
+            if (itemFrom == null)
+            {
+                Debug.LogWarning("[Inventory] Combine aborted: selected item (itemFrom) is null in list.");
+                ResetCombineSelection();
+                return;
+            }
+
+            return;
         }
-        else if(itemTo == null && currentItemIndex != itemFromIndex)
+        // Second selection (must be a different index)
+        else if (itemTo == null && currentItemIndex != itemFromIndex)
         {
             itemTo = items[currentItemIndex];
             itemToIndex = currentItemIndex;
-            List<ItemContractSO> itemIngredients = new List<ItemContractSO>
+
+            if (itemTo == null)
             {
-                itemFrom,
-                itemTo
-            };
+                Debug.LogWarning("[Inventory] Combine aborted: selected item (itemTo) is null in list.");
+                ResetCombineSelection();
+                return;
+            }
+
+            if (recipeBook == null)
+            {
+                Debug.LogError("[Inventory] Combine aborted: recipeBook is not assigned in the Inspector!");
+                ResetCombineSelection();
+                return;
+            }
+
+            // Build ingredient list and look up recipe
+            List<ItemContractSO> itemIngredients = new List<ItemContractSO> { itemFrom, itemTo };
             ItemContractSO result = recipeBook.FindRecipe(itemIngredients);
-            if (result != null)
+
+            if (result == null)
             {
-                Debug.Log("itemFromIndex: " + itemFromIndex + ". The count  is " + items.Count);
-                if (result.Id == flashlightContractSO.Id)
+                Debug.Log($"[Inventory] No recipe found for {itemFrom.name} + {itemTo.name}");
+                ResetCombineSelection();
+                return;
+            }
+
+            // Safety checks for special-case contracts
+            if (flashlightContractSO != null && result.Id == flashlightContractSO.Id)
+            {
+                rechargeEvent?.Invoke();
+
+                if (playerInventorySO == null)
                 {
-                    rechargeEvent?.Invoke();
-                    if (itemFrom.Id != flashlightContractSO.Id)
-                    {
-                        playerInventorySO.items.RemoveAt(itemFromIndex);
-                    }
-                    else
-                    {
-                        playerInventorySO.items.RemoveAt(itemToIndex);
-                    }
+                    Debug.LogError("[Inventory] Cannot remove items: playerInventorySO is null.");
                 }
                 else
                 {
-                    AddItem(result);
-                    RemoveTwoItems();
+                    if (itemFrom != null && itemFrom.Id != flashlightContractSO.Id)
+                    {
+                        if (IsIndexValid(itemFromIndex)) playerInventorySO.items.RemoveAt(itemFromIndex);
+                    }
+                    else
+                    {
+                        if (IsIndexValid(itemToIndex)) playerInventorySO.items.RemoveAt(itemToIndex);
+                    }
                 }
-                
             }
-            itemFrom = null;
-            itemTo = null;
-            itemFromIndex = -1;
-            itemToIndex = -1;
+            else if (sandwichContractSO != null && result.Id == sandwichContractSO.Id)
+            {
+                sandwichEvent?.Invoke();
+                AddItem(result);
+                RemoveTwoItems();
+            }
+            else
+            {
+                AddItem(result);
+                RemoveTwoItems();
+            }
+
+            // Reset selection at end
+            ResetCombineSelection();
+        }
+        else
+        {
+            // Either same index or both already selected, safe reset
+            ResetCombineSelection();
         }
         
+    }
+
+    //Helper to reset selection and indices
+    private void ResetCombineSelection()
+    {
+        itemFrom = null;
+        itemTo = null;
+        itemFromIndex = -1;
+        itemToIndex = -1;
+    }
+
+    //Helper to validate index against current playerInventorySO.items if available, else items
+    private bool IsIndexValid(int idx)
+    {
+        var listToCheck = (playerInventorySO != null) ? playerInventorySO.items : items;
+        return listToCheck != null && idx >= 0 && idx < listToCheck.Count;
     }
 
 }
