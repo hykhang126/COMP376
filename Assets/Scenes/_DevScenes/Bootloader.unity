@@ -774,11 +774,11 @@ PrefabInstance:
       objectReference: {fileID: 1912221550}
     - target: {fileID: 8644566066862939331, guid: 86e86d4efe7a77849853179f6ca39ebd, type: 3}
       propertyPath: firstSceneGroupIndex
-      value: 3
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 8644566066862939331, guid: 86e86d4efe7a77849853179f6ca39ebd, type: 3}
       propertyPath: sceneGroups.Array.size
-      value: 4
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 8644566066862939331, guid: 86e86d4efe7a77849853179f6ca39ebd, type: 3}
       propertyPath: sceneGroups.Array.data[0].Name
@@ -798,7 +798,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8644566066862939331, guid: 86e86d4efe7a77849853179f6ca39ebd, type: 3}
       propertyPath: sceneGroups.Array.data[4].Name
-      value: Puzzle
+      value: HorrorScene3
       objectReference: {fileID: 0}
     - target: {fileID: 8644566066862939331, guid: 86e86d4efe7a77849853179f6ca39ebd, type: 3}
       propertyPath: sceneGroups.Array.data[3].Scenes.Array.size
@@ -834,7 +834,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8644566066862939331, guid: 86e86d4efe7a77849853179f6ca39ebd, type: 3}
       propertyPath: sceneGroups.Array.data[4].Scenes.Array.data[0].SceneReference.guid
-      value: 35e087b44a426754aa4069998ef48438
+      value: c79967c68b67ebf47a06b6d2499a43be
       objectReference: {fileID: 0}
     - target: {fileID: 8644566066862939331, guid: 86e86d4efe7a77849853179f6ca39ebd, type: 3}
       propertyPath: sceneGroups.Array.data[0].Scenes.Array.data[0].SceneReference.asset
@@ -855,7 +855,7 @@ PrefabInstance:
     - target: {fileID: 8644566066862939331, guid: 86e86d4efe7a77849853179f6ca39ebd, type: 3}
       propertyPath: sceneGroups.Array.data[4].Scenes.Array.data[0].SceneReference.asset
       value: 
-      objectReference: {fileID: 102900000, guid: 35e087b44a426754aa4069998ef48438, type: 3}
+      objectReference: {fileID: 102900000, guid: c79967c68b67ebf47a06b6d2499a43be, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
