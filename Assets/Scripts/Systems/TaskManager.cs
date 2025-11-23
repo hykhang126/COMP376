@@ -1,6 +1,7 @@
 using System;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 
 public class TaskManager : MonoBehaviour
@@ -21,6 +22,13 @@ public class TaskManager : MonoBehaviour
   private String washHandsText = "\r\nWASH HANDS";
   private String clothesText = "\r\nPUT BEDROOM CLOTHES IN WASHER";
 
+  public static UnityEvent onClothesInWasher = new UnityEvent();
+
+  public static UnityEvent onClothesNotInWasher = new UnityEvent();
+
+  public static UnityEvent onClothesInDryer = new UnityEvent();
+
+  public static UnityEvent onClothesNotInDryer = new UnityEvent();
 
 
   public void Start()
@@ -52,12 +60,23 @@ public class TaskManager : MonoBehaviour
     if (!pantsPickedUp || !shirtPickedUp)
     {
       Debug.Log("Washer interacted with but clothes not picked up");
+      onClothesNotInWasher.Invoke();
     }
     else
     {
       CompleteClothesTask();
+      onClothesInWasher.Invoke();
     }
   }
+
+  public void OnDryerInteract()
+    {
+        if(!clothesTaskFinished)
+        {
+            Debug.Log("Dryer interacted with but clothes not in washer");
+            onClothesNotInDryer.Invoke();
+        }
+    }
 
   public void OnSinkInteract()
   {

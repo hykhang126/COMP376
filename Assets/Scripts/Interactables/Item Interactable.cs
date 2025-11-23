@@ -53,21 +53,21 @@ public class ItemInteractable : Interactable
         _meshCollider.sharedMesh = _meshFilter.mesh;
     }
 
-    public override void Interact(Player player)
+    public override void Interact()
     {
-        if (player == null)
+        if (Player.InstanceReference == null)
         {
             Debug.LogError("Player is null, cannot interact with item.");
             return;
         }
-        else if (!player.inventory)
+        else if (!Player.InstanceReference.inventory)
         {
             Debug.LogError("Player's inventory is null, cannot add item.");
             return;
         }
         else
         {
-            player.inventory.AddItem(itemContractSO);
+            Player.InstanceReference.inventory.AddItem(itemContractSO);
             // player.inventory.AddItem(item.itemName, item.itemKey, item);
             Destroy(gameObject);
             if (this.gameObject.name == "FlashLightItem")

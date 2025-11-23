@@ -17,7 +17,7 @@ public class Faucet : Interactable
         
     }
 
-    public override void Interact(Player player)
+    public override void Interact()
     {
         if (waterStream != null)
         {

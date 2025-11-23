@@ -17,7 +17,7 @@ public class FrameInteractable : Interactable
     }
 
     // One time interaction
-    public override void Interact(Player player)
+    public override void Interact()
     {
         if (isOneTime && isTriggered)
         {

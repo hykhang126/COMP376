@@ -52,7 +52,7 @@ public class TVInteractable : Interactable
         }
     }
 
-    public override void Interact(Player player)
+    public override void Interact()
     {
         isPlaying = !isPlaying;
         Debug.Log("TV Interacted with. Is Playing: " + isPlaying);

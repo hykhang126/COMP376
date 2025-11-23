@@ -39,25 +39,25 @@ public class DoorInteractable : Interactable
         doorAction = gameObject.GetComponent<DoorAction>();
     }
 
-    public override void Interact(Player player)
+    public override void Interact()
     {
         // GMTK 25 - We can either teleport the player or just open the door
-        if (player)
+        if (Player.InstanceReference)
         {
             // If door is not locked by keys, open it directly
             if (!isLockedByKeys)
             {
-                OpenDoor(player);
+                OpenDoor();
             }
-            else if (player.inventory)
+            else if (Player.InstanceReference.inventory)
             {
                 for (int i = 0; i < itemContractSOsToOpenThisDoor.Length; i++)
                 {
                     //----- To be replaced by getting the equipped key and checking if it is in the array -----
-                    if (player.inventory.items[player.inventory.GetCurrentItemIndex()].Id == itemContractSOsToOpenThisDoor[i].Id)
+                    if (Player.InstanceReference.inventory.items[Player.InstanceReference.inventory.GetCurrentItemIndex()].Id == itemContractSOsToOpenThisDoor[i].Id)
                     {
-                        OpenDoor(player);
-                        player.inventory.RemoveItem();
+                        OpenDoor();
+                        Player.InstanceReference.inventory.RemoveItem();
                         break;
                         //-------------------------------------------------------------------------------------
                     }
@@ -86,11 +86,11 @@ public class DoorInteractable : Interactable
         loadNextScene.completed += UnlockDoor;
     }*/
 
-    private void OpenDoor(Player player)
+    private void OpenDoor()
     {
         if (door.isTeleportable && door.teleportTarget != null)
         {
-            player.transform.position = door.teleportTarget.position;
+            Player.InstanceReference.transform.position = door.teleportTarget.position;
             Debug.Log("Player teleported to " + door.teleportTarget.name);
         }
         else if (door.isInteractable && door.doorInteractable != null)

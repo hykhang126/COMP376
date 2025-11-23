@@ -21,7 +21,7 @@ public class CarryInteractable : Interactable
         rb = GetComponent<Rigidbody>();
     }
 
-    public override void Interact(Player player)
+    public override void Interact()
     {
         if (Player.InstanceReference.stateMachine.GetCurrentStateName() == PlayerStateType.CarryingObject.ToString()
             && !isCarried)
@@ -31,15 +31,14 @@ public class CarryInteractable : Interactable
         }
         else if (isCarried)
         {
-            DropObject(player);
+            DropObject();
             return;
         }
 
-        PickUp(player);
-
+        PickUp();
     }
 
-    private void DropObject(Player player)
+    private void DropObject()
     {
         Debug.Log("Player is dropping the carried object.");
 
@@ -64,10 +63,9 @@ public class CarryInteractable : Interactable
         //player.carriedObject = null;
     }
 
-    private void PickUp(Player player)
+    private void PickUp()
     {
         // Pick up logic
-        this.player = player;
         isCarried = true;
         //player.SetIsCarrying(true);
 
