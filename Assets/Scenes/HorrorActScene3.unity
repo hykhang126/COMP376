@@ -4110,6 +4110,25 @@ Mesh:
       - serializedVersion: 1
         m_IndexStart: 0
         m_IndexCount: 0
+--- !u!1 &924659405 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3394969789324606259, guid: ccbdcfb6e05206941b13f0a9afd9b2da, type: 3}
+  m_PrefabInstance: {fileID: 868134324097291341}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &924659406
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 924659405}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8eac8e7937e1f90438c5ebfd519d5cdb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Washer
+  washerWarningSound: {fileID: 8300000, guid: ac1656d6b8a426142b2e6162436734ea, type: 3}
+  washerLoadingSound: {fileID: 8300000, guid: ac7590bb6cfd7414bae26d112007a196, type: 3}
 --- !u!1001 &966064876
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -9049,11 +9068,19 @@ PrefabInstance:
     - target: {fileID: 3323857416736227377, guid: af3fc870042714341838be55a49b73d3, type: 3}
       propertyPath: interactionTriggered.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 457396766}
+      objectReference: {fileID: 2075680690}
     - target: {fileID: 3323857416736227377, guid: af3fc870042714341838be55a49b73d3, type: 3}
       propertyPath: interactionTriggered.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: OnDryerInteract
+      value: Interact
       objectReference: {fileID: 0}
+    - target: {fileID: 3323857416736227377, guid: af3fc870042714341838be55a49b73d3, type: 3}
+      propertyPath: interactionTriggered.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: Dryer, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 4613991620805098774, guid: af3fc870042714341838be55a49b73d3, type: 3}
+      propertyPath: dryerLoadingSound
+      value: 
+      objectReference: {fileID: 8300000, guid: ac7590bb6cfd7414bae26d112007a196, type: 3}
     - target: {fileID: 4613991620805098774, guid: af3fc870042714341838be55a49b73d3, type: 3}
       propertyPath: dryerWarningSound
       value: 
@@ -9063,6 +9090,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: af3fc870042714341838be55a49b73d3, type: 3}
+--- !u!114 &2075680690 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4613991620805098774, guid: af3fc870042714341838be55a49b73d3, type: 3}
+  m_PrefabInstance: {fileID: 2075680689}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b8a84102eae9757418709c8654455091, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Dryer
 --- !u!43 &2115760857
 Mesh:
   m_ObjectHideFlags: 0
@@ -9917,6 +9955,10 @@ PrefabInstance:
       propertyPath: m_VersionIndex
       value: 18541
       objectReference: {fileID: 0}
+    - target: {fileID: 3577426272013976573, guid: ccbdcfb6e05206941b13f0a9afd9b2da, type: 3}
+      propertyPath: m_Resource
+      value: 
+      objectReference: {fileID: 8300000, guid: 18bfcb1cb366aed49abf0a620332a749, type: 3}
     - target: {fileID: 3709895521381347236, guid: ccbdcfb6e05206941b13f0a9afd9b2da, type: 3}
       propertyPath: m_Mesh
       value: 
@@ -10190,12 +10232,36 @@ PrefabInstance:
       value: 6899
       objectReference: {fileID: 0}
     - target: {fileID: 5599958561295374100, guid: ccbdcfb6e05206941b13f0a9afd9b2da, type: 3}
+      propertyPath: interactionTriggered.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5599958561295374100, guid: ccbdcfb6e05206941b13f0a9afd9b2da, type: 3}
+      propertyPath: interactionTriggered.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5599958561295374100, guid: ccbdcfb6e05206941b13f0a9afd9b2da, type: 3}
+      propertyPath: interactionTriggered.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 868134324097291346}
+    - target: {fileID: 5599958561295374100, guid: ccbdcfb6e05206941b13f0a9afd9b2da, type: 3}
       propertyPath: interactionTriggered.m_PersistentCalls.m_Calls.Array.data[1].m_Target
       value: 
       objectReference: {fileID: 457396766}
     - target: {fileID: 5599958561295374100, guid: ccbdcfb6e05206941b13f0a9afd9b2da, type: 3}
+      propertyPath: interactionTriggered.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: Interact
+      objectReference: {fileID: 0}
+    - target: {fileID: 5599958561295374100, guid: ccbdcfb6e05206941b13f0a9afd9b2da, type: 3}
       propertyPath: interactionTriggered.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
       value: OnPantsPickup
+      objectReference: {fileID: 0}
+    - target: {fileID: 5599958561295374100, guid: ccbdcfb6e05206941b13f0a9afd9b2da, type: 3}
+      propertyPath: interactionTriggered.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: ItemInteractable, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 5599958561295374100, guid: ccbdcfb6e05206941b13f0a9afd9b2da, type: 3}
+      propertyPath: interactionTriggered.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 5623515645334631105, guid: ccbdcfb6e05206941b13f0a9afd9b2da, type: 3}
       propertyPath: m_Mesh
@@ -10270,12 +10336,36 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 780516679}
     - target: {fileID: 7094814750745015750, guid: ccbdcfb6e05206941b13f0a9afd9b2da, type: 3}
+      propertyPath: interactionTriggered.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7094814750745015750, guid: ccbdcfb6e05206941b13f0a9afd9b2da, type: 3}
+      propertyPath: interactionTriggered.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7094814750745015750, guid: ccbdcfb6e05206941b13f0a9afd9b2da, type: 3}
+      propertyPath: interactionTriggered.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 868134324097291347}
+    - target: {fileID: 7094814750745015750, guid: ccbdcfb6e05206941b13f0a9afd9b2da, type: 3}
       propertyPath: interactionTriggered.m_PersistentCalls.m_Calls.Array.data[1].m_Target
       value: 
       objectReference: {fileID: 457396766}
     - target: {fileID: 7094814750745015750, guid: ccbdcfb6e05206941b13f0a9afd9b2da, type: 3}
+      propertyPath: interactionTriggered.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: Interact
+      objectReference: {fileID: 0}
+    - target: {fileID: 7094814750745015750, guid: ccbdcfb6e05206941b13f0a9afd9b2da, type: 3}
       propertyPath: interactionTriggered.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
       value: OnShirtPickup
+      objectReference: {fileID: 0}
+    - target: {fileID: 7094814750745015750, guid: ccbdcfb6e05206941b13f0a9afd9b2da, type: 3}
+      propertyPath: interactionTriggered.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: ItemInteractable, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 7094814750745015750, guid: ccbdcfb6e05206941b13f0a9afd9b2da, type: 3}
+      propertyPath: interactionTriggered.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 7194255077413643200, guid: ccbdcfb6e05206941b13f0a9afd9b2da, type: 3}
       propertyPath: interactionTriggered.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
@@ -10349,6 +10439,34 @@ PrefabInstance:
       propertyPath: interactionTriggered.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgument
       value: 
       objectReference: {fileID: 1117987154}
+    - target: {fileID: 7742830237113163718, guid: ccbdcfb6e05206941b13f0a9afd9b2da, type: 3}
+      propertyPath: interactionTriggered.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7742830237113163718, guid: ccbdcfb6e05206941b13f0a9afd9b2da, type: 3}
+      propertyPath: interactionTriggered.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7742830237113163718, guid: ccbdcfb6e05206941b13f0a9afd9b2da, type: 3}
+      propertyPath: interactionTriggered.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 924659406}
+    - target: {fileID: 7742830237113163718, guid: ccbdcfb6e05206941b13f0a9afd9b2da, type: 3}
+      propertyPath: interactionTriggered.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: Interact
+      objectReference: {fileID: 0}
+    - target: {fileID: 7742830237113163718, guid: ccbdcfb6e05206941b13f0a9afd9b2da, type: 3}
+      propertyPath: interactionTriggered.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: Washer, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 7742830237113163718, guid: ccbdcfb6e05206941b13f0a9afd9b2da, type: 3}
+      propertyPath: interactionTriggered.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgument
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 7742830237113163718, guid: ccbdcfb6e05206941b13f0a9afd9b2da, type: 3}
+      propertyPath: interactionTriggered.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 7782330664165705226, guid: ccbdcfb6e05206941b13f0a9afd9b2da, type: 3}
       propertyPath: m_Mesh
       value: 
@@ -10519,7 +10637,16 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 5542053650861571587, guid: ccbdcfb6e05206941b13f0a9afd9b2da, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1999726548}
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 3394969789324606259, guid: ccbdcfb6e05206941b13f0a9afd9b2da, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 924659406}
+    - targetCorrespondingSourceObject: {fileID: 2324465605417400506, guid: ccbdcfb6e05206941b13f0a9afd9b2da, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 868134324097291347}
+    - targetCorrespondingSourceObject: {fileID: 5936641100235248068, guid: ccbdcfb6e05206941b13f0a9afd9b2da, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 868134324097291346}
   m_SourcePrefab: {fileID: 100100000, guid: ccbdcfb6e05206941b13f0a9afd9b2da, type: 3}
 --- !u!4 &868134324097291342 stripped
 Transform:
@@ -10531,6 +10658,46 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 4314523255039576140, guid: ccbdcfb6e05206941b13f0a9afd9b2da, type: 3}
   m_PrefabInstance: {fileID: 868134324097291341}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &868134324097291344 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5936641100235248068, guid: ccbdcfb6e05206941b13f0a9afd9b2da, type: 3}
+  m_PrefabInstance: {fileID: 868134324097291341}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &868134324097291345 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2324465605417400506, guid: ccbdcfb6e05206941b13f0a9afd9b2da, type: 3}
+  m_PrefabInstance: {fileID: 868134324097291341}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &868134324097291346
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 868134324097291344}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f19ddf3e40219db42830353d1479e177, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ItemInteractable
+  itemContractSO: {fileID: 11400000, guid: 7d953c79ee781724ab68ffe5bd08e4c0, type: 2}
+  Flashlight: {fileID: 0}
+  playerInventorySO: {fileID: 11400000, guid: 5028993a4a4a40f48a60d83aa1fe42c8, type: 2}
+--- !u!114 &868134324097291347
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 868134324097291345}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f19ddf3e40219db42830353d1479e177, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ItemInteractable
+  itemContractSO: {fileID: 11400000, guid: df2bfcaa31c55104588e7e0969e89d42, type: 2}
+  Flashlight: {fileID: 0}
+  playerInventorySO: {fileID: 11400000, guid: 5028993a4a4a40f48a60d83aa1fe42c8, type: 2}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

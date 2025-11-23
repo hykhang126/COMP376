@@ -1,20 +1,24 @@
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class Washer : MonoBehaviour
+public class Washer : Interactable
 {
     private AudioSource washerAudio;
 
     [SerializeField] private AudioClip washerWarningSound;
 
-    bool isClothesInWasher = false;
+    [SerializeField] private AudioClip washerLoadingSound;
+
+    public static UnityEvent onClothesInWasher = new UnityEvent();
+
+    bool shirtInWasher = false;
+
+    bool pantsInWasher = false;
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        TaskManager.onClothesInWasher.AddListener(OnClothesInWasher);
-
-        TaskManager.onClothesNotInWasher.AddListener(OnClothesNotInWasher);
 
         washerAudio = GetComponent<AudioSource>();
     }
@@ -25,21 +29,38 @@ public class Washer : MonoBehaviour
         
     }
 
-    void OnClothesInWasher()
+    public override void Interact()
     {
-        if(!isClothesInWasher)
+        
+        if(Inventory.InstanceReference.items.Count != 0 && !shirtInWasher && Inventory.InstanceReference.items[Inventory.InstanceReference.GetCurrentItemIndex()].Name == "Shirt")
         {
-            isClothesInWasher = true;
-            washerAudio.Play();
-        }   
+            shirtInWasher = true;
+            Inventory.InstanceReference.RemoveItem();
+            CheckLaundryStart();
+        }
+        else if(Inventory.InstanceReference.items.Count != 0 &&!pantsInWasher && Inventory.InstanceReference.items[Inventory.InstanceReference.GetCurrentItemIndex()].Name == "Pants")
+        {
+            pantsInWasher = true;
+            Inventory.InstanceReference.RemoveItem();
+            CheckLaundryStart();
+        }
+        else
+        {
+            washerAudio.PlayOneShot(washerWarningSound);
+        }
+        
     }
 
-    void OnClothesNotInWasher()
+    private void CheckLaundryStart()
     {
-        if(!isClothesInWasher)
+        if(shirtInWasher && pantsInWasher)
         {
-            isClothesInWasher = false;
-            washerAudio.PlayOneShot(washerWarningSound);
+            onClothesInWasher.Invoke();
+            washerAudio.Play();
+        }
+        else
+        {
+            washerAudio.PlayOneShot(washerLoadingSound);
         }
     }
 }
