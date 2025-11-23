@@ -1557,10 +1557,14 @@ PrefabInstance:
     - target: {fileID: 3323857416736227377, guid: af3fc870042714341838be55a49b73d3, type: 3}
       propertyPath: interactionTriggered.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 301671070}
+      objectReference: {fileID: 263543832}
     - target: {fileID: 3323857416736227377, guid: af3fc870042714341838be55a49b73d3, type: 3}
       propertyPath: interactionTriggered.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: OnDryerInteract
+      value: Interact
+      objectReference: {fileID: 0}
+    - target: {fileID: 3323857416736227377, guid: af3fc870042714341838be55a49b73d3, type: 3}
+      propertyPath: interactionTriggered.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: Dryer, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 4613991620805098774, guid: af3fc870042714341838be55a49b73d3, type: 3}
       propertyPath: dryerLoadingSound
@@ -1580,6 +1584,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 99267816587392797, guid: af3fc870042714341838be55a49b73d3, type: 3}
   m_PrefabInstance: {fileID: 263543830}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &263543832 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4613991620805098774, guid: af3fc870042714341838be55a49b73d3, type: 3}
+  m_PrefabInstance: {fileID: 263543830}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b8a84102eae9757418709c8654455091, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Dryer
 --- !u!114 &301671070 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2668782034785429948, guid: 953b58418fb00eb468b219fb222e5f09, type: 3}
@@ -10236,6 +10251,10 @@ PrefabInstance:
       value: 18634
       objectReference: {fileID: 0}
     - target: {fileID: 3577426272013976573, guid: ccbdcfb6e05206941b13f0a9afd9b2da, type: 3}
+      propertyPath: m_Volume
+      value: 0.25
+      objectReference: {fileID: 0}
+    - target: {fileID: 3577426272013976573, guid: ccbdcfb6e05206941b13f0a9afd9b2da, type: 3}
       propertyPath: m_Resource
       value: 
       objectReference: {fileID: 8300000, guid: 18bfcb1cb366aed49abf0a620332a749, type: 3}
@@ -10738,14 +10757,14 @@ PrefabInstance:
     - target: {fileID: 7742830237113163718, guid: ccbdcfb6e05206941b13f0a9afd9b2da, type: 3}
       propertyPath: interactionTriggered.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 301671070}
+      objectReference: {fileID: 1114275382}
     - target: {fileID: 7742830237113163718, guid: ccbdcfb6e05206941b13f0a9afd9b2da, type: 3}
       propertyPath: interactionTriggered.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: OnWasherInteract
+      value: Interact
       objectReference: {fileID: 0}
     - target: {fileID: 7742830237113163718, guid: ccbdcfb6e05206941b13f0a9afd9b2da, type: 3}
       propertyPath: interactionTriggered.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: TaskManager, Assembly-CSharp
+      value: Washer, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 7742830237113163718, guid: ccbdcfb6e05206941b13f0a9afd9b2da, type: 3}
       propertyPath: interactionTriggered.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgument
