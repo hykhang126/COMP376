@@ -14,6 +14,8 @@ public class Inventory : MonoBehaviour
     public ItemRecipeBook recipeBook;
     public Camera inventoryCamera { get; private set; }
 
+    public static Inventory InstanceReference { get; private set; }
+
     // Serialized
     [SerializeField] private PlayerInventorySO playerInventorySO;
     [SerializeField] private AudioClip pickUpAudioClip;
@@ -37,6 +39,27 @@ public class Inventory : MonoBehaviour
 
     public static UnityEvent rechargeEvent = new UnityEvent();
     public static UnityEvent sandwichEvent = new UnityEvent();
+
+    public void Awake()
+    {
+        // Singleton pattern to ensure only one instance of Inventory exists
+        if (InstanceReference == null)
+        {
+            InstanceReference = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        // Setup inventory camera
+        inventoryCamera = GetComponentInChildren<Camera>();
+        if (inventoryCamera == null)
+        {
+            Debug.LogError("Inventory Camera not found as a child of Inventory GameObject.");
+        }
+    }
 
     public void Start()
     {
@@ -282,8 +305,18 @@ public class Inventory : MonoBehaviour
 
     private void ItemRefresh()
     {
-        itemNameText.text = items[currentItemIndex].Name;
-        ItemPreview();
+        if(items.Count == 0)
+        {
+            itemNameText.text = "";
+            itemPreviewPlaceholder.SetActive(false);
+            return;
+        }
+        else
+        {
+            itemNameText.text = items[currentItemIndex].Name;
+            ItemPreview();
+        }
+        
     }
 
     public int GetItemIndex(string itemiD)

@@ -11,7 +11,6 @@ public class Player : MonoBehaviour
     // Global Player reference
     public static Player InstanceReference { get; private set; }
     public StateMachine stateMachine { get; private set; }
-    public Inventory inventory { get; private set; }
     public PlayerInputHandler playerInputHandler { get; private set; }
     [HideInInspector] public Vector2 movementInput;
     [HideInInspector] public Vector2 lookInput;
@@ -116,14 +115,6 @@ public class Player : MonoBehaviour
 
         // Initialize camera rotation
         _camera.transform.localRotation = Quaternion.Euler(0, 0, 0);
-
-        //Connect to Inventory System
-        inventory = FindAnyObjectByType<Inventory>();
-        if (inventory == null)
-        {
-            Debug.LogError("Inventory System not found in Hierarchy");
-        }
-
 
         // Audio Source
         playerAudioSource = GetComponent<AudioSource>();

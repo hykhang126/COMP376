@@ -4,128 +4,130 @@ using UnityEngine.AI;
 
 public class DoorAction : MonoBehaviour
 {
+    public Animator openandclose;
+    public bool open;
+    public ItemContractSO key;
 
-	public Animator openandclose;
-	public bool open;
-	public ItemContractSO key;
+    [SerializeField] bool isLocked = true;
 
-	[SerializeField] bool isLocked = true;
+    [SerializeField] string openAnimation;
+    [SerializeField] string closeAnimation;
 
-	[SerializeField] string openAnimation;
+    [SerializeField] AudioClip openSound;
+    [SerializeField] AudioClip closeSound;
+    [SerializeField] AudioClip lockSound;
 
-	[SerializeField] string closeAnimation;
+    public AudioSource doorAudioSource { get; private set; }
 
-	[SerializeField] AudioClip openSound;
+    public NavMeshObstacle navObstacle;
 
-	[SerializeField] AudioClip closeSound;
+    void Start()
+    {
+        if (navObstacle == null)
+            navObstacle = GetComponentInChildren<NavMeshObstacle>();
 
-	public AudioSource doorAudioSource { get; private set; }
+        open = false;
 
-  public NavMeshObstacle navObstacle;
+        // find AudioSource on this GameObject first, then in children
+        doorAudioSource = GetComponent<AudioSource>() ?? GetComponentInChildren<AudioSource>();
+    }
 
-  void Start()
-	{
-		if (navObstacle == null)
-			navObstacle = GetComponentInChildren<NavMeshObstacle>();
-
-		open = false;
-
-		// find AudioSource on this GameObject first, then in children
-		doorAudioSource = GetComponent<AudioSource>() ?? GetComponentInChildren<AudioSource>();
-		}
-
-	void OnTriggerEnter(Collider other)
-	{
-		
-
-		// Example: activate a room when player enters
-		if (other.CompareTag("enemy"))
-		{
-      Debug.Log("Triggered by: " + other.name);
-      if (!open)
-			{
-				OpenDoor();
-			}
-		}
-	}
-
-
-  public void OpenorClose()
-	{
-		if (isLocked && key != null && Player.InstanceReference.inventory.items[Player.InstanceReference.inventory.GetCurrentItemIndex()].Id ==
-		key.Id)
-		{
-			Debug.Log("Unlocked");	
-			isLocked = false;
-		}
-		else if (isLocked)
-		{
-			Debug.Log("Locked and you don't have the right key");
-			return;
-		}
-		
-		if (!open)
-		{
-			OpenDoor();
-
-		}
-        else
+    void OnTriggerEnter(Collider other)
+    {
+        // Example: activate a room when player enters
+        if (other.CompareTag("enemy"))
         {
-			CloseDoor();
+            Debug.Log("Triggered by: " + other.name);
+            if (!open)
+            {
+                OpenDoor();
+            }
         }
     }
 
-	public void OpenDoor()
-	{
-		StartCoroutine(opening());
-	}
-
-	public void CloseDoor()
-	{
-		StartCoroutine(closing());
-	}
-
-	public void TeleportPlayerTo(Transform player, Transform targetPosition)
-	{
-		if (player != null && targetPosition != null)
-		{
-			player.SetPositionAndRotation(targetPosition.position, targetPosition.rotation);
+    public void OpenorClose()
+    {
+        if (isLocked && key != null && Inventory.InstanceReference.items[Inventory.InstanceReference.GetCurrentItemIndex()].Id ==
+            key.Id)
+        {
+            Debug.Log("Unlocked");
+            isLocked = false;
         }
-		else
-		{
-			Debug.LogWarning("Player or target position is null.");
-		}
-	}
+        else if (isLocked)
+        {
+            Debug.Log("Locked and you don't have the right key");
 
-	public IEnumerator opening(float waitTime = 0.5f)
-	{
-		if (navObstacle != null) navObstacle.carving = false;
+            // PLAY LOCKED SOUND
+            if (doorAudioSource != null && lockSound != null)
+            {
+                doorAudioSource.pitch = Random.Range(0.95f, 1.05f);
+                doorAudioSource.PlayOneShot(lockSound);
+            }
 
-		openandclose.Play(openAnimation);
+            return;
+        }
 
-		if (doorAudioSource != null && openSound != null)
-		{
-			doorAudioSource.pitch = Random.Range(0.95f, 1.05f);
-			doorAudioSource.PlayOneShot(openSound);
-		}
+        if (!open)
+        {
+            OpenDoor();
+        }
+        else
+        {
+            CloseDoor();
+        }
+    }
 
-		open = true;
-		yield return new WaitForSeconds(waitTime);
-	}
+    public void OpenDoor()
+    {
+        StartCoroutine(opening());
+    }
 
-	public IEnumerator closing(float waitTime = 0.5f)
-	{
-		if (navObstacle != null) navObstacle.carving = true;
+    public void CloseDoor()
+    {
+        StartCoroutine(closing());
+    }
 
-		openandclose.Play(closeAnimation);
+    public void TeleportPlayerTo(Transform player, Transform targetPosition)
+    {
+        if (player != null && targetPosition != null)
+        {
+            player.SetPositionAndRotation(targetPosition.position, targetPosition.rotation);
+        }
+        else
+        {
+            Debug.LogWarning("Player or target position is null.");
+        }
+    }
 
-		if (doorAudioSource != null && closeSound != null)
-		{
-			doorAudioSource.pitch = Random.Range(0.95f, 1.05f);
-			doorAudioSource.PlayOneShot(closeSound);
-		}
+    public IEnumerator opening(float waitTime = 0.5f)
+    {
+        if (navObstacle != null) navObstacle.carving = false;
 
-		open = false;
-		yield return new WaitForSeconds(waitTime);
-	}
+        openandclose.Play(openAnimation);
+
+        if (doorAudioSource != null && openSound != null)
+        {
+            doorAudioSource.pitch = Random.Range(0.95f, 1.05f);
+            doorAudioSource.PlayOneShot(openSound);
+        }
+
+        open = true;
+        yield return new WaitForSeconds(waitTime);
+    }
+
+    public IEnumerator closing(float waitTime = 0.5f)
+    {
+        if (navObstacle != null) navObstacle.carving = true;
+
+        openandclose.Play(closeAnimation);
+
+        if (doorAudioSource != null && closeSound != null)
+        {
+            doorAudioSource.pitch = Random.Range(0.95f, 1.05f);
+            doorAudioSource.PlayOneShot(closeSound);
+        }
+
+        open = false;
+        yield return new WaitForSeconds(waitTime);
+    }
 }
