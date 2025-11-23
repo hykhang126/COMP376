@@ -305,8 +305,18 @@ public class Inventory : MonoBehaviour
 
     private void ItemRefresh()
     {
-        itemNameText.text = items[currentItemIndex].Name;
-        ItemPreview();
+        if(items.Count == 0)
+        {
+            itemNameText.text = "";
+            itemPreviewPlaceholder.SetActive(false);
+            return;
+        }
+        else
+        {
+            itemNameText.text = items[currentItemIndex].Name;
+            ItemPreview();
+        }
+        
     }
 
     public int GetItemIndex(string itemiD)
