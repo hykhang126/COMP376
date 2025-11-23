@@ -1319,6 +1319,28 @@ Mesh:
       - serializedVersion: 1
         m_IndexStart: 0
         m_IndexCount: 0
+--- !u!114 &193312210
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 482910267}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a81125d77ccd7940b43e34bab4b5bdc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LightFlickerCycle
+  baseIntensity: 0.8
+  baseRange: 10
+  flickerAmplitude: 0.8
+  flickerSpeed: 10
+  noiseOffset: 0
+  minOnDuration: 3
+  maxOnDuration: 8
+  flickerDuration: 1.5
+  affectRange: 0
+  rangeVariation: 0.1
 --- !u!43 &240637308
 Mesh:
   m_ObjectHideFlags: 0
@@ -2712,6 +2734,176 @@ Mesh:
       - serializedVersion: 1
         m_IndexStart: 0
         m_IndexCount: 0
+--- !u!1 &482910264 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 9070794459185089412, guid: ccbdcfb6e05206941b13f0a9afd9b2da, type: 3}
+  m_PrefabInstance: {fileID: 868134324097291341}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &482910265 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4427346572158646099, guid: ccbdcfb6e05206941b13f0a9afd9b2da, type: 3}
+  m_PrefabInstance: {fileID: 868134324097291341}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &482910266 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3796513478415494494, guid: ccbdcfb6e05206941b13f0a9afd9b2da, type: 3}
+  m_PrefabInstance: {fileID: 868134324097291341}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &482910267 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7279127657237525853, guid: ccbdcfb6e05206941b13f0a9afd9b2da, type: 3}
+  m_PrefabInstance: {fileID: 868134324097291341}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &482910268 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6730481923027511289, guid: ccbdcfb6e05206941b13f0a9afd9b2da, type: 3}
+  m_PrefabInstance: {fileID: 868134324097291341}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &482910269 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8208345835870466848, guid: ccbdcfb6e05206941b13f0a9afd9b2da, type: 3}
+  m_PrefabInstance: {fileID: 868134324097291341}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &482910270 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7546041053425465942, guid: ccbdcfb6e05206941b13f0a9afd9b2da, type: 3}
+  m_PrefabInstance: {fileID: 868134324097291341}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &482910271 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5481493693377115001, guid: ccbdcfb6e05206941b13f0a9afd9b2da, type: 3}
+  m_PrefabInstance: {fileID: 868134324097291341}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &482910272 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5293894599890512404, guid: ccbdcfb6e05206941b13f0a9afd9b2da, type: 3}
+  m_PrefabInstance: {fileID: 868134324097291341}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &482910273 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2772550625060941594, guid: ccbdcfb6e05206941b13f0a9afd9b2da, type: 3}
+  m_PrefabInstance: {fileID: 868134324097291341}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &482910274 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7234300223014621297, guid: ccbdcfb6e05206941b13f0a9afd9b2da, type: 3}
+  m_PrefabInstance: {fileID: 868134324097291341}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &482910275 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4487291450375159583, guid: ccbdcfb6e05206941b13f0a9afd9b2da, type: 3}
+  m_PrefabInstance: {fileID: 868134324097291341}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &482910276
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 482910271}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a81125d77ccd7940b43e34bab4b5bdc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LightFlickerCycle
+  baseIntensity: 0.8
+  baseRange: 10
+  flickerAmplitude: 0.8
+  flickerSpeed: 10
+  noiseOffset: 0
+  minOnDuration: 3
+  maxOnDuration: 8
+  flickerDuration: 1.5
+  affectRange: 0
+  rangeVariation: 0.1
+--- !u!114 &482910277
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 482910272}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a81125d77ccd7940b43e34bab4b5bdc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LightFlickerCycle
+  baseIntensity: 0.8
+  baseRange: 10
+  flickerAmplitude: 0.8
+  flickerSpeed: 10
+  noiseOffset: 0
+  minOnDuration: 3
+  maxOnDuration: 8
+  flickerDuration: 1.5
+  affectRange: 0
+  rangeVariation: 0.1
+--- !u!114 &482910278
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 482910273}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a81125d77ccd7940b43e34bab4b5bdc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LightFlickerCycle
+  baseIntensity: 0.8
+  baseRange: 10
+  flickerAmplitude: 0.8
+  flickerSpeed: 10
+  noiseOffset: 0
+  minOnDuration: 3
+  maxOnDuration: 8
+  flickerDuration: 1.5
+  affectRange: 0
+  rangeVariation: 0.1
+--- !u!114 &482910279
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 482910274}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a81125d77ccd7940b43e34bab4b5bdc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LightFlickerCycle
+  baseIntensity: 0.8
+  baseRange: 10
+  flickerAmplitude: 0.8
+  flickerSpeed: 10
+  noiseOffset: 0
+  minOnDuration: 3
+  maxOnDuration: 8
+  flickerDuration: 1.5
+  affectRange: 0
+  rangeVariation: 0.1
+--- !u!114 &482910280
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 482910275}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a81125d77ccd7940b43e34bab4b5bdc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LightFlickerCycle
+  baseIntensity: 0.8
+  baseRange: 10
+  flickerAmplitude: 0.8
+  flickerSpeed: 10
+  noiseOffset: 0
+  minOnDuration: 3
+  maxOnDuration: 8
+  flickerDuration: 1.5
+  affectRange: 0
+  rangeVariation: 0.1
 --- !u!1 &544609915
 GameObject:
   m_ObjectHideFlags: 0
@@ -3317,6 +3509,28 @@ Mesh:
       - serializedVersion: 1
         m_IndexStart: 0
         m_IndexCount: 0
+--- !u!114 &749673499
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 482910270}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a81125d77ccd7940b43e34bab4b5bdc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LightFlickerCycle
+  baseIntensity: 0.8
+  baseRange: 10
+  flickerAmplitude: 0.8
+  flickerSpeed: 10
+  noiseOffset: 0
+  minOnDuration: 3
+  maxOnDuration: 8
+  flickerDuration: 1.5
+  affectRange: 0
+  rangeVariation: 0.1
 --- !u!43 &780516679
 Mesh:
   m_ObjectHideFlags: 0
@@ -4775,6 +4989,28 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 8409400308406302545, guid: ccbdcfb6e05206941b13f0a9afd9b2da, type: 3}
   m_PrefabInstance: {fileID: 868134324097291341}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1064080748
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 482910268}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a81125d77ccd7940b43e34bab4b5bdc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LightFlickerCycle
+  baseIntensity: 0.8
+  baseRange: 10
+  flickerAmplitude: 0.8
+  flickerSpeed: 10
+  noiseOffset: 0
+  minOnDuration: 3
+  maxOnDuration: 8
+  flickerDuration: 1.5
+  affectRange: 0
+  rangeVariation: 0.1
 --- !u!4 &1065655642 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1429024393493407468, guid: b09202c7b9d214d448bfc4aed4725ec5, type: 3}
@@ -5605,6 +5841,28 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1285898718}
   m_LocalEulerAnglesHint: {x: 0, y: -100.197, z: 0}
+--- !u!114 &1197855432
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 482910265}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a81125d77ccd7940b43e34bab4b5bdc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LightFlickerCycle
+  baseIntensity: 0.8
+  baseRange: 10
+  flickerAmplitude: 0.8
+  flickerSpeed: 10
+  noiseOffset: 0
+  minOnDuration: 3
+  maxOnDuration: 8
+  flickerDuration: 1.5
+  affectRange: 0
+  rangeVariation: 0.1
 --- !u!1 &1239650584
 GameObject:
   m_ObjectHideFlags: 0
@@ -6636,6 +6894,28 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 922481513177739605, guid: b09202c7b9d214d448bfc4aed4725ec5, type: 3}
   m_PrefabInstance: {fileID: 1349130311}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1385502424
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 482910266}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a81125d77ccd7940b43e34bab4b5bdc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LightFlickerCycle
+  baseIntensity: 0.8
+  baseRange: 10
+  flickerAmplitude: 0.8
+  flickerSpeed: 10
+  noiseOffset: 0
+  minOnDuration: 3
+  maxOnDuration: 8
+  flickerDuration: 1.5
+  affectRange: 0
+  rangeVariation: 0.1
 --- !u!4 &1394464869 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4569654481064740679, guid: a9b92ebf67d0a7f4e8a1b3efedc9a2b4, type: 3}
@@ -6673,6 +6953,50 @@ Transform:
   - {fileID: 263242802}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1396505634
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 482910264}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a81125d77ccd7940b43e34bab4b5bdc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LightFlickerCycle
+  baseIntensity: 0.8
+  baseRange: 10
+  flickerAmplitude: 0.8
+  flickerSpeed: 10
+  noiseOffset: 0
+  minOnDuration: 3
+  maxOnDuration: 8
+  flickerDuration: 1.5
+  affectRange: 0
+  rangeVariation: 0.1
+--- !u!114 &1450632155
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 482910269}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a81125d77ccd7940b43e34bab4b5bdc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LightFlickerCycle
+  baseIntensity: 0.8
+  baseRange: 10
+  flickerAmplitude: 0.8
+  flickerSpeed: 10
+  noiseOffset: 0
+  minOnDuration: 3
+  maxOnDuration: 8
+  flickerDuration: 1.5
+  affectRange: 0
+  rangeVariation: 0.1
 --- !u!43 &1458603393
 Mesh:
   m_ObjectHideFlags: 0
@@ -11060,15 +11384,51 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 1999726548}
     m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 7234300223014621297, guid: ccbdcfb6e05206941b13f0a9afd9b2da, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 482910279}
+    - targetCorrespondingSourceObject: {fileID: 2772550625060941594, guid: ccbdcfb6e05206941b13f0a9afd9b2da, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 482910278}
+    - targetCorrespondingSourceObject: {fileID: 5293894599890512404, guid: ccbdcfb6e05206941b13f0a9afd9b2da, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 482910277}
+    - targetCorrespondingSourceObject: {fileID: 5481493693377115001, guid: ccbdcfb6e05206941b13f0a9afd9b2da, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 482910276}
+    - targetCorrespondingSourceObject: {fileID: 7546041053425465942, guid: ccbdcfb6e05206941b13f0a9afd9b2da, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 749673499}
+    - targetCorrespondingSourceObject: {fileID: 8208345835870466848, guid: ccbdcfb6e05206941b13f0a9afd9b2da, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1450632155}
+    - targetCorrespondingSourceObject: {fileID: 6730481923027511289, guid: ccbdcfb6e05206941b13f0a9afd9b2da, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1064080748}
     - targetCorrespondingSourceObject: {fileID: 3394969789324606259, guid: ccbdcfb6e05206941b13f0a9afd9b2da, type: 3}
       insertIndex: -1
       addedObject: {fileID: 924659406}
+    - targetCorrespondingSourceObject: {fileID: 4487291450375159583, guid: ccbdcfb6e05206941b13f0a9afd9b2da, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 482910280}
+    - targetCorrespondingSourceObject: {fileID: 7279127657237525853, guid: ccbdcfb6e05206941b13f0a9afd9b2da, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 193312210}
+    - targetCorrespondingSourceObject: {fileID: 3796513478415494494, guid: ccbdcfb6e05206941b13f0a9afd9b2da, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1385502424}
+    - targetCorrespondingSourceObject: {fileID: 4427346572158646099, guid: ccbdcfb6e05206941b13f0a9afd9b2da, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1197855432}
     - targetCorrespondingSourceObject: {fileID: 2324465605417400506, guid: ccbdcfb6e05206941b13f0a9afd9b2da, type: 3}
       insertIndex: -1
       addedObject: {fileID: 868134324097291347}
     - targetCorrespondingSourceObject: {fileID: 5936641100235248068, guid: ccbdcfb6e05206941b13f0a9afd9b2da, type: 3}
       insertIndex: -1
       addedObject: {fileID: 868134324097291346}
+    - targetCorrespondingSourceObject: {fileID: 9070794459185089412, guid: ccbdcfb6e05206941b13f0a9afd9b2da, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1396505634}
   m_SourcePrefab: {fileID: 100100000, guid: ccbdcfb6e05206941b13f0a9afd9b2da, type: 3}
 --- !u!4 &868134324097291342 stripped
 Transform:
