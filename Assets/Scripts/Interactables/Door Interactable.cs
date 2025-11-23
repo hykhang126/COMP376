@@ -49,15 +49,15 @@ public class DoorInteractable : Interactable
             {
                 OpenDoor();
             }
-            else if (Player.InstanceReference.inventory)
+            else if (Inventory.InstanceReference != null)
             {
                 for (int i = 0; i < itemContractSOsToOpenThisDoor.Length; i++)
                 {
                     //----- To be replaced by getting the equipped key and checking if it is in the array -----
-                    if (Player.InstanceReference.inventory.items[Player.InstanceReference.inventory.GetCurrentItemIndex()].Id == itemContractSOsToOpenThisDoor[i].Id)
+                    if (Inventory.InstanceReference.items[Inventory.InstanceReference.GetCurrentItemIndex()].Id == itemContractSOsToOpenThisDoor[i].Id)
                     {
                         OpenDoor();
-                        Player.InstanceReference.inventory.RemoveItem();
+                        Inventory.InstanceReference.RemoveItem();
                         break;
                         //-------------------------------------------------------------------------------------
                     }

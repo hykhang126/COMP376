@@ -60,14 +60,14 @@ public class ItemInteractable : Interactable
             Debug.LogError("Player is null, cannot interact with item.");
             return;
         }
-        else if (!Player.InstanceReference.inventory)
+        else if (!Inventory.InstanceReference)
         {
             Debug.LogError("Player's inventory is null, cannot add item.");
             return;
         }
         else
         {
-            Player.InstanceReference.inventory.AddItem(itemContractSO);
+            Inventory.InstanceReference.AddItem(itemContractSO);
             // player.inventory.AddItem(item.itemName, item.itemKey, item);
             Destroy(gameObject);
             if (this.gameObject.name == "FlashLightItem")

@@ -47,7 +47,7 @@ public class DoorAction : MonoBehaviour
 
     public void OpenorClose()
     {
-        if (isLocked && key != null && Player.InstanceReference.inventory.items[Player.InstanceReference.inventory.GetCurrentItemIndex()].Id ==
+        if (isLocked && key != null && Inventory.InstanceReference.items[Inventory.InstanceReference.GetCurrentItemIndex()].Id ==
             key.Id)
         {
             Debug.Log("Unlocked");
