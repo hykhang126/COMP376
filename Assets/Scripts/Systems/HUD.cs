@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class HUD : MonoBehaviour
-{
+{   
     public GameObject EndGamePanel{ get; private set; }
     public GameObject EndGameVolume { get; private set; }
     private Button quitGame;
@@ -11,6 +11,7 @@ public class HUD : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        DontDestroyOnLoad(gameObject);
         EndGamePanel = transform.Find("EndGame")?.gameObject;
 
         if (quitGame != null)

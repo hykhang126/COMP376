@@ -12,6 +12,8 @@ public class Inventory : MonoBehaviour
     public GameObject inventoryUI; // Reference to the inventory UI GameObject
     public GameObject itemPreviewPlaceholder;
     public ItemRecipeBook recipeBook;
+
+    public GameObject itemFromPreviewIndicator;
     public Camera inventoryCamera { get; private set; }
 
     public static Inventory InstanceReference { get; private set; }
@@ -39,13 +41,13 @@ public class Inventory : MonoBehaviour
 
     public static UnityEvent rechargeEvent = new UnityEvent();
     public static UnityEvent sandwichEvent = new UnityEvent();
-
     public void Awake()
     {
         // Singleton pattern to ensure only one instance of Inventory exists
         if (InstanceReference == null)
         {
             InstanceReference = this;
+            DontDestroyOnLoad(gameObject);
         }
         else
         {
@@ -96,6 +98,8 @@ public class Inventory : MonoBehaviour
         Transform itemNameTransform = panel != null ? panel.transform.Find("ItemName") : null;
         itemNameText = itemNameTransform != null ? itemNameTransform.GetComponent<TextMeshProUGUI>() : null;
         inventoryUI.SetActive(false);
+        itemFromPreviewIndicator = panel.transform.Find("ItemFromIndicator").gameObject;
+        itemFromPreviewIndicator.SetActive(false);
 
 #if UNITY_EDITOR
         playerInventorySO.ClearItemsInstance();
@@ -194,6 +198,15 @@ public class Inventory : MonoBehaviour
         Debug.Log("The item's material is: "+ items[currentItemIndex].Material);
         Material newMaterial = new Material(items[currentItemIndex].Material);
         itemPreviewPlaceholder.GetComponent<MeshRenderer>().material = newMaterial;
+
+        if(currentItemIndex == itemFromIndex)
+        {
+            itemFromPreviewIndicator.SetActive(true);
+        }
+        else
+        {
+            itemFromPreviewIndicator.SetActive(false);
+        }
     }
 
     private void CloseInventory()
@@ -413,6 +426,8 @@ public class Inventory : MonoBehaviour
                 return;
             }
 
+            ItemPreview();
+
             return;
         }
         // Second selection (must be a different index)
@@ -487,6 +502,8 @@ public class Inventory : MonoBehaviour
             // Either same index or both already selected, safe reset
             ResetCombineSelection();
         }
+
+        ItemPreview();
         
     }
 

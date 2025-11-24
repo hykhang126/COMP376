@@ -87,7 +87,12 @@ public class TaskManager : MonoBehaviour
     // If all tasks done, let the existing logic handle scene switching.
       if (allTasksDone)
       {
-        if (lightStalkerSequenceEnded)
+      if (lightStalkerSequenceEnded)
+      {
+        LeaveApartment();
+        return;
+      }
+      else if(SceneManager.GetActiveScene().name != "HorrorActScene")
       {
         LeaveApartment();
         return;
@@ -168,7 +173,7 @@ public class TaskManager : MonoBehaviour
         SceneManager.LoadScene("HorrorActScene3");
         break;
       case "HorrorActScene3":
-        SceneManager.LoadScene("PuzzleScene");
+        SceneManager.LoadScene("FinalPuzzle");
         break;
 
       default:
