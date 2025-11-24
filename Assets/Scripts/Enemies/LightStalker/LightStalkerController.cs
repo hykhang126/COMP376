@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Events;
+using UnityEngine.SceneManagement;
 
 [RequireComponent(typeof(StateMachine))]
 [RequireComponent(typeof(LightDetector))]
@@ -139,8 +141,9 @@ public class LightStalkerController : MonoBehaviour
     private CharacterController cachedPlayerController = null;
     private Collider[] cachedPlayerColliders = null;
     [Tooltip("Distance threshold (meters) for the manual contact check fallback.")]
-    public float manualContactDistanceThreshold = 0.12f; 
+    public float manualContactDistanceThreshold = 0.12f;
 
+  public UnityEvent OnFleeSceneThree;
     void Awake()
     {
         stateMachine = GetComponent<StateMachine>();
@@ -305,8 +308,15 @@ public class LightStalkerController : MonoBehaviour
         if (isFleeing) return;
         isFleeing = true;
 
-        // Play flee screech
-        if (fleeScreechClip != null)
+    if (SceneManager.GetActiveScene().name == "HorrorActScene3")
+    {
+
+      OnFleeSceneThree?.Invoke();
+      //this.gameObject.SetActive(false);
+    }
+
+    // Play flee screech
+    if (fleeScreechClip != null)
         {
             AudioSource.PlayClipAtPoint(fleeScreechClip, transform.position, Mathf.Clamp01(fleeScreechVolume));
         }
@@ -407,7 +417,7 @@ public class LightStalkerController : MonoBehaviour
 
         // --- NO reachable spawner found: instant despawn (no circular sampling fallback) ---
         Debug.Log($"[StartFlee] No reachable spawner found for {name} — despawning immediately.");
-        CompleteFleeAndDespawn();
+    CompleteFleeAndDespawn();
     }
 
     private IEnumerator WaitForArrivalAndDespawn(float maxWait, Vector3 destination, float arrivalThreshold)
@@ -482,7 +492,7 @@ public class LightStalkerController : MonoBehaviour
         {
             gameObject.SetActive(false);
         }
-    }
+  }
 
     // Called by state machine's stateUpdate (ChasingPlayer)
     public void MoveTowardPlayer()
