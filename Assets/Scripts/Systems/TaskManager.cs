@@ -15,10 +15,14 @@ public class TaskManager : MonoBehaviour
   bool makeSandwichTaskFinished = false;
   bool allTasksDone = false;
 
+  bool lightStalkerSequenceEnded = false;
+
   private String sandwichText = "\r\nMAKE A SANDWICH";
   private String washHandsText = "\r\nWASH HANDS";
   private String clothesText = "\r\nPUT BEDROOM CLOTHES IN WASHER";
 
+  public GameObject LightStalker;
+  public AudioSource laughingLightStalker;
 
   public void Start()
   {
@@ -79,11 +83,22 @@ public class TaskManager : MonoBehaviour
 
   public void LeaveApartmentFromDoor(GameObject door)
   {
-      // If all tasks done, let the existing logic handle scene switching.
+      
+    // If all tasks done, let the existing logic handle scene switching.
       if (allTasksDone)
       {
-          LeaveApartment();
-          return;
+        if (lightStalkerSequenceEnded)
+      {
+        LeaveApartment();
+        return;
+      }
+      else
+      {
+        StartLightStalkerSequence();
+      }
+
+
+          
       }
 
       AudioSource doorSource = null;
@@ -103,6 +118,38 @@ public class TaskManager : MonoBehaviour
       }   
       
       Debug.Log("Must finish all tasks before leaving for groceries");
+  }
+
+  public void HandleLightStalkerSequenceEnded()
+  {
+    lightStalkerSequenceEnded = true;
+  }
+
+
+  private void StartLightStalkerSequence()
+  {
+  // Use typeof(Light) and FindObjectsByType overload with correct parameters
+  Light[] lights = GameObject.FindObjectsByType<Light>(UnityEngine.FindObjectsSortMode.None);
+
+  foreach (Light light in lights)
+  {
+      if ( light.gameObject.name != "Flashlight Light" && light.gameObject.name != "Inventory Light" && light.gameObject.name != "BatteryIndicator Light")
+      {
+        light.gameObject.SetActive(false);
+      }
+  }
+
+
+  if (LightStalker != null)
+    {
+      LightStalker.gameObject.SetActive(true);
+    }
+
+    if (laughingLightStalker != null)
+    {
+      laughingLightStalker.gameObject.SetActive(true);
+    }
+
   }
 
   public void LeaveApartment()
