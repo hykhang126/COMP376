@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8e9dc5f7d7ea94c41958f79f15ca32b9, type: 3}
+  m_Name: Pants
+  m_EditorClassIdentifier: Assembly-CSharp::ItemContractSO
+  _name: Pants
+  _description: Pants Ismael needs to clean
+  _meshRef: {fileID: 7666266049737368757, guid: b78f3b78b4a0d2641aae17dfd4b6bf2f, type: 3}
+  _material: {fileID: -672959592190460447, guid: b78f3b78b4a0d2641aae17dfd4b6bf2f, type: 3}
+  _id: 3b781c02-a0f2-4e35-be48-6dc6ad61ea9b

@@ -52,7 +52,7 @@ public class TVInteractable : Interactable
         }
     }
 
-    public override void Interact(Player player)
+    public override void Interact()
     {
         isPlaying = !isPlaying;
         Debug.Log("TV Interacted with. Is Playing: " + isPlaying);
@@ -78,7 +78,7 @@ public class TVInteractable : Interactable
         {
             videoPlayer.Play();
             yield return new WaitUntil(() => videoPlayer.isPlaying);
-            _screenRenderer.material = TVOnMaterial;
+            _screenRenderer.material = TVOnMaterial ? TVOnMaterial : null;
         }
         else
         {
