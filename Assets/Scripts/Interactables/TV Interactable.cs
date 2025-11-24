@@ -78,7 +78,7 @@ public class TVInteractable : Interactable
         {
             videoPlayer.Play();
             yield return new WaitUntil(() => videoPlayer.isPlaying);
-            _screenRenderer.material = TVOnMaterial;
+            _screenRenderer.material = TVOnMaterial ? TVOnMaterial : null;
         }
         else
         {
