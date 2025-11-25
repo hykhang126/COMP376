@@ -2598,40 +2598,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 6353983105119651536, guid: 60a43cfd1362b7b4899f19278f4d23e1, type: 3}
   m_PrefabInstance: {fileID: 966064876}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &385523671 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7071416110524938846, guid: 60a43cfd1362b7b4899f19278f4d23e1, type: 3}
-  m_PrefabInstance: {fileID: 966064876}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 385523668}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5fe4b85ec797d494ab1370b9afc049f5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::LightStalkerController
---- !u!136 &385523676
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 385523668}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.5
-  m_Height: 2
-  m_Direction: 1
-  m_Center: {x: 0, y: -0.00071132183, z: 0}
 --- !u!43 &432564051
 Mesh:
   m_ObjectHideFlags: 0
@@ -3286,7 +3252,7 @@ MonoBehaviour:
   npcPrefab: {fileID: 839530232}
   spawnPoint: {fileID: 1135093119}
   destination: {fileID: 382637574}
-  jumpscareClip: {fileID: 8300000, guid: 30cc386faf8aa4772a0c4fb8fd59677c, type: 3}
+  jumpscareClip: {fileID: 8300000, guid: 16a378aaad5561d49be39e5c48e73216, type: 3}
   jumpscareVolume: 1
 --- !u!65 &544609918
 BoxCollider:
@@ -4931,14 +4897,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 3752194050364853390, guid: 60a43cfd1362b7b4899f19278f4d23e1, type: 3}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3752194050364853390, guid: 60a43cfd1362b7b4899f19278f4d23e1, type: 3}
-      propertyPath: m_IsTrigger
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 4395965178007330038, guid: 60a43cfd1362b7b4899f19278f4d23e1, type: 3}
       propertyPath: m_LocalPosition.x
       value: 6.407
@@ -4979,58 +4937,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 6018077579191336849, guid: 60a43cfd1362b7b4899f19278f4d23e1, type: 3}
-      propertyPath: m_Layer
-      value: 2
-      objectReference: {fileID: 0}
     - target: {fileID: 6353983105119651536, guid: 60a43cfd1362b7b4899f19278f4d23e1, type: 3}
       propertyPath: m_Name
       value: LightStalker
       objectReference: {fileID: 0}
-    - target: {fileID: 6353983105119651536, guid: 60a43cfd1362b7b4899f19278f4d23e1, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6353983105119651536, guid: 60a43cfd1362b7b4899f19278f4d23e1, type: 3}
-      propertyPath: m_TagString
-      value: enemy
-      objectReference: {fileID: 0}
-    - target: {fileID: 7013293767866104222, guid: 60a43cfd1362b7b4899f19278f4d23e1, type: 3}
-      propertyPath: enemyController
-      value: 
-      objectReference: {fileID: 385523671}
     - target: {fileID: 7013293767866104222, guid: 60a43cfd1362b7b4899f19278f4d23e1, type: 3}
       propertyPath: playerFlashlight
       value: 
       objectReference: {fileID: 1334365942}
-    - target: {fileID: 7071416110524938846, guid: 60a43cfd1362b7b4899f19278f4d23e1, type: 3}
-      propertyPath: hushVolume
-      value: 1.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 7071416110524938846, guid: 60a43cfd1362b7b4899f19278f4d23e1, type: 3}
-      propertyPath: whisperClip
-      value: 
-      objectReference: {fileID: 8300000, guid: 75b32d577a45c35d68504981ba29a455, type: 3}
-    - target: {fileID: 7071416110524938846, guid: 60a43cfd1362b7b4899f19278f4d23e1, type: 3}
-      propertyPath: jumpscareClip
-      value: 
-      objectReference: {fileID: 8300000, guid: 5254e618a1fa1a548959f70cf3b594ba, type: 3}
-    - target: {fileID: 7071416110524938846, guid: 60a43cfd1362b7b4899f19278f4d23e1, type: 3}
-      propertyPath: whisperVolume
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7071416110524938846, guid: 60a43cfd1362b7b4899f19278f4d23e1, type: 3}
-      propertyPath: jumpscareHeadOffset
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7071416110524938846, guid: 60a43cfd1362b7b4899f19278f4d23e1, type: 3}
-      propertyPath: jumpscareHeadTarget
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 7071416110524938846, guid: 60a43cfd1362b7b4899f19278f4d23e1, type: 3}
-      propertyPath: slowdownBufferDuration
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 7071416110524938846, guid: 60a43cfd1362b7b4899f19278f4d23e1, type: 3}
       propertyPath: 'spawners.Array.data[0]'
       value: 
@@ -5044,56 +4958,13 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1349130313}
     - target: {fileID: 7071416110524938846, guid: 60a43cfd1362b7b4899f19278f4d23e1, type: 3}
-      propertyPath: jumpscareCameraDistance
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7071416110524938846, guid: 60a43cfd1362b7b4899f19278f4d23e1, type: 3}
-      propertyPath: slowdownSpeedMultiplier
-      value: 0.3
-      objectReference: {fileID: 0}
-    - target: {fileID: 7071416110524938846, guid: 60a43cfd1362b7b4899f19278f4d23e1, type: 3}
-      propertyPath: manualContactDistanceThreshold
-      value: 0.12
-      objectReference: {fileID: 0}
-    - target: {fileID: 7071416110524938846, guid: 60a43cfd1362b7b4899f19278f4d23e1, type: 3}
-      propertyPath: OnFleeSceneThree.m_PersistentCalls.m_Calls.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7071416110524938846, guid: 60a43cfd1362b7b4899f19278f4d23e1, type: 3}
-      propertyPath: OnFleeSceneThree.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7071416110524938846, guid: 60a43cfd1362b7b4899f19278f4d23e1, type: 3}
       propertyPath: OnFleeSceneThree.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 457396766}
-    - target: {fileID: 7071416110524938846, guid: 60a43cfd1362b7b4899f19278f4d23e1, type: 3}
-      propertyPath: OnFleeSceneThree.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 7071416110524938846, guid: 60a43cfd1362b7b4899f19278f4d23e1, type: 3}
-      propertyPath: OnFleeSceneThree.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: HandleLightStalkerSequenceEnded
-      objectReference: {fileID: 0}
-    - target: {fileID: 7071416110524938846, guid: 60a43cfd1362b7b4899f19278f4d23e1, type: 3}
-      propertyPath: OnFleeSceneThree.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: TaskManager, Assembly-CSharp
-      objectReference: {fileID: 0}
-    - target: {fileID: 7071416110524938846, guid: 60a43cfd1362b7b4899f19278f4d23e1, type: 3}
-      propertyPath: OnFleeSceneThree.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
-      value: UnityEngine.Object, UnityEngine
-      objectReference: {fileID: 0}
-    - target: {fileID: 8337238520577210330, guid: 60a43cfd1362b7b4899f19278f4d23e1, type: 3}
-      propertyPath: m_Controller
-      value: 
-      objectReference: {fileID: 9100000, guid: 5ca0b81b5909dc64190e8eb42a10f728, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 6353983105119651536, guid: 60a43cfd1362b7b4899f19278f4d23e1, type: 3}
-      insertIndex: 1
-      addedObject: {fileID: 385523676}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 60a43cfd1362b7b4899f19278f4d23e1, type: 3}
 --- !u!43 &1006694435
 Mesh:
@@ -12056,6 +11927,10 @@ PrefabInstance:
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 1753306628}
+    - target: {fileID: 8409400308406302544, guid: ccbdcfb6e05206941b13f0a9afd9b2da, type: 3}
+      propertyPath: m_IsTrigger
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8479994799964991286, guid: ccbdcfb6e05206941b13f0a9afd9b2da, type: 3}
       propertyPath: m_Mesh
       value: 
