@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 5961090926084262749}
   - component: {fileID: 4967722665162233801}
   - component: {fileID: 2124289745934211797}
-  m_Layer: 10
+  m_Layer: 2
   m_Name: ProximityTrigger
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -82,6 +82,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4395965178007330038}
+  - component: {fileID: 1443265560248015129}
   - component: {fileID: 3752194050364853390}
   - component: {fileID: 5028128561188652905}
   - component: {fileID: 7013293767866104222}
@@ -90,7 +91,7 @@ GameObject:
   - component: {fileID: 6330638515685503071}
   m_Layer: 10
   m_Name: LightStalker
-  m_TagString: Untagged
+  m_TagString: enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -106,12 +107,35 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -25.2, y: 1.5, z: 53.79}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 6041570709652980887}
   - {fileID: 5961090926084262749}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!136 &1443265560248015129
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6353983105119651536}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Height: 2
+  m_Direction: 1
+  m_Center: {x: 0, y: -0.00071132183, z: 0}
 --- !u!136 &3752194050364853390
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -320,8 +344,8 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  slowdownBufferDuration: 2
-  slowdownSpeedMultiplier: 0.5
+  slowdownBufferDuration: 1
+  slowdownSpeedMultiplier: 0.3
   fleeDuration: 4.5
   fleeSpeedMultiplier: 3
   fleeDistanceMultiplier: 4
@@ -329,7 +353,7 @@ MonoBehaviour:
   originalAgentSpeed: 3
   proximityTriggerOverride: {fileID: 2124289745934211797}
   hushClip: {fileID: 8300000, guid: 75b32d577a45c35d68504981ba29a455, type: 3}
-  whisperClip: {fileID: 8300000, guid: 0f17b49ced158df43a5909068b2e6fa8, type: 3}
+  whisperClip: {fileID: 8300000, guid: 75b32d577a45c35d68504981ba29a455, type: 3}
   hushVolume: 0.5
   whisperVolume: 1
   crossfadeTime: 0.25
@@ -340,7 +364,7 @@ MonoBehaviour:
     m_Bits: 4294967295
   fleeScreechClip: {fileID: 8300000, guid: 111cb335d900e3146b681d864ab64f8a, type: 3}
   fleeScreechVolume: 1
-  jumpscareClip: {fileID: 0}
+  jumpscareClip: {fileID: 8300000, guid: 5254e618a1fa1a548959f70cf3b594ba, type: 3}
   jumpscareVolume: 1
   jumpscareDuration: 2.2
   jumpscareCameraDistance: 1

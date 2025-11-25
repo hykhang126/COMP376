@@ -105,6 +105,7 @@ public class PlayerInputHandler : MonoBehaviour
     void OnEnable()
     {
         Init();
+        DontDestroyOnLoad(this.gameObject);
     }
 
     void OnDisable()
