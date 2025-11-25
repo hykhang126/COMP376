@@ -27,7 +27,7 @@ namespace SceneManagement
             _ = LoadSceneGroup(index);
         }
 
-        public int FindSceneGroupByName(string name)
+        public int FindSceneGroupIndexByName(string name)
         {
             for (int i = 0; i < sceneGroups.Length; i++)
             {

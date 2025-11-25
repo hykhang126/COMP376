@@ -9,7 +9,7 @@ namespace SceneManagement
 {
     public class SceneGroupManager
     {
-        SceneGroup activeSceneGroup;
+        public static SceneGroup activeSceneGroup;
         string persistentSceneName;
 
         public async Task LoadSceneGroup(SceneGroup sceneGroup, IProgress<float> progress = null)

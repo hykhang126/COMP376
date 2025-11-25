@@ -18,7 +18,7 @@ namespace SceneManagement
 
         public void LoadSceneGroupName(string sceneGroupName)
         {
-            int sceneGroup = sceneLoader.FindSceneGroupByName(sceneGroupName);
+            int sceneGroup = sceneLoader.FindSceneGroupIndexByName(sceneGroupName);
             if (sceneGroup != -1)
             {
                 LoadSceneGroup(sceneGroup);
@@ -27,6 +27,12 @@ namespace SceneManagement
             {
                 Debug.LogError($"Scene group {sceneGroupName} not found.");
             }
+        }
+
+        public void LoadNextSceneGroup()
+        {
+            int currentIndex = sceneLoader.FindSceneGroupIndexByName(SceneGroupManager.activeSceneGroup.Name);
+            sceneLoader.StartLoadingSceneGroup(currentIndex + 1);
         }
     }
 }
