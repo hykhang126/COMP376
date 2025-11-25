@@ -47,7 +47,7 @@ public class Inventory : MonoBehaviour
         if (InstanceReference == null)
         {
             InstanceReference = this;
-            DontDestroyOnLoad(gameObject);
+            // DontDestroyOnLoad(gameObject);
         }
         else
         {
