@@ -70,6 +70,8 @@ public class Pause : MonoBehaviour
 
     private void DeteminePause()
     {
+        if (this == null || !gameObject.scene.IsValid()) return; // Input safety check
+
         if (paused)
             ResumeGame();
         else
@@ -99,6 +101,8 @@ public class Pause : MonoBehaviour
 
     public void ResumeGame()
     {
+        if (this == null || !gameObject.scene.IsValid()) return; // Input safety check
+
         Time.timeScale = 1f; // Resume the game
         paused = false;
         pauseMenu.SetActive(false); // Hide the pause menu

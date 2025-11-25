@@ -82,7 +82,7 @@ public class Player : MonoBehaviour
         }
         InstanceReference = this;
         // Keep object loaded between scene loads. Not required 
-        //DontDestroyOnLoad(gameObject);
+        // DontDestroyOnLoad(gameObject);
 
     }
 
@@ -341,4 +341,10 @@ public class Player : MonoBehaviour
         transform.localScale = targetScale;
     }
     #endregion
+
+    [ContextMenu("DEBUG: reset scene")]
+    public void ResetScene()
+    {
+        UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().name);
+    }
 }

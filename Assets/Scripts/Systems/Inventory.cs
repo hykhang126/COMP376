@@ -87,7 +87,7 @@ public class Inventory : MonoBehaviour
         inventoryMapName = playerInputHandler.inventoryActionMap;
 
         playerInputHandler.AddMapActionNoParamSubscriber(playerMapName, "InventoryToggle", ToggleInventory);
-        playerInputHandler.AddMapActionNoParamSubscriber(inventoryMapName, "InventoryToggle", CloseInventory);
+        playerInputHandler.AddMapActionNoParamSubscriber(inventoryMapName, "InventoryToggle", ToggleInventory);
         playerInputHandler.AddMapActionNoParamSubscriber(inventoryMapName, "Next", Next);
         playerInputHandler.AddMapActionNoParamSubscriber(inventoryMapName, "Previous", Previous);
         playerInputHandler.AddMapActionNoParamSubscriber(inventoryMapName, "Combine", Combine);
@@ -125,8 +125,9 @@ public class Inventory : MonoBehaviour
     
     void OnDisable()
     {
+        // Unsubscribe from input events to prevent memory leaks
         playerInputHandler.RemoveMapActionNoParamSubscriber(playerMapName, "InventoryToggle", ToggleInventory);
-        playerInputHandler.RemoveMapActionNoParamSubscriber(inventoryMapName, "InventoryToggle", CloseInventory);
+        playerInputHandler.RemoveMapActionNoParamSubscriber(inventoryMapName, "InventoryToggle", ToggleInventory);
         playerInputHandler.RemoveMapActionNoParamSubscriber(inventoryMapName, "Next", Next);
         playerInputHandler.RemoveMapActionNoParamSubscriber(inventoryMapName, "Previous", Previous);
         playerInputHandler.RemoveMapActionNoParamSubscriber(inventoryMapName, "Combine", Combine);
@@ -135,6 +136,7 @@ public class Inventory : MonoBehaviour
 
     public void ToggleInventory()
     {
+        if (this == null || !gameObject.scene.IsValid()) return; // Input safety check
         //Logic to toggle the inventory UI
         //unlock the cursor
         Debug.Log("Inventory toggled");
@@ -236,6 +238,8 @@ public class Inventory : MonoBehaviour
 
     public void CycleItems(InputAction.CallbackContext context)
     {
+        if (this == null || !gameObject.scene.IsValid()) return; // Input safety check
+        
         if (!isInventoryOpen) return; // Only cycle items if the inventory is open
         int direction = Mathf.RoundToInt(context.ReadValue<Vector2>().y);
         if (items.Count != 0) currentItemIndex = (currentItemIndex + direction + items.Count) % items.Count;
@@ -263,6 +267,8 @@ public class Inventory : MonoBehaviour
 
     public void Next()
     {
+        if (this == null || !gameObject.scene.IsValid()) return; // Input safety check
+
         if (items.Count == 0 || !isInventoryOpen) return; // No items to cycle through
         currentItemIndex = (currentItemIndex + 1) % items.Count;
         playerInventorySO.currentItemIndex = currentItemIndex; // Update the current item index in the SO
@@ -273,6 +279,8 @@ public class Inventory : MonoBehaviour
 
     public void Previous()
     {
+        if (this == null || !gameObject.scene.IsValid()) return; // Input safety check
+
         if (items.Count == 0 || !isInventoryOpen) return; // No items to cycle through
         currentItemIndex = (currentItemIndex - 1 + items.Count) % items.Count;
         playerInventorySO.currentItemIndex = currentItemIndex; // Update the current item index in the SO
@@ -410,6 +418,8 @@ public class Inventory : MonoBehaviour
 
     public void Combine()
     {
+        if (this == null || !gameObject.scene.IsValid()) return; // Input safety check
+
         if (items == null || items.Count == 0)
         {
             Debug.LogWarning("[Inventory] Combine aborted: inventory is empty or items list is null.");
