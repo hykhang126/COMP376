@@ -11,7 +11,10 @@ public class EV2_FrameChecker : MonoBehaviour
 
     public bool hasSpawnedKey = false;
 
-    
+    void Awake()
+    {
+        DontDestroyOnLoad(gameObject);
+    }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
