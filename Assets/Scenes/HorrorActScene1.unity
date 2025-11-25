@@ -6539,6 +6539,11 @@ Mesh:
       - serializedVersion: 1
         m_IndexStart: 0
         m_IndexCount: 0
+--- !u!1 &1504057739 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2122762357399802875, guid: a9b92ebf67d0a7f4e8a1b3efedc9a2b4, type: 3}
+  m_PrefabInstance: {fileID: 1885552569}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1504736982
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -8826,6 +8831,10 @@ PrefabInstance:
       propertyPath: flashlightContractSO
       value: 
       objectReference: {fileID: 11400000, guid: 3dbb71b85a532acf6be8782c3f7f6a4e, type: 2}
+    - target: {fileID: 6218547655644601836, guid: a9b92ebf67d0a7f4e8a1b3efedc9a2b4, type: 3}
+      propertyPath: itemPreviewPlaceholder
+      value: 
+      objectReference: {fileID: 1504057739}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:

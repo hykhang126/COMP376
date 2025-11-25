@@ -328,7 +328,7 @@ MonoBehaviour:
   inBeamSpeedMultiplier: 0.25
   originalAgentSpeed: 3
   proximityTriggerOverride: {fileID: 2124289745934211797}
-  hushClip: {fileID: 8300000, guid: 5254e618a1fa1a548959f70cf3b594ba, type: 3}
+  hushClip: {fileID: 8300000, guid: 75b32d577a45c35d68504981ba29a455, type: 3}
   whisperClip: {fileID: 8300000, guid: 0f17b49ced158df43a5909068b2e6fa8, type: 3}
   hushVolume: 0.5
   whisperVolume: 1
@@ -350,6 +350,9 @@ MonoBehaviour:
   jumpscareHeadTarget: {fileID: 0}
   playerRespawnPoint: {fileID: 0}
   manualContactDistanceThreshold: 0.12
+  OnFleeSceneThree:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!54 &5658977490894596109
 Rigidbody:
   m_ObjectHideFlags: 0

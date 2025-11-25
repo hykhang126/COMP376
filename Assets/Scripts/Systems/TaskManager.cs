@@ -92,7 +92,7 @@ public class TaskManager : MonoBehaviour
         LeaveApartment();
         return;
       }
-      else if(SceneManager.GetActiveScene().name != "HorrorActScene")
+      else if(SceneManager.GetActiveScene().name != "HorrorActScene3")
       {
         LeaveApartment();
         return;
@@ -152,7 +152,7 @@ public class TaskManager : MonoBehaviour
 
     if (laughingLightStalker != null)
     {
-      laughingLightStalker.gameObject.SetActive(true);
+      laughingLightStalker.Play();
     }
 
   }

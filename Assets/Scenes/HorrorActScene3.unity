@@ -1505,7 +1505,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!82 &133117155
 AudioSource:
   m_ObjectHideFlags: 0
@@ -1518,7 +1518,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 8300000, guid: 7a66de912637b4d48a89a2c9af046bb8, type: 3}
-  m_PlayOnAwake: 1
+  m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
   Loop: 0
@@ -5004,9 +5004,21 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1334365942}
     - target: {fileID: 7071416110524938846, guid: 60a43cfd1362b7b4899f19278f4d23e1, type: 3}
+      propertyPath: hushVolume
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7071416110524938846, guid: 60a43cfd1362b7b4899f19278f4d23e1, type: 3}
+      propertyPath: whisperClip
+      value: 
+      objectReference: {fileID: 8300000, guid: 75b32d577a45c35d68504981ba29a455, type: 3}
+    - target: {fileID: 7071416110524938846, guid: 60a43cfd1362b7b4899f19278f4d23e1, type: 3}
       propertyPath: jumpscareClip
       value: 
       objectReference: {fileID: 8300000, guid: 5254e618a1fa1a548959f70cf3b594ba, type: 3}
+    - target: {fileID: 7071416110524938846, guid: 60a43cfd1362b7b4899f19278f4d23e1, type: 3}
+      propertyPath: whisperVolume
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7071416110524938846, guid: 60a43cfd1362b7b4899f19278f4d23e1, type: 3}
       propertyPath: jumpscareHeadOffset
       value: 1
@@ -11136,6 +11148,10 @@ PrefabInstance:
       propertyPath: Flashlight
       value: 
       objectReference: {fileID: 1934005229}
+    - target: {fileID: 1522203923896136226, guid: ccbdcfb6e05206941b13f0a9afd9b2da, type: 3}
+      propertyPath: m_Camera
+      value: 
+      objectReference: {fileID: 1334365941}
     - target: {fileID: 1787094163144377136, guid: ccbdcfb6e05206941b13f0a9afd9b2da, type: 3}
       propertyPath: m_Mesh
       value: 
@@ -11834,7 +11850,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7234300223014621297, guid: ccbdcfb6e05206941b13f0a9afd9b2da, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7279127657237525853, guid: ccbdcfb6e05206941b13f0a9afd9b2da, type: 3}
       propertyPath: m_IsActive

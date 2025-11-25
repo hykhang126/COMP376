@@ -11,6 +11,9 @@ public class PlayerInventorySO : MyScriptables
     [Header("Item Prefab preference")]
     public List<SerializableKeyValuePair<int, GameObject>> itemList = new();
 
+    bool hasFlashlight = false;
+    int batteriesCount = 0;
+
     [NaughtyAttributes.Button("Clear Items data")]
     public void ClearItemsInstance()
     {
@@ -22,10 +25,12 @@ public class PlayerInventorySO : MyScriptables
     [NaughtyAttributes.Button("Clear All data")]
     override public void ClearAllData()
     {
+        
         base.ClearAllData();
         items.Clear();
         currentItemIndex = 0;
         itemList.Clear();
+
     }
 }
 
