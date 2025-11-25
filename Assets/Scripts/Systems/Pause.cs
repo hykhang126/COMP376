@@ -48,6 +48,12 @@ public class Pause : MonoBehaviour
             gameSettingsSO = Resources.Load<GameSettingsSO>("Scriptable Objects/GameSettingsSO");
     }
 
+    void OnDisable()
+    {
+        playerInputHandler.RemoveMapActionNoParamSubscriber(playerMapName, "PauseGame", DeteminePause);
+        playerInputHandler.RemoveMapActionNoParamSubscriber(pauseMapName, "PauseGame", ResumeGame);
+    }
+
     public void Update()
     {
         if (EventSystem.current != null)

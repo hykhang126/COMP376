@@ -76,7 +76,7 @@ public class Inventory : MonoBehaviour
             {
                 // Get flashlight reference from PlayerInputHandler (may be null if not yet available)
                 flashlight = playerInputHandler.flashlight;
-                
+
             }
         }
         else
@@ -116,11 +116,21 @@ public class Inventory : MonoBehaviour
         }
 
         itemPreviewPlaceholder = gameObject.transform.Find("ItemPreviewPlaceholder").gameObject;
-        if(itemPreviewPlaceholder == null)
+        if (itemPreviewPlaceholder == null)
         {
             Debug.LogError("Did not find Item Preview Placeholder");
         }
 
+    }
+    
+    void OnDisable()
+    {
+        playerInputHandler.RemoveMapActionNoParamSubscriber(playerMapName, "InventoryToggle", ToggleInventory);
+        playerInputHandler.RemoveMapActionNoParamSubscriber(inventoryMapName, "InventoryToggle", CloseInventory);
+        playerInputHandler.RemoveMapActionNoParamSubscriber(inventoryMapName, "Next", Next);
+        playerInputHandler.RemoveMapActionNoParamSubscriber(inventoryMapName, "Previous", Previous);
+        playerInputHandler.RemoveMapActionNoParamSubscriber(inventoryMapName, "Combine", Combine);
+        playerInputHandler.RemoveMapActionSubscriber(inventoryMapName, "CycleItems", CycleItems);
     }
 
     public void ToggleInventory()
