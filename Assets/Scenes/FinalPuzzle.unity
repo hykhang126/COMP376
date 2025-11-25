@@ -10116,6 +10116,10 @@ PrefabInstance:
       value: 1.25
       objectReference: {fileID: 0}
     - target: {fileID: 7071416110524938846, guid: 60a43cfd1362b7b4899f19278f4d23e1, type: 3}
+      propertyPath: fleeScreechClip
+      value: 
+      objectReference: {fileID: 8300000, guid: 3350672fe3f8ba24dae0187c1348bb3c, type: 3}
+    - target: {fileID: 7071416110524938846, guid: 60a43cfd1362b7b4899f19278f4d23e1, type: 3}
       propertyPath: jumpscareDuration
       value: 5
       objectReference: {fileID: 0}

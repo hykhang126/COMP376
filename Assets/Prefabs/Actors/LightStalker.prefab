@@ -82,6 +82,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4395965178007330038}
+  - component: {fileID: 2250484527105950674}
   - component: {fileID: 1443265560248015129}
   - component: {fileID: 3752194050364853390}
   - component: {fileID: 5028128561188652905}
@@ -95,7 +96,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &4395965178007330038
 Transform:
   m_ObjectHideFlags: 0
@@ -113,6 +114,29 @@ Transform:
   - {fileID: 5961090926084262749}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!136 &2250484527105950674
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6353983105119651536}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Height: 2
+  m_Direction: 1
+  m_Center: {x: 0, y: -0.00071132183, z: 0}
 --- !u!136 &1443265560248015129
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -354,7 +378,7 @@ MonoBehaviour:
   proximityTriggerOverride: {fileID: 2124289745934211797}
   hushClip: {fileID: 8300000, guid: 75b32d577a45c35d68504981ba29a455, type: 3}
   whisperClip: {fileID: 8300000, guid: 75b32d577a45c35d68504981ba29a455, type: 3}
-  hushVolume: 0.5
+  hushVolume: 1.5
   whisperVolume: 1
   crossfadeTime: 0.25
   proximityCheckInterval: 0.18
@@ -362,9 +386,9 @@ MonoBehaviour:
   occlusionMask:
     serializedVersion: 2
     m_Bits: 4294967295
-  fleeScreechClip: {fileID: 8300000, guid: 111cb335d900e3146b681d864ab64f8a, type: 3}
+  fleeScreechClip: {fileID: 8300000, guid: 3350672fe3f8ba24dae0187c1348bb3c, type: 3}
   fleeScreechVolume: 1
-  jumpscareClip: {fileID: 8300000, guid: 5254e618a1fa1a548959f70cf3b594ba, type: 3}
+  jumpscareClip: {fileID: 8300000, guid: c89c714100c038942b3e1ad86c4b3fe5, type: 3}
   jumpscareVolume: 1
   jumpscareDuration: 2.2
   jumpscareCameraDistance: 1
@@ -376,7 +400,19 @@ MonoBehaviour:
   manualContactDistanceThreshold: 0.12
   OnFleeSceneThree:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: TaskManager, Assembly-CSharp
+        m_MethodName: HandleLightStalkerSequenceEnded
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!54 &5658977490894596109
 Rigidbody:
   m_ObjectHideFlags: 0
