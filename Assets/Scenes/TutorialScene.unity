@@ -8938,6 +8938,10 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1040468741183003728, guid: ccbdcfb6e05206941b13f0a9afd9b2da, type: 3}
+      propertyPath: interactionTriggered.m_PersistentCalls.m_Calls.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1040468741183003728, guid: ccbdcfb6e05206941b13f0a9afd9b2da, type: 3}
       propertyPath: interactionTriggered.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgument
       value: 
       objectReference: {fileID: 8300000, guid: d5321c19279530b1591c151d9b7a6621, type: 3}
@@ -9494,12 +9498,16 @@ PrefabInstance:
       value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 6831148398648178353, guid: ccbdcfb6e05206941b13f0a9afd9b2da, type: 3}
+      propertyPath: m_Resource
+      value: 
+      objectReference: {fileID: 8300000, guid: d5321c19279530b1591c151d9b7a6621, type: 3}
+    - target: {fileID: 6831148398648178353, guid: ccbdcfb6e05206941b13f0a9afd9b2da, type: 3}
       propertyPath: MaxDistance
       value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 6831148398648178353, guid: ccbdcfb6e05206941b13f0a9afd9b2da, type: 3}
       propertyPath: m_PlayOnAwake
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6894591256243137709, guid: ccbdcfb6e05206941b13f0a9afd9b2da, type: 3}
       propertyPath: m_Mesh
@@ -9809,7 +9817,8 @@ PrefabInstance:
       propertyPath: m_VersionIndex
       value: 9338
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 1040468741183003728, guid: ccbdcfb6e05206941b13f0a9afd9b2da, type: 3}
     m_RemovedGameObjects:
     - {fileID: 3394969789324606259, guid: ccbdcfb6e05206941b13f0a9afd9b2da, type: 3}
     - {fileID: 7468796773479497544, guid: ccbdcfb6e05206941b13f0a9afd9b2da, type: 3}
