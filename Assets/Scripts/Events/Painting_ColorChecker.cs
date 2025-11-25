@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class EV2_FrameChecker : MonoBehaviour
+public class ColorChecker : MonoBehaviour
 {
     [SerializeField] private Renderer[] materialsToCheck;
     [SerializeField] private Renderer[] frameRenderers;
