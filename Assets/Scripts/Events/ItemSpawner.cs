@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class ItemSpawner : MonoBehaviour
 {
-    private EV2_FrameChecker frameChecker;
+    private FrameChecker frameChecker;
     private AudioSource successSource;
 
     [SerializeField] private AudioClip successClip;
@@ -12,7 +12,7 @@ public class ItemSpawner : MonoBehaviour
 
     void Start()
     {
-        frameChecker = transform.parent.GetComponent<EV2_FrameChecker>();
+        frameChecker = transform.parent.GetComponent<FrameChecker>();
         if (frameChecker == null)
         {
             Debug.LogError("Event checker is null");
