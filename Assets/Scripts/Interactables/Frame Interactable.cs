@@ -46,6 +46,8 @@ public class FrameInteractable : Interactable
         {
             imageRenderer.material = frameMaterialNormal;
         }
+
+        imageRenderer.material.color = originalColor;
     }
 
     private bool ChangeMaterialColor()
