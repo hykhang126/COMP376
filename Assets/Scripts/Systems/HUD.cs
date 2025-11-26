@@ -36,7 +36,7 @@ public class HUD : MonoBehaviour
             Debug.LogError("GameOverPanel not found in HUD.");
         }
 
-        FindAnyObjectByType<LightStalkerController>().onNeckSnap.AddListener(DeathScreen);
+        FindAnyObjectByType<DeathManager>().onNeckSnap.AddListener(DeathScreen);
     }
     
     

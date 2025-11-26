@@ -1,14 +1,19 @@
 using System.Xml.Serialization;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.Events;
 
 public class FinalPuzzleManager : MonoBehaviour
 {
     [SerializeField] private ItemContractSO finalKeyItemSO;
 
+    public UnityEvent onJumpscareComplete = new UnityEvent();
+
+    public UnityEvent onNeckSnap = new UnityEvent();
+
     public void Start()
     {
-        FindAnyObjectByType<LightStalkerController>().onJumpscareComplete.AddListener(GameOver);
+        FindAnyObjectByType<DeathManager>().onJumpscareComplete.AddListener(GameOver);
     }
     
     public void CheckExitCondition()
