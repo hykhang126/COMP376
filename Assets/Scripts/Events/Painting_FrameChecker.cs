@@ -17,8 +17,16 @@ public class FrameChecker : MonoBehaviour
     
     private List<Material> colorMaterials;
 
+    private static FrameChecker instance;
+
     void Awake()
     {
+        if(instance != null && instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        instance = this;
         DontDestroyOnLoad(gameObject);
     }
 
@@ -33,7 +41,7 @@ public class FrameChecker : MonoBehaviour
             return;
         }
 
-        for(int i=0;i<frameRenderers.Length;i++)
+        for(int i=0;i<materialsToCheck.Length;i++)
         {
             Renderer renderer = frameRenderers[i];
             if (frameRenderers[i] == null || materialsToCheck[i] == null)
@@ -41,21 +49,12 @@ public class FrameChecker : MonoBehaviour
                 Debug.LogWarning("One of the frame renderers or materials to check is not assigned.");
                 return;
             }
-
-            int randomIndex = Random.Range(0, colorMaterials.Count);
             int randomIndexToCheck = Random.Range(0, colorMaterials.Count);
 
-            while(randomIndexToCheck == randomIndex)
-            {
-                randomIndexToCheck = Random.Range(0, colorMaterials.Count);
-            }
-            frameRenderers[i].material.color = colorMaterials[randomIndex].color;
             materialsToCheck[i].material.color = colorMaterials[randomIndexToCheck].color;
-
-            Debug.Log("Assigned color " + frameRenderers[i].material.color + " to frame renderer " + i);
             Debug.Log("Assigned color " + materialsToCheck[i].material.color + " to material to check " + i);
 
-            colorMaterials.RemoveAt(randomIndex); // Ensure unique colors
+            colorMaterials.RemoveAt(randomIndexToCheck); // Ensure unique colors
         }
 
         keySpawner = transform.Find("KeySpawner")?.gameObject;
