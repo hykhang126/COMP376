@@ -645,13 +645,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2747049698810651338}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.032883734, y: 0.70634174, z: -0.70634174, w: -0.032883734}
-  m_LocalPosition: {x: 0.0000010918603, y: -3.02, z: -0}
+  m_LocalRotation: {x: -0.00032374635, y: 0.66250396, z: -0.74905795, w: -0.0008080416}
+  m_LocalPosition: {x: 0.012, y: -0.283, z: -0.024}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6335204541154062239}
-  m_LocalEulerAnglesHint: {x: 95.33099, y: 90, z: -90}
+  m_LocalEulerAnglesHint: {x: 97.018005, y: 179.725, z: -0.3670044}
 --- !u!108 &3179508161369383720
 Light:
   m_ObjectHideFlags: 0
@@ -757,15 +757,14 @@ GameObject:
   - component: {fileID: 6335204541154062239}
   - component: {fileID: 2350694373632829555}
   - component: {fileID: 384722844784150849}
-  - component: {fileID: 5680160801128194814}
   - component: {fileID: 5892630267381453625}
   m_Layer: 0
   m_Name: Flashlight
-  m_TagString: Untagged
+  m_TagString: flashlightTag
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &6335204541154062239
 Transform:
   m_ObjectHideFlags: 0
@@ -774,16 +773,16 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3030522681464480912}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0.7071068, z: -0.7071068, w: 0}
-  m_LocalPosition: {x: 0.296, y: -0.369, z: 0.626}
-  m_LocalScale: {x: 0.08443435, y: 0.09591067, z: 0.073199995}
+  m_LocalRotation: {x: 0.014716628, y: 0.671724, z: -0.74057376, w: 0.01099233}
+  m_LocalPosition: {x: 0.26813865, y: -0.2431455, z: 0.4929638}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7093812255644744325}
   - {fileID: 1072474523875000079}
   - {fileID: 481674546160595529}
   m_Father: {fileID: 7293616561641714550}
-  m_LocalEulerAnglesHint: {x: 90, y: 180, z: 0}
+  m_LocalEulerAnglesHint: {x: 95.58899, y: 175.861, z: -2.0529785}
 --- !u!33 &2350694373632829555
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -841,29 +840,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!136 &5680160801128194814
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3030522681464480912}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.5000001
-  m_Height: 5.302272
-  m_Direction: 1
-  m_Center: {x: 0.00000006824126, y: -0.45594072, z: -0.000000048127617}
 --- !u!114 &5892630267381453625
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -878,7 +854,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   FlashlightLight: {fileID: 2747049698810651338}
   FlashlightSpotLight: {fileID: 3179508161369383720}
-  maxBattery: 50
+  maxBattery: 100
   FIRST_WARNING_TIME: 20
   LAST_WARNING_TIME: 5
   IsActivated: 0
@@ -929,7 +905,19 @@ MonoBehaviour:
         m_CallState: 2
   OnBatteryRecharged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 6688815378221881368}
+        m_TargetAssemblyTypeName: BatteryIndicator, Assembly-CSharp
+        m_MethodName: HandleBatteryInsert
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   OnBeamEnter:
     m_PersistentCalls:
       m_Calls: []
@@ -951,7 +939,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  beamRange: 10
+  beamRange: 5
   beamHitMask:
     serializedVersion: 2
     m_Bits: 4294967295
@@ -1016,8 +1004,8 @@ Transform:
   m_GameObject: {fileID: 5181218133593911367}
   serializedVersion: 2
   m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: -1.36, z: -0.36}
-  m_LocalScale: {x: -0.33957, y: 0.18763, z: 0.26212}
+  m_LocalPosition: {x: -0.004, y: -0.128, z: -0.036}
+  m_LocalScale: {x: 0.05, y: 0.015358292, z: 0.06875601}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7854647098140106571}
@@ -1290,7 +1278,7 @@ GameObject:
   - component: {fileID: 21873035584615497}
   m_Layer: 0
   m_Name: camera
-  m_TagString: Untagged
+  m_TagString: MainCamera
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1498,7 +1486,7 @@ Transform:
   m_GameObject: {fileID: 7102143770686881452}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -2.09, z: 0}
+  m_LocalPosition: {x: -0.002, y: -0.193, z: -0.0021}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1643,13 +1631,13 @@ Light:
     serializedVersion: 2
     m_Bits: 4294967295
   m_RenderingLayerMask: 1
-  m_Lightmapping: 2
+  m_Lightmapping: 1
   m_LightShadowCasterMode: 0
   m_AreaSize: {x: 1, y: 1}
   m_BounceIntensity: 1
   m_ColorTemperature: 6570
   m_UseColorTemperature: 0
-  m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0}
+  m_BoundingSphereOverride: {x: 2.4576e-41, y: -0.0390625, z: -0.07592324, w: -0.08595276}
   m_UseBoundingSphereOverride: 0
   m_UseViewFrustumForShadowCasterCull: 1
   m_ForceVisible: 0

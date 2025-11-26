@@ -15,4 +15,10 @@ MonoBehaviour:
   recipeBook:
   - {fileID: 11400000, guid: 0d79177fe558ba938814cb468a4a39e5, type: 2}
   - {fileID: 11400000, guid: dc8fd798eaae12bf68fa3eed1a58cf8a, type: 2}
+  - {fileID: 11400000, guid: 0b5ddc24c5480c746850d35ee6e22ea0, type: 2}
+  - {fileID: 11400000, guid: 37025b7b1f744804cb75d48010681609, type: 2}
+  - {fileID: 11400000, guid: 4b4d7700ec1a792429edfea7d4d7a238, type: 2}
+  - {fileID: 11400000, guid: 1582c144c1ed4504388d3251ac2851a4, type: 2}
+  - {fileID: 11400000, guid: c0e90d664bb9fea4498671e2edfddaed, type: 2}
+  - {fileID: 11400000, guid: 08f96c6c0d4839c488bcc3d289dd6ea2, type: 2}
   - {fileID: 11400000, guid: dd533ee450c3b3e46aa2aa6ff826d7ed, type: 2}

@@ -16,4 +16,5 @@ MonoBehaviour:
   _description: Sandwich
   _meshRef: {fileID: 4300000, guid: fec741b9da329714ea2dd2119d2e390a, type: 3}
   _material: {fileID: 2100000, guid: d2f521cb274445740bdb023b2765701e, type: 2}
+  _isConsumable: 1
   _id: d6988ddd-9713-437b-ac06-982a52f53074

@@ -248,7 +248,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 1250
+  m_VersionIndex: 1274
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -606,7 +606,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 1272
+  m_VersionIndex: 1296
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -704,8 +704,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   imageRenderer: {fileID: 1375333100387890819}
-  frameMaterialNormal: {fileID: 2100000, guid: a049080c17ec23541a35be281c28fc10, type: 2}
-  frameMaterialTrigered: {fileID: 2100000, guid: 64fbcad1a50f1be42a179bc7095ed608, type: 2}
+  frameMaterialNormal: {fileID: 2100000, guid: 64fbcad1a50f1be42a179bc7095ed608, type: 2}
+  frameMaterialTrigered: {fileID: 2100000, guid: a049080c17ec23541a35be281c28fc10, type: 2}
   isOneTime: 0
   isTriggered: 0
 --- !u!114 &3648029942203265558
@@ -726,10 +726,10 @@ MonoBehaviour:
       - m_Target: {fileID: 477836297812481571}
         m_TargetAssemblyTypeName: FrameInteractable, Assembly-CSharp
         m_MethodName: Interact
-        m_Mode: 2
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: Player, Assembly-CSharp
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 

@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8e9dc5f7d7ea94c41958f79f15ca32b9, type: 3}
+  m_Name: BlueVial
+  m_EditorClassIdentifier: Assembly-CSharp::ItemContractSO
+  _name: Blue Vial
+  _description: Use it on a painting to paint it blue
+  _meshRef: {fileID: 1917029493789446750, guid: 0a77190ec0f307e41b8f54603c9a2cd6, type: 3}
+  _material: {fileID: 2100000, guid: cb297ac92c8f5fd4faa072d47bcfe0dc, type: 2}
+  _id: 601d8fa0-d23b-404b-91bf-67a45c9ce3b8

@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8e9dc5f7d7ea94c41958f79f15ca32b9, type: 3}
+  m_Name: RedVial
+  m_EditorClassIdentifier: Assembly-CSharp::ItemContractSO
+  _name: Red Vial
+  _description: Use it on a painting to paint it red
+  _meshRef: {fileID: 1917029493789446750, guid: 0a77190ec0f307e41b8f54603c9a2cd6, type: 3}
+  _material: {fileID: 2100000, guid: 46d5c7c98bbb81c44a7b452a7715aeb7, type: 2}
+  _id: 7a11a4d2-eba9-4514-8c82-4089e6061ffd

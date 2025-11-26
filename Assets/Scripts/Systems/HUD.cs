@@ -3,14 +3,17 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class HUD : MonoBehaviour
-{
+{   
     public GameObject EndGamePanel{ get; private set; }
     public GameObject EndGameVolume { get; private set; }
     private Button quitGame;
 
+    private GameObject GameOverPanel;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        // DontDestroyOnLoad(gameObject);
         EndGamePanel = transform.Find("EndGame")?.gameObject;
 
         if (quitGame != null)
@@ -24,6 +27,16 @@ public class HUD : MonoBehaviour
             EndGamePanel.SetActive(false);
         
         EndGameVolume = GameObject.Find("End Game Volume");
+
+        GameOverPanel = transform.parent.Find("GameOver")?.gameObject;
+        if (GameOverPanel != null)
+            GameOverPanel.SetActive(false);
+        else
+        {
+            Debug.LogError("GameOverPanel not found in HUD.");
+        }
+
+        FindAnyObjectByType<DeathManager>().onNeckSnap.AddListener(DeathScreen);
     }
     
     
@@ -50,5 +63,10 @@ public class HUD : MonoBehaviour
             EventSystem.current.SetSelectedGameObject(quitGame.gameObject);
         #endif
         }
+    }
+
+    private void DeathScreen()
+    {
+        GameOverPanel.SetActive(true);
     }
 }
