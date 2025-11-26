@@ -89,44 +89,40 @@ public class TaskManager : MonoBehaviour
   }
 
   public void LeaveApartmentFromDoor(GameObject door)
-  {
-      
-    // If all tasks done, let the existing logic handle scene switching.
+  { 
+      // If all tasks done, let the existing logic handle scene switching.
       if (allTasksDone)
       {
-      if (lightStalkerSequenceEnded)
-      {
-        LeaveApartment();
-        return;
-      }
-      else if(SceneManager.GetActiveScene().name != "HorrorActScene3")
-      {
-        LeaveApartment();
-        return;
-      }
-      else
-      {
-        StartLightStalkerSequence();
-      }
-
-
-          
+          if (lightStalkerSequenceEnded)
+          {
+            LeaveApartment();
+            return;
+          }
+          else if(SceneManager.GetActiveScene().name != "HorrorActScene3")
+          {
+            LeaveApartment();
+            return;
+          }
+          else
+          {
+            StartLightStalkerSequence();
+          }
       }
 
       AudioSource doorSource = null;
       if (door != null)
       {
-          doorSource = door.GetComponent<AudioSource>() ?? door.GetComponentInChildren<AudioSource>();
+        doorSource = door.GetComponent<AudioSource>() ?? door.GetComponentInChildren<AudioSource>();
       }
 
       if (doorSource != null && doorSource.clip != null)
       {
-          doorSource.pitch = UnityEngine.Random.Range(0.95f, 1.05f);
-          doorSource.PlayOneShot(doorSource.clip);
+        doorSource.pitch = UnityEngine.Random.Range(0.95f, 1.05f);
+        doorSource.PlayOneShot(doorSource.clip);
       }
       else
       {
-          Debug.LogWarning("LeaveApartmentFromDoor: Door AudioSource has no clip assigned.");
+        Debug.LogWarning("LeaveApartmentFromDoor: Door AudioSource has no clip assigned.");
       }   
       
       Debug.Log("Must finish all tasks before leaving for groceries");
@@ -140,19 +136,18 @@ public class TaskManager : MonoBehaviour
 
   private void StartLightStalkerSequence()
   {
-  // Use typeof(Light) and FindObjectsByType overload with correct parameters
-  Light[] lights = GameObject.FindObjectsByType<Light>(UnityEngine.FindObjectsSortMode.None);
+    // Use typeof(Light) and FindObjectsByType overload with correct parameters
+    Light[] lights = GameObject.FindObjectsByType<Light>(UnityEngine.FindObjectsSortMode.None);
 
-  foreach (Light light in lights)
-  {
-      if ( light.gameObject.name != "Flashlight Light" && light.gameObject.name != "Inventory Light" && light.gameObject.name != "BatteryIndicator Light")
-      {
-        light.gameObject.SetActive(false);
-      }
-  }
+    foreach (Light light in lights)
+    {
+        if ( light.gameObject.name != "Flashlight Light" && light.gameObject.name != "Inventory Light" && light.gameObject.name != "BatteryIndicator Light")
+        {
+          light.gameObject.SetActive(false);
+        }
+    }
 
-
-  if (LightStalker != null)
+    if (LightStalker != null)
     {
       LightStalker.gameObject.SetActive(true);
     }
@@ -161,7 +156,6 @@ public class TaskManager : MonoBehaviour
     {
       laughingLightStalker.Play();
     }
-
   }
 
   public void LeaveApartment()
