@@ -1,9 +1,15 @@
+using System.Xml.Serialization;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class FinalPuzzleManager : MonoBehaviour
 {
     [SerializeField] private ItemContractSO finalKeyItemSO;
+
+    public void Start()
+    {
+        FindAnyObjectByType<LightStalkerController>().onJumpscareComplete.AddListener(GameOver);
+    }
     
     public void CheckExitCondition()
     {
@@ -20,5 +26,13 @@ public class FinalPuzzleManager : MonoBehaviour
                 SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().name);
             }
         }
+    }
+
+    private void GameOver()
+    {
+        //Reset the players inventory to before their first entered the level
+        //Destroy the EV2_LevelManager instance to reset the level completely
+        Destroy(FindAnyObjectByType<FrameChecker>().gameObject);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 }
