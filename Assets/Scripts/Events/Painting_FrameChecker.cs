@@ -67,7 +67,7 @@ public class FrameChecker : MonoBehaviour
     {
         for (int i = 0; i < frameRenderers.Length; i++)
         {
-            if (frameRenderers[i].material.name != materialsToCheck[i].material.name && frameRenderers[i].material.color != materialsToCheck[i].material.color)
+            if (frameRenderers[i].material.name != materialsToCheck[i].material.name || frameRenderers[i].material.color != materialsToCheck[i].material.color)
             {
                 isCorrectMaterial = false; // If any material does not match
                 return;
