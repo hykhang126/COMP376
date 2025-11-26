@@ -17,7 +17,7 @@ public class TaskManager : MonoBehaviour
 
   bool lightStalkerSequenceEnded = false;
 
-  private String sandwichText = "\r\nMAKE A SANDWICH";
+  private String sandwichText = "\r\nEAT A SANDWICH";
   private String washHandsText = "\r\nWASH HANDS";
   private String clothesText = "\r\nPUT BEDROOM CLOTHES IN WASHER";
 
@@ -74,7 +74,7 @@ public class TaskManager : MonoBehaviour
   public void CompleteSandwichTask()
   {
     Inventory.sandwichEvent.RemoveListener(CompleteSandwichTask);
-    sandwichText = "\r\n<s>MAKE A SANDWICH</s>";
+    sandwichText = "\r\n<s>EAT A SANDWICH</s>";
     UpdateBlackBoardText();
     makeSandwichTaskFinished = true;
     CheckAllTasksDone();

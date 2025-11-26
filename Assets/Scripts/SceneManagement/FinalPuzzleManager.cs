@@ -20,7 +20,7 @@ public class FinalPuzzleManager : MonoBehaviour
     {
         if(Inventory.InstanceReference != null)
         {
-            if(Inventory.InstanceReference.items.Count > 0 && Inventory.InstanceReference.items[Inventory.InstanceReference.GetCurrentItemIndex()].Id == finalKeyItemSO.Id)
+            if(Inventory.InstanceReference.playerInventorySO.items.Count > 0 && Inventory.InstanceReference.playerInventorySO.items[Inventory.InstanceReference.GetCurrentItemIndex()].Id == finalKeyItemSO.Id)
             {
                 Debug.Log("Final key used, exiting game...");
                 // Implement game exit or level completion logic here

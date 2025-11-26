@@ -27,7 +27,7 @@ public class FrameInteractable : Interactable
             return;
         }
 
-        if(Inventory.InstanceReference != null && Inventory.InstanceReference.items.Count > 0)
+        if(Inventory.InstanceReference != null && Inventory.InstanceReference.playerInventorySO.items.Count > 0)
         {
             if(ChangeMaterialColor())
             {
@@ -52,25 +52,25 @@ public class FrameInteractable : Interactable
 
     private bool ChangeMaterialColor()
     {
-        switch(Inventory.InstanceReference.items[Inventory.InstanceReference.GetCurrentItemIndex()].Name)
+        switch(Inventory.InstanceReference.playerInventorySO.items[Inventory.InstanceReference.GetCurrentItemIndex()].Name)
         {
             case "Red Vial":
-                originalColor = Inventory.InstanceReference.items[Inventory.InstanceReference.GetCurrentItemIndex()].Material.color;
+                originalColor = Inventory.InstanceReference.playerInventorySO.items[Inventory.InstanceReference.GetCurrentItemIndex()].Material.color;
                 return true;
             case "Blue Vial":
-                originalColor = Inventory.InstanceReference.items[Inventory.InstanceReference.GetCurrentItemIndex()].Material.color;
+                originalColor = Inventory.InstanceReference.playerInventorySO.items[Inventory.InstanceReference.GetCurrentItemIndex()].Material.color;
                 return true;
             case "Green Vial":
-                originalColor = Inventory.InstanceReference.items[Inventory.InstanceReference.GetCurrentItemIndex()].Material.color;
+                originalColor = Inventory.InstanceReference.playerInventorySO.items[Inventory.InstanceReference.GetCurrentItemIndex()].Material.color;
                 return true;
             case "Yellow Vial":
-                originalColor = Inventory.InstanceReference.items[Inventory.InstanceReference.GetCurrentItemIndex()].Material.color;
+                originalColor = Inventory.InstanceReference.playerInventorySO.items[Inventory.InstanceReference.GetCurrentItemIndex()].Material.color;
                 return true;
             case "Magenta Vial":
-                originalColor = Inventory.InstanceReference.items[Inventory.InstanceReference.GetCurrentItemIndex()].Material.color;
+                originalColor = Inventory.InstanceReference.playerInventorySO.items[Inventory.InstanceReference.GetCurrentItemIndex()].Material.color;
                 return true;
             case "Cyan Vial":
-                originalColor = Inventory.InstanceReference.items[Inventory.InstanceReference.GetCurrentItemIndex()].Material.color;
+                originalColor = Inventory.InstanceReference.playerInventorySO.items[Inventory.InstanceReference.GetCurrentItemIndex()].Material.color;
                 return true;
             default:
                 Debug.LogWarning("Item used on frame is not a paint item.");
