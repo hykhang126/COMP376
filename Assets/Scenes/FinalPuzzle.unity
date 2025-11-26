@@ -10444,34 +10444,6 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1334365942}
     - target: {fileID: 7071416110524938846, guid: 60a43cfd1362b7b4899f19278f4d23e1, type: 3}
-      propertyPath: hushVolume
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7071416110524938846, guid: 60a43cfd1362b7b4899f19278f4d23e1, type: 3}
-      propertyPath: fleeDuration
-      value: 4.3
-      objectReference: {fileID: 0}
-    - target: {fileID: 7071416110524938846, guid: 60a43cfd1362b7b4899f19278f4d23e1, type: 3}
-      propertyPath: jumpscareClip
-      value: 
-      objectReference: {fileID: 8300000, guid: c89c714100c038942b3e1ad86c4b3fe5, type: 3}
-    - target: {fileID: 7071416110524938846, guid: 60a43cfd1362b7b4899f19278f4d23e1, type: 3}
-      propertyPath: whisperVolume
-      value: 1.25
-      objectReference: {fileID: 0}
-    - target: {fileID: 7071416110524938846, guid: 60a43cfd1362b7b4899f19278f4d23e1, type: 3}
-      propertyPath: fleeScreechClip
-      value: 
-      objectReference: {fileID: 8300000, guid: 3350672fe3f8ba24dae0187c1348bb3c, type: 3}
-    - target: {fileID: 7071416110524938846, guid: 60a43cfd1362b7b4899f19278f4d23e1, type: 3}
-      propertyPath: jumpscareVolume
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7071416110524938846, guid: 60a43cfd1362b7b4899f19278f4d23e1, type: 3}
-      propertyPath: jumpscareDuration
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 7071416110524938846, guid: 60a43cfd1362b7b4899f19278f4d23e1, type: 3}
       propertyPath: 'spawners.Array.data[0]'
       value: 
       objectReference: {fileID: 1065655642}
@@ -10483,10 +10455,6 @@ PrefabInstance:
       propertyPath: 'spawners.Array.data[2]'
       value: 
       objectReference: {fileID: 1349130313}
-    - target: {fileID: 7071416110524938846, guid: 60a43cfd1362b7b4899f19278f4d23e1, type: 3}
-      propertyPath: jumpscareShakeIntensity
-      value: 0.3
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -14156,6 +14124,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 356833715875402867, guid: a134cc40a117af44daa5d51a4d3e902a, type: 3}
+      propertyPath: flashlight
+      value: 
+      objectReference: {fileID: 1334365942}
     - target: {fileID: 972639073029162981, guid: a134cc40a117af44daa5d51a4d3e902a, type: 3}
       propertyPath: m_Name
       value: Player

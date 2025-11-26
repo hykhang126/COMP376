@@ -34,6 +34,13 @@ public class TaskManager : MonoBehaviour
     UpdateBlackBoardText();
     Inventory.sandwichEvent.AddListener(CompleteSandwichTask);
     Washer.onClothesInWasher.AddListener(CompleteClothesTask);
+
+    FindAnyObjectByType<DeathManager>()?.onJumpscareComplete.AddListener(HandleDeath);
+  }
+
+  public void HandleDeath()
+  {
+    SceneManager.LoadScene(SceneManager.GetActiveScene().name);
   }
 
   public void OnSinkInteract()
