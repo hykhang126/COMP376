@@ -67,6 +67,7 @@ public class Player : MonoBehaviour
     private HUD HUD;
     private Rigidbody rb;
 
+    private float normalHeight;
     public void Awake()
     {
         stateMachine = GetComponent<StateMachine>();
@@ -88,6 +89,7 @@ public class Player : MonoBehaviour
 
     void Start()
     {
+        normalHeight = GetComponent<CapsuleCollider>().height;
         // Set currentYaw value to starting transform forward direction
         currentYaw = transform.rotation.y;
         // Set starting sensitivity based on initial _inputMode
@@ -320,25 +322,26 @@ public class Player : MonoBehaviour
     }
 
     void LerpToCrouchScale()
-    {
-        transform.localScale = Vector3.Lerp(transform.localScale, new Vector3(1f, 0.5f, 1f), 0.25f);
+    {   
+        CapsuleCollider c = GetComponent<CapsuleCollider>();
+        c.height = Mathf.Lerp(c.height,normalHeight/4f,0.25f);
     }
 
     IEnumerator LerpToStandingScale()
     {
-        Vector3 startScale = transform.localScale;
-        Vector3 targetScale = new Vector3(1f, 1f, 1f);
+        CapsuleCollider c = GetComponent<CapsuleCollider>();
+        float startHeight = c.height;
         float timeElapsed = 0f;
-        float lerpDuration = 0.15f;
+        float lerpDuration = 0.5f;
 
         while (timeElapsed < lerpDuration)
         {
             float t = timeElapsed / lerpDuration;
-            transform.localScale = Vector3.Lerp(startScale, targetScale, t);
+            c.height = Mathf.Lerp(startHeight, normalHeight, t);
             timeElapsed += Time.fixedDeltaTime;
             yield return null;
         }
-        transform.localScale = targetScale;
+        c.height = normalHeight;
     }
     #endregion
 

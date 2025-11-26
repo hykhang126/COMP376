@@ -700,6 +700,15 @@ public partial class @PlayerInput_Actions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Consume"",
+                    ""type"": ""Button"",
+                    ""id"": ""824b323f-7e8f-4cbe-b827-ed761f91bdc5"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -805,11 +814,22 @@ public partial class @PlayerInput_Actions: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""542f20b2-159f-4ff7-bb85-15107bb106b8"",
-                    ""path"": ""<Keyboard>/c"",
+                    ""path"": ""<Keyboard>/q"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Combine"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""53fc43c7-fb99-4275-9f64-b1a59334edf4"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Consume"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -902,6 +922,7 @@ public partial class @PlayerInput_Actions: IInputActionCollection2, IDisposable
         m_Inventory_Next = m_Inventory.FindAction("Next", throwIfNotFound: true);
         m_Inventory_Previous = m_Inventory.FindAction("Previous", throwIfNotFound: true);
         m_Inventory_Combine = m_Inventory.FindAction("Combine", throwIfNotFound: true);
+        m_Inventory_Consume = m_Inventory.FindAction("Consume", throwIfNotFound: true);
     }
 
     ~@PlayerInput_Actions()
@@ -1291,6 +1312,7 @@ public partial class @PlayerInput_Actions: IInputActionCollection2, IDisposable
     private readonly InputAction m_Inventory_Next;
     private readonly InputAction m_Inventory_Previous;
     private readonly InputAction m_Inventory_Combine;
+    private readonly InputAction m_Inventory_Consume;
     /// <summary>
     /// Provides access to input actions defined in input action map "Inventory".
     /// </summary>
@@ -1322,6 +1344,10 @@ public partial class @PlayerInput_Actions: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "Inventory/Combine".
         /// </summary>
         public InputAction @Combine => m_Wrapper.m_Inventory_Combine;
+        /// <summary>
+        /// Provides access to the underlying input action "Inventory/Consume".
+        /// </summary>
+        public InputAction @Consume => m_Wrapper.m_Inventory_Consume;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -1363,6 +1389,9 @@ public partial class @PlayerInput_Actions: IInputActionCollection2, IDisposable
             @Combine.started += instance.OnCombine;
             @Combine.performed += instance.OnCombine;
             @Combine.canceled += instance.OnCombine;
+            @Consume.started += instance.OnConsume;
+            @Consume.performed += instance.OnConsume;
+            @Consume.canceled += instance.OnConsume;
         }
 
         /// <summary>
@@ -1389,6 +1418,9 @@ public partial class @PlayerInput_Actions: IInputActionCollection2, IDisposable
             @Combine.started -= instance.OnCombine;
             @Combine.performed -= instance.OnCombine;
             @Combine.canceled -= instance.OnCombine;
+            @Consume.started -= instance.OnConsume;
+            @Consume.performed -= instance.OnConsume;
+            @Consume.canceled -= instance.OnConsume;
         }
 
         /// <summary>
@@ -1629,5 +1661,12 @@ public partial class @PlayerInput_Actions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnCombine(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Consume" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnConsume(InputAction.CallbackContext context);
     }
 }

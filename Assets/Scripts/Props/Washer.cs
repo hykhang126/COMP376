@@ -32,13 +32,13 @@ public class Washer : Interactable
     public override void Interact()
     {
         
-        if(Inventory.InstanceReference.items.Count != 0 && !shirtInWasher && Inventory.InstanceReference.items[Inventory.InstanceReference.GetCurrentItemIndex()].Name == "Shirt")
+        if(Inventory.InstanceReference.playerInventorySO.items.Count != 0 && !shirtInWasher && Inventory.InstanceReference.playerInventorySO.items[Inventory.InstanceReference.GetCurrentItemIndex()].Name == "Shirt")
         {
             shirtInWasher = true;
             Inventory.InstanceReference.RemoveItem();
             CheckLaundryStart();
         }
-        else if(Inventory.InstanceReference.items.Count != 0 &&!pantsInWasher && Inventory.InstanceReference.items[Inventory.InstanceReference.GetCurrentItemIndex()].Name == "Pants")
+        else if(Inventory.InstanceReference.playerInventorySO.items.Count != 0 &&!pantsInWasher && Inventory.InstanceReference.playerInventorySO.items[Inventory.InstanceReference.GetCurrentItemIndex()].Name == "Pants")
         {
             pantsInWasher = true;
             Inventory.InstanceReference.RemoveItem();

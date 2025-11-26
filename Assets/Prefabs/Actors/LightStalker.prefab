@@ -378,8 +378,8 @@ MonoBehaviour:
   proximityTriggerOverride: {fileID: 2124289745934211797}
   hushClip: {fileID: 8300000, guid: 75b32d577a45c35d68504981ba29a455, type: 3}
   whisperClip: {fileID: 8300000, guid: 75b32d577a45c35d68504981ba29a455, type: 3}
-  hushVolume: 1.5
-  whisperVolume: 1
+  hushVolume: 1
+  whisperVolume: 1.25
   crossfadeTime: 0.25
   proximityCheckInterval: 0.18
   useOcclusionRaycast: 1
@@ -390,13 +390,14 @@ MonoBehaviour:
   fleeScreechVolume: 1
   jumpscareClip: {fileID: 8300000, guid: c89c714100c038942b3e1ad86c4b3fe5, type: 3}
   jumpscareVolume: 1
-  jumpscareDuration: 2.2
+  jumpscareDuration: 5
   jumpscareCameraDistance: 1
   jumpscareFOV: 30
-  jumpscareShakeIntensity: 0.05
+  jumpscareShakeIntensity: 0.3
   jumpscareHeadOffset: 1
   jumpscareHeadTarget: {fileID: 0}
   playerRespawnPoint: {fileID: 0}
+  neckSnappingTrigger: 4.4
   manualContactDistanceThreshold: 0.12
   OnFleeSceneThree:
     m_PersistentCalls:

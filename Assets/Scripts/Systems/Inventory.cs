@@ -8,7 +8,6 @@ using UnityEditor.ShaderKeywordFilter;
 public class Inventory : MonoBehaviour
 {
     // Global Variables
-    public List<ItemContractSO> items = new List<ItemContractSO>();
     public GameObject inventoryUI; // Reference to the inventory UI GameObject
     public GameObject itemPreviewPlaceholder;
     public ItemRecipeBook recipeBook;
@@ -19,7 +18,7 @@ public class Inventory : MonoBehaviour
     public static Inventory InstanceReference { get; private set; }
 
     // Serialized
-    [SerializeField] private PlayerInventorySO playerInventorySO;
+    public PlayerInventorySO playerInventorySO;
     [SerializeField] private AudioClip pickUpAudioClip;
     [SerializeField] private int itemFromIndex = -1;
     [SerializeField] private int itemToIndex = -1;
@@ -92,6 +91,7 @@ public class Inventory : MonoBehaviour
         playerInputHandler.AddMapActionNoParamSubscriber(inventoryMapName, "Previous", Previous);
         playerInputHandler.AddMapActionNoParamSubscriber(inventoryMapName, "Combine", Combine);
         playerInputHandler.AddMapActionSubscriber(inventoryMapName, "CycleItems", CycleItems);
+        playerInputHandler.AddMapActionSubscriber(inventoryMapName, "Consume",Consume);
 
         Transform InventoryPanelTransform = inventoryUI.transform.Find("Panel");
         GameObject panel = InventoryPanelTransform != null ? InventoryPanelTransform.gameObject : null;
@@ -107,7 +107,6 @@ public class Inventory : MonoBehaviour
         // Load info from PlayerInventorySO
         if (playerInventorySO != null)
         {
-            items = playerInventorySO.items;
             currentItemIndex = playerInventorySO.currentItemIndex;
         }
         else
@@ -178,9 +177,9 @@ public class Inventory : MonoBehaviour
         playerInputHandler.SwitchInputMap(inventoryMapName);
 
         //Set the item name text to the last item seen before closing the inventory
-        if (items.Count > 0)
+        if (playerInventorySO.items.Count > 0)
         {
-            itemNameText.text = items[currentItemIndex].Name; // Update the item name text
+            itemNameText.text = playerInventorySO.items[currentItemIndex].Name; // Update the item name text
         }
         else
         {
@@ -196,7 +195,7 @@ public class Inventory : MonoBehaviour
 
     private void ItemPreview()
     {
-        if (items.Count == 0)
+        if (playerInventorySO.items.Count == 0)
         {
             itemPreviewPlaceholder.SetActive(false);
             return;
@@ -206,9 +205,9 @@ public class Inventory : MonoBehaviour
             itemPreviewPlaceholder.SetActive(true);
         }
 
-        itemPreviewPlaceholder.GetComponent<MeshFilter>().mesh = items[currentItemIndex].MeshRef;
-        Debug.Log("The item's material is: "+ items[currentItemIndex].Material);
-        Material newMaterial = new Material(items[currentItemIndex].Material);
+        itemPreviewPlaceholder.GetComponent<MeshFilter>().mesh = playerInventorySO.items[currentItemIndex].MeshRef;
+        Debug.Log("The item's material is: "+ playerInventorySO.items[currentItemIndex].Material);
+        Material newMaterial = new Material(playerInventorySO.items[currentItemIndex].Material);
         itemPreviewPlaceholder.GetComponent<MeshRenderer>().material = newMaterial;
 
         if(currentItemIndex == itemFromIndex)
@@ -242,12 +241,12 @@ public class Inventory : MonoBehaviour
         
         if (!isInventoryOpen) return; // Only cycle items if the inventory is open
         int direction = Mathf.RoundToInt(context.ReadValue<Vector2>().y);
-        if (items.Count != 0) currentItemIndex = (currentItemIndex + direction + items.Count) % items.Count;
+        if (playerInventorySO.items.Count != 0) currentItemIndex = (currentItemIndex + direction + playerInventorySO.items.Count) % playerInventorySO.items.Count;
 
         // Logic to cycle through items in the inventory
-        if (items.Count > 0)
+        if (playerInventorySO.items.Count > 0)
         {
-            itemNameText.text = items[currentItemIndex].Name; // Update the item name text
+            itemNameText.text = playerInventorySO.items[currentItemIndex].Name; // Update the item name text
         }
 
         Debug.Log("Current item index after cycling: " + currentItemIndex);
@@ -269,10 +268,10 @@ public class Inventory : MonoBehaviour
     {
         if (this == null || !gameObject.scene.IsValid()) return; // Input safety check
 
-        if (items.Count == 0 || !isInventoryOpen) return; // No items to cycle through
-        currentItemIndex = (currentItemIndex + 1) % items.Count;
+        if (playerInventorySO.items.Count == 0 || !isInventoryOpen) return; // No items to cycle through
+        currentItemIndex = (currentItemIndex + 1) % playerInventorySO.items.Count;
         playerInventorySO.currentItemIndex = currentItemIndex; // Update the current item index in the SO
-        itemNameText.text = items[currentItemIndex].Name; // Update the item name text
+        itemNameText.text = playerInventorySO.items[currentItemIndex].Name; // Update the item name text
 
         ItemPreview();
     }
@@ -281,10 +280,10 @@ public class Inventory : MonoBehaviour
     {
         if (this == null || !gameObject.scene.IsValid()) return; // Input safety check
 
-        if (items.Count == 0 || !isInventoryOpen) return; // No items to cycle through
-        currentItemIndex = (currentItemIndex - 1 + items.Count) % items.Count;
+        if (playerInventorySO.items.Count == 0 || !isInventoryOpen) return; // No items to cycle through
+        currentItemIndex = (currentItemIndex - 1 + playerInventorySO.items.Count) % playerInventorySO.items.Count;
         playerInventorySO.currentItemIndex = currentItemIndex; // Update the current item index in the SO
-        itemNameText.text = items[currentItemIndex].Name; // Update the item name text
+        itemNameText.text = playerInventorySO.items[currentItemIndex].Name; // Update the item name text
 
         ItemPreview();
     }
@@ -310,7 +309,7 @@ public class Inventory : MonoBehaviour
 
     public void RemoveItem()
     {
-        if (items.Count > 0)
+        if (playerInventorySO.items.Count > 0)
         {
 
             playerInventorySO.items.RemoveAt(currentItemIndex);
@@ -322,7 +321,7 @@ public class Inventory : MonoBehaviour
 
     public bool RemoveItemAtIndex(int itemIndex)
     {
-        if (items.Count > 0 && itemIndex >= 0 && itemIndex < items.Count)
+        if (playerInventorySO.items.Count > 0 && itemIndex >= 0 && itemIndex < playerInventorySO.items.Count)
         {
             Debug.Log("itemIndex: " + itemIndex);
             playerInventorySO.items.RemoveAt(itemIndex);
@@ -336,7 +335,7 @@ public class Inventory : MonoBehaviour
 
     private void ItemRefresh()
     {
-        if(items.Count == 0)
+        if(playerInventorySO.items.Count == 0)
         {
             itemNameText.text = "";
             itemPreviewPlaceholder.SetActive(false);
@@ -344,7 +343,7 @@ public class Inventory : MonoBehaviour
         }
         else
         {
-            itemNameText.text = items[currentItemIndex].Name;
+            itemNameText.text = playerInventorySO.items[currentItemIndex].Name;
             ItemPreview();
         }
         
@@ -352,11 +351,11 @@ public class Inventory : MonoBehaviour
 
     public int GetItemIndex(string itemiD)
     {
-        for (int i = 0; i < items.Count; i++)
+        for (int i = 0; i < playerInventorySO.items.Count; i++)
         {
-            if (items[i].Id == itemiD)
+            if (playerInventorySO.items[i].Id == itemiD)
             {
-                ItemContractSO FoundItem = items[i];
+                ItemContractSO FoundItem = playerInventorySO.items[i];
                 return i;
             }
         }
@@ -366,9 +365,9 @@ public class Inventory : MonoBehaviour
 
     public string GetEquippedItemKey()
     {
-        if (items.Count > 0 && currentItemIndex >= 0 && currentItemIndex < items.Count)
+        if (playerInventorySO.items.Count > 0 && currentItemIndex >= 0 && currentItemIndex < playerInventorySO.items.Count)
         {
-            return items[currentItemIndex].Id;
+            return playerInventorySO.items[currentItemIndex].Id;
         }
 
         return null;
@@ -420,13 +419,13 @@ public class Inventory : MonoBehaviour
     {
         if (this == null || !gameObject.scene.IsValid()) return; // Input safety check
 
-        if (items == null || items.Count == 0)
+        if (playerInventorySO.items == null || playerInventorySO.items.Count == 0)
         {
             Debug.LogWarning("[Inventory] Combine aborted: inventory is empty or items list is null.");
             ResetCombineSelection();
             return;
         }
-        if (currentItemIndex < 0 || currentItemIndex >= items.Count)
+        if (currentItemIndex < 0 || currentItemIndex >= playerInventorySO.items.Count)
         {
             Debug.LogWarning($"[Inventory] Combine aborted: currentItemIndex ({currentItemIndex}) out of range.");
             ResetCombineSelection();
@@ -436,7 +435,7 @@ public class Inventory : MonoBehaviour
         // First selection
         if (itemFrom == null)
         {
-            itemFrom = items[currentItemIndex];
+            itemFrom = playerInventorySO.items[currentItemIndex];
             itemFromIndex = currentItemIndex;
 
             if (itemFrom == null)
@@ -453,7 +452,7 @@ public class Inventory : MonoBehaviour
         // Second selection (must be a different index)
         else if (itemTo == null && currentItemIndex != itemFromIndex)
         {
-            itemTo = items[currentItemIndex];
+            itemTo = playerInventorySO.items[currentItemIndex];
             itemToIndex = currentItemIndex;
 
             if (itemTo == null)
@@ -502,12 +501,6 @@ public class Inventory : MonoBehaviour
                     }
                 }
             }
-            else if (sandwichContractSO != null && result.Id == sandwichContractSO.Id)
-            {
-                sandwichEvent?.Invoke();
-                AddItem(result);
-                RemoveTwoItems();
-            }
             else
             {
                 AddItem(result);
@@ -539,8 +532,25 @@ public class Inventory : MonoBehaviour
     //Helper to validate index against current playerInventorySO.items if available, else items
     private bool IsIndexValid(int idx)
     {
-        var listToCheck = (playerInventorySO != null) ? playerInventorySO.items : items;
+        var listToCheck = (playerInventorySO != null) ? playerInventorySO.items : playerInventorySO.items;
         return listToCheck != null && idx >= 0 && idx < listToCheck.Count;
+    }
+
+    private void Consume(InputAction.CallbackContext context)
+    {
+        if(this == null || !gameObject.scene.IsValid()) return;
+        if (!isInventoryOpen) return; // Only consume if the inventory is open
+        if (playerInventorySO.items.Count == 0) return; // No items to consume
+        if(currentItemIndex < 0 || currentItemIndex >= playerInventorySO.items.Count) return; // Invalid index
+        if (playerInventorySO.items[currentItemIndex].IsConsumable)
+        {
+            Debug.Log("Consuming item: " + playerInventorySO.items[currentItemIndex].Name);
+            if(playerInventorySO.items[currentItemIndex].Id == sandwichContractSO.Id)
+            {
+                sandwichEvent?.Invoke();
+            }
+            RemoveItem();
+        }
     }
 
 }
