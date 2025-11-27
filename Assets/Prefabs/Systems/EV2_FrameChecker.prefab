@@ -291,7 +291,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3828441358615361732}
-  - component: {fileID: 1859262036882534800}
+  - component: {fileID: 6066371666773677165}
   m_Layer: 0
   m_Name: EV2_FrameChecker
   m_TagString: Untagged
@@ -324,7 +324,7 @@ Transform:
   - {fileID: 7033996839096916768}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1859262036882534800
+--- !u!114 &6066371666773677165
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -335,7 +335,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c95ab07eeb18bc64faaee7518a762cd7, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: 
+  m_EditorClassIdentifier: Assembly-CSharp::FrameChecker
   materialsToCheck:
   - {fileID: 7244498440176659791}
   - {fileID: 820489430054822144}
@@ -348,6 +348,13 @@ MonoBehaviour:
   - {fileID: 6386843383269869505}
   isCorrectMaterial: 0
   hasSpawnedKey: 0
+  requiredMaterials:
+  - {fileID: 2100000, guid: 46d5c7c98bbb81c44a7b452a7715aeb7, type: 2}
+  - {fileID: 2100000, guid: e3df53038b800424daac4653ff785962, type: 2}
+  - {fileID: 2100000, guid: b9a7f7c2a6e70be4092dab74dcfc8a85, type: 2}
+  - {fileID: 2100000, guid: bcf7599f0103a5d49bbb3c1834cf8571, type: 2}
+  - {fileID: 2100000, guid: 1977a135cb76bad4cba14ac9eb8672d5, type: 2}
+  - {fileID: 2100000, guid: cb297ac92c8f5fd4faa072d47bcfe0dc, type: 2}
 --- !u!1 &7971543171493488361
 GameObject:
   m_ObjectHideFlags: 0

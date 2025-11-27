@@ -11,8 +11,8 @@ public class PlayerInventorySO : MyScriptables
     [Header("Item Prefab preference")]
     public List<SerializableKeyValuePair<int, GameObject>> itemList = new();
 
-    bool hasFlashlight = false;
-    int batteriesCount = 0;
+    // bool hasFlashlight = false;
+    // int batteriesCount = 0;
 
     [NaughtyAttributes.Button("Clear Items data")]
     public void ClearItemsInstance()

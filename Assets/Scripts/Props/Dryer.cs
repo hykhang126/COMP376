@@ -6,9 +6,9 @@ public class Dryer :  Interactable
 {
     private AudioSource dryerAudio;
 
-    bool shirtInDryer = false;
+    // bool shirtInDryer = false;
 
-    bool pantsInDryer = false;
+    // bool pantsInDryer = false;
 
     public static UnityEvent onClothesInDryer = new UnityEvent();
 

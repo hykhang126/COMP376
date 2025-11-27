@@ -18,7 +18,7 @@ public class AnimationInteractable : Interactable
     {
         Debug.Log("Entered Interaction with " + gameObject.name + " by " + Player.InstanceReference);   
     }
-    public void Interact()
+    public override void Interact()
     {
         // This method can be called to interact with the object
         Debug.Log("Interacted with " + gameObject.name + " by " + Player.InstanceReference);
