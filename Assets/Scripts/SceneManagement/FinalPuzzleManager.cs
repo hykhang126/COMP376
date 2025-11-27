@@ -23,11 +23,12 @@ public class FinalPuzzleManager : MonoBehaviour
             {
                 Debug.Log("Final key used, exiting game...");
                 // Implement game exit or level completion logic here
+                Destroy(FindAnyObjectByType<SpriteChecker>().gameObject);
                 SceneManager.LoadScene("TutorialScene");
             }
             else
             {
-                SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().name);
+                SceneManager.LoadScene(SceneManager.GetActiveScene().name);
             }
         }
     }
