@@ -120,6 +120,8 @@ public class Inventory : MonoBehaviour
             Debug.LogError("Did not find Item Preview Placeholder");
         }
 
+        FindAnyObjectByType<DeathManager>().onDeathSequenceStart.AddListener(CloseInventory);
+
     }
     
     void OnDisable()

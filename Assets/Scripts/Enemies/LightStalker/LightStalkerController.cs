@@ -804,6 +804,8 @@ public class LightStalkerController : MonoBehaviour
 
     private IEnumerator DoJumpscare(Collider playerCollider)
     {
+        
+        FindAnyObjectByType<DeathManager>().onDeathSequenceStart.Invoke();
         jumpscarePlaying = true;
         isFleeing = true;
 
