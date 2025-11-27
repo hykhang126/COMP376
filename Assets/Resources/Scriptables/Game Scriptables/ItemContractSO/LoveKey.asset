@@ -10,10 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8e9dc5f7d7ea94c41958f79f15ca32b9, type: 3}
-  m_Name: Flood Key
+  m_Name: LoveKey
   m_EditorClassIdentifier: 
-  _name: Flood Key
+  _name: Love Key
   _description: Final Key
   _meshRef: {fileID: 8362958982165418291, guid: afe62282d53875d40853f939df79f672, type: 3}
   _material: {fileID: 2100000, guid: 4a3c4e9ae9b122e449659fdb803fb1dc, type: 2}
+  _isConsumable: 0
   _id: da8ec7e3-174d-4bff-aab2-c25df4c82d2a
