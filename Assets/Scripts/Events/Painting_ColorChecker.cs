@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FrameChecker : MonoBehaviour
+public class ColorChecker : MonoBehaviour
 {
     [SerializeField] private Renderer[] materialsToCheck;
     [SerializeField] private Renderer[] frameRenderers;
@@ -16,7 +16,7 @@ public class FrameChecker : MonoBehaviour
     
     private List<Material> colorMaterials;
 
-    private static FrameChecker instance;
+    private static ColorChecker instance;
 
     void Awake()
     {
@@ -56,7 +56,7 @@ public class FrameChecker : MonoBehaviour
             colorMaterials.RemoveAt(randomIndexToCheck); // Ensure unique colors
         }
 
-        keySpawner = transform.Find("KeySpawner")?.gameObject;
+        keySpawner = transform.Find("KeySpawner").gameObject;
 
         isCorrectMaterial = false;
     }
