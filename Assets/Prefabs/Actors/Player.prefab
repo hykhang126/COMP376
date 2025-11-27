@@ -854,7 +854,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   FlashlightLight: {fileID: 2747049698810651338}
   FlashlightSpotLight: {fileID: 3179508161369383720}
-  maxBattery: 100
+  maxBattery: 30
   FIRST_WARNING_TIME: 20
   LAST_WARNING_TIME: 5
   IsActivated: 0
@@ -943,6 +943,7 @@ MonoBehaviour:
   beamHitMask:
     serializedVersion: 2
     m_Bits: 4294967295
+  flashlightSO: {fileID: 11400000, guid: 6d11203653e0dbb42ac2dd21b308358c, type: 2}
 --- !u!1 &5085665329965969228
 GameObject:
   m_ObjectHideFlags: 0

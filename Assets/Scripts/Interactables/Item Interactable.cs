@@ -73,6 +73,7 @@ public class ItemInteractable : Interactable
             {
                 Debug.Log("flashlight picked up");
                 Flashlight.SetActive(true);
+                Flashlight.GetComponent<Flashlight>().ResetFlashLight();
             }
             Destroy(gameObject);
             
