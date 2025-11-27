@@ -49,9 +49,13 @@ public class Flashlight : MonoBehaviour
   // minimal tracking of last hit collider so we can produce Enter/Exit events
   private Collider lastHit = null;
 
+  [SerializeField] private FlashlightSO flashlightSO;
+
+
   void Start()
   {
-    TimeLeft = maxBattery;
+    TimeLeft = flashlightSO.BatteryLife;
+    flashlightSO.BatteryLifeCheckPoint = flashlightSO.BatteryLife;
 
     if (FlashlightLight != null)
       FlashlightLight.SetActive(false);
@@ -60,6 +64,11 @@ public class Flashlight : MonoBehaviour
       FlashlightSpotLight.enabled = false;
 
     Inventory.rechargeEvent.AddListener(HandleBatteryInventorySelect);
+    FindAnyObjectByType<DeathManager>()?.onJumpscareComplete.AddListener(() => {
+        flashlightSO.BatteryLife = flashlightSO.BatteryLifeCheckPoint;
+    });
+
+    CheckBatteryStatus();
   }
 
   void Update()
@@ -70,41 +79,10 @@ public class Flashlight : MonoBehaviour
     {
       // run raycast detection every frame while on
       CastRay();
-
+      CheckBatteryStatus();
       TimeLeft -= Time.deltaTime;
       TimeLeft = Mathf.Max(TimeLeft, 0f);
-      if (!FirstWarningFlag && TimeLeft < FIRST_WARNING_TIME && TimeLeft >= LAST_WARNING_TIME)
-      {
-        FirstWarningFlag = true;
-        OnFirstWarning?.Invoke();
-        Debug.Log("Flashlight first warning");
-      }
-      else if (!LastWarningFlag && TimeLeft <= LAST_WARNING_TIME && TimeLeft > 0f)
-      {
-        LastWarningFlag = true;
-        OnLastWarning?.Invoke();
-        Debug.Log("Flashlight last warning");
-      }
-      else if (TimeLeft <= 0f)
-      {
-        TimeLeft = 0f;
-
-        // ensure we send an Exit for any collider we were hitting so detectors don't remain "stuck"
-        if (lastHit != null)
-        {
-          OnBeamExit?.Invoke(lastHit);
-          lastHit = null;
-        }
-
-        IsActivated = false;
-        HasBatteryLeft = false;
-
-        if (FlashlightLight != null) FlashlightLight.SetActive(false);
-        if (FlashlightSpotLight != null) FlashlightSpotLight.enabled = false;
-
-        OnBatteryEmpty?.Invoke();
-        Debug.Log("Flashlight battery empty");
-      }
+      flashlightSO.BatteryLife = TimeLeft;
     }
     else
     {
@@ -115,6 +93,42 @@ public class Flashlight : MonoBehaviour
             lastHit = null;
         }
     }
+  }
+
+  private void CheckBatteryStatus()
+  {
+      if (!FirstWarningFlag && TimeLeft < FIRST_WARNING_TIME && TimeLeft >= LAST_WARNING_TIME)
+        {
+          FirstWarningFlag = true;
+          OnFirstWarning?.Invoke();
+          Debug.Log("Flashlight first warning");
+        }
+        else if (!LastWarningFlag && TimeLeft <= LAST_WARNING_TIME && TimeLeft > 0f)
+        {
+          LastWarningFlag = true;
+          OnLastWarning?.Invoke();
+          Debug.Log("Flashlight last warning");
+        }
+        else if (TimeLeft <= 0f)
+        {
+          TimeLeft = 0f;
+
+          // ensure we send an Exit for any collider we were hitting so detectors don't remain "stuck"
+          if (lastHit != null)
+          {
+            OnBeamExit?.Invoke(lastHit);
+            lastHit = null;
+          }
+
+          IsActivated = false;
+          HasBatteryLeft = false;
+
+          if (FlashlightLight != null) FlashlightLight.SetActive(false);
+          if (FlashlightSpotLight != null) FlashlightSpotLight.enabled = false;
+
+          OnBatteryEmpty?.Invoke();
+          Debug.Log("Flashlight battery empty");
+        }     
   }
 
 

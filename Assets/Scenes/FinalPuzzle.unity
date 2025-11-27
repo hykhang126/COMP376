@@ -14756,6 +14756,10 @@ PrefabInstance:
       propertyPath: m_Radius
       value: 0.25
       objectReference: {fileID: 0}
+    - target: {fileID: 5892630267381453625, guid: a134cc40a117af44daa5d51a4d3e902a, type: 3}
+      propertyPath: maxBattery
+      value: 30
+      objectReference: {fileID: 0}
     - target: {fileID: 6127447214756072385, guid: a134cc40a117af44daa5d51a4d3e902a, type: 3}
       propertyPath: m_IsActive
       value: 1

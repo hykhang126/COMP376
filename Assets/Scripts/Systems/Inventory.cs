@@ -202,6 +202,11 @@ public class Inventory : MonoBehaviour
             itemPreviewPlaceholder.SetActive(true);
         }
 
+        if(currentItemIndex < 0 || currentItemIndex >= playerInventorySO.items.Count)
+        {
+            Debug.LogWarning("Current item index is out of range for ItemPreview.");
+            return;
+        }
         itemPreviewPlaceholder.GetComponent<MeshFilter>().mesh = playerInventorySO.items[currentItemIndex].MeshRef;
         Debug.Log("The item's material is: "+ playerInventorySO.items[currentItemIndex].Material);
         Material newMaterial = new Material(playerInventorySO.items[currentItemIndex].Material);
