@@ -52,7 +52,9 @@ public class TVInteractable : Interactable
             Debug.LogError("AudioSource component not found on the TVInteractable object.");
         }
         if (SceneManager.GetActiveScene().name == "HorrorActScene1")
-          StartCoroutine(DelayTV());
+            StartCoroutine(DelayTV());
+        else if(SceneManager.GetActiveScene().name == "TutorialScene")
+            Inventory.sandwichEvent.AddListener(Interact);
     
   }
 
