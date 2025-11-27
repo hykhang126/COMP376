@@ -46,14 +46,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a29177cae7b601d4db8d1c65e6c7e835, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  items: []
   inventoryUI: {fileID: 0}
   itemPreviewPlaceholder: {fileID: 0}
-  pickUpAudioClip: {fileID: 8300000, guid: ac7590bb6cfd7414bae26d112007a196, type: 3}
+  recipeBook: {fileID: 11400000, guid: 19004a78956c81f5388fd1f7adeb1cda, type: 2}
+  itemFromPreviewIndicator: {fileID: 0}
   playerInventorySO: {fileID: 11400000, guid: 5028993a4a4a40f48a60d83aa1fe42c8, type: 2}
+  flashlightContractSO: {fileID: 11400000, guid: 3dbb71b85a532acf6be8782c3f7f6a4e, type: 2}
+  sandwichContractSO: {fileID: 11400000, guid: 6a7ec4a793620bd4a862eb8fb0589014, type: 2}
+  pickUpAudioClip: {fileID: 8300000, guid: 7faf5ab4d8562764c8759ff15f48d99c, type: 3}
+  combineFailClip: {fileID: 8300000, guid: ac1656d6b8a426142b2e6162436734ea, type: 3}
+  consumeAudioClip: {fileID: 8300000, guid: df402301324bfc546bd97d9932ce5f26, type: 3}
   itemFromIndex: -1
   itemToIndex: -1
-  recipeBook: {fileID: 11400000, guid: 19004a78956c81f5388fd1f7adeb1cda, type: 2}
 --- !u!1 &2122762357399802875
 GameObject:
   m_ObjectHideFlags: 0

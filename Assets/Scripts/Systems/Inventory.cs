@@ -23,6 +23,8 @@ public class Inventory : MonoBehaviour
 
     // Serialized
     [SerializeField] private AudioClip pickUpAudioClip;
+    [SerializeField] private AudioClip combineFailClip;
+    [SerializeField] private AudioClip consumeAudioClip;
     [SerializeField] private int itemFromIndex = -1;
     [SerializeField] private int itemToIndex = -1;
 
@@ -484,6 +486,7 @@ public class Inventory : MonoBehaviour
             if (result == null)
             {
                 Debug.Log($"[Inventory] No recipe found for {itemFrom.name} + {itemTo.name}");
+                Player.InstanceReference.playerAudioSource.PlayOneShot(combineFailClip);
                 ResetCombineSelection();
                 return;
             }
@@ -554,6 +557,7 @@ public class Inventory : MonoBehaviour
         if(currentItemIndex < 0 || currentItemIndex >= playerInventorySO.items.Count) return; // Invalid index
         if (playerInventorySO.items[currentItemIndex].IsConsumable)
         {
+            Player.InstanceReference.playerAudioSource.PlayOneShot(consumeAudioClip);
             Debug.Log("Consuming item: " + playerInventorySO.items[currentItemIndex].Name);
             if(playerInventorySO.items[currentItemIndex].Id == sandwichContractSO.Id)
             {

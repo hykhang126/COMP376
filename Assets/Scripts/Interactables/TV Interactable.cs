@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.Video;
 
 public class TVInteractable : Interactable
@@ -50,9 +51,21 @@ public class TVInteractable : Interactable
         {
             Debug.LogError("AudioSource component not found on the TVInteractable object.");
         }
-    }
+        if (SceneManager.GetActiveScene().name == "HorrorActScene1")
+            StartCoroutine(DelayTV());
+        else if(SceneManager.GetActiveScene().name == "TutorialScene")
+            Inventory.sandwichEvent.AddListener(Interact);
+    
+  }
 
-    public override void Interact()
+  IEnumerator DelayTV()
+  {
+    yield return new WaitForSeconds(1f);
+    Interact();
+
+  }
+
+  public override void Interact()
     {
         isPlaying = !isPlaying;
         Debug.Log("TV Interacted with. Is Playing: " + isPlaying);
