@@ -17,7 +17,7 @@ public class FinalPuzzleManager : MonoBehaviour
     
     public void CheckExitCondition()
     {
-        if(Inventory.InstanceReference != null)
+        if(Inventory.InstanceReference != null || Inventory.InstanceReference.playerInventorySO.items.Count > 0)
         {
             if(Inventory.InstanceReference.playerInventorySO.items.Count > 0 && Inventory.InstanceReference.playerInventorySO.items[Inventory.InstanceReference.GetCurrentItemIndex()].Id == finalKeyItemSO.Id)
             {

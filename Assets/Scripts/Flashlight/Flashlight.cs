@@ -228,6 +228,7 @@ public class Flashlight : MonoBehaviour
     FirstWarningFlag = false;
     LastWarningFlag = false;
     TimeLeft = maxBattery;
+    flashlightSO.BatteryLife = TimeLeft;
     OnBatteryRecharged?.Invoke();
     Debug.Log("Battery inserted");
   }
