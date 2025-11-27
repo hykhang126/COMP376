@@ -174,12 +174,26 @@ public class TaskManager : MonoBehaviour
         SceneManager.LoadScene("HorrorActScene3");
         break;
       case "HorrorActScene3":
+        CopyInventoryToPersistent();
         SceneManager.LoadScene("FinalPuzzle");
         break;
-
       default:
         break;
     }
   }
+  private void CopyInventoryToPersistent()
+  {
+    // Null checks
+    if (Inventory.InstanceReference == null || Inventory.InstanceReference.playerInventorySO == null)
+    {
+      return;
+    }
 
+    var playerInventorySO = Inventory.InstanceReference.playerInventorySO;
+    playerInventorySO.ClearPersistentItems();
+    foreach(var item in playerInventorySO.items)
+    {
+        playerInventorySO.persistentItems.Add(item);
+    }
+  }
 }
