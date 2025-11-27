@@ -7,14 +7,9 @@ public class FrameChecker : MonoBehaviour
     [SerializeField] private Renderer[] frameRenderers;
 
     public bool isCorrectMaterial = false;
-
-    private GameObject keySpawner;
-
     public bool hasSpawnedKey = false;
 
     [SerializeField] private Material[] requiredMaterials;
-    
-    private List<Material> colorMaterials;
 
     private static FrameChecker instance;
 
@@ -33,7 +28,7 @@ public class FrameChecker : MonoBehaviour
     void Start()
     {
         
-        colorMaterials = new List<Material>(requiredMaterials);
+        List<Material> colorMaterials = new List<Material>(requiredMaterials);
         if (frameRenderers.Length == 0)
         {
             Debug.LogWarning("No frame renderers assigned to EV2_FrameChecker.");
@@ -42,7 +37,6 @@ public class FrameChecker : MonoBehaviour
 
         for(int i=0;i<materialsToCheck.Length;i++)
         {
-            Renderer renderer = frameRenderers[i];
             if (frameRenderers[i] == null || materialsToCheck[i] == null)
             {
                 Debug.LogWarning("One of the frame renderers or materials to check is not assigned.");
@@ -55,8 +49,6 @@ public class FrameChecker : MonoBehaviour
 
             colorMaterials.RemoveAt(randomIndexToCheck); // Ensure unique colors
         }
-
-        keySpawner = transform.Find("KeySpawner")?.gameObject;
 
         isCorrectMaterial = false;
     }
