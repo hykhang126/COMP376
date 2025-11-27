@@ -1,8 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 
 public class DoorInteractable : Interactable
 {
@@ -11,12 +7,6 @@ public class DoorInteractable : Interactable
     [SerializeField] private bool isLockedByKeys = false;
 
     private Door door;
-
-    //private AsyncOperation loadNextScene;
-
-    [SerializeField] private ItemKeyToSceneNameSO itemKeyToSceneNameSO;
-    private Dictionary<string, string> itemKeyToSceneName;
-
     private DoorAction doorAction;
 
     [SerializeField] private AudioClip lockedSound;
@@ -35,7 +25,6 @@ public class DoorInteractable : Interactable
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        itemKeyToSceneName = itemKeyToSceneNameSO.itemKeyToSceneName;
         doorAction = gameObject.GetComponent<DoorAction>();
     }
 
@@ -78,13 +67,6 @@ public class DoorInteractable : Interactable
             return;
         }
     }
-
-    /*private void LoadNextScene(Player player, int keyIndex)
-    {
-        loadNextScene = SceneManager.LoadSceneAsync(itemKeyToSceneName[itemContractSOsToOpenThisDoor[keyIndex]], LoadSceneMode.Additive);
-        player.inventory.RemoveItemAtIndex(player.inventory.GetCurrentItemIndex());
-        loadNextScene.completed += UnlockDoor;
-    }*/
 
     private void OpenDoor()
     {

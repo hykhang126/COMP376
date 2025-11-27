@@ -3,10 +3,12 @@ using UnityEngine.InputSystem;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine.Events;
-using UnityEditor.ShaderKeywordFilter;
 
 public class Inventory : MonoBehaviour
 {
+    // SINGLETON
+    public static Inventory InstanceReference { get; private set; }
+
     // Global Variables
     public GameObject inventoryUI; // Reference to the inventory UI GameObject
     public GameObject itemPreviewPlaceholder;
@@ -15,10 +17,11 @@ public class Inventory : MonoBehaviour
     public GameObject itemFromPreviewIndicator;
     public Camera inventoryCamera { get; private set; }
 
-    public static Inventory InstanceReference { get; private set; }
+    public PlayerInventorySO playerInventorySO;
+    public ItemContractSO flashlightContractSO;
+    public ItemContractSO sandwichContractSO;
 
     // Serialized
-    public PlayerInventorySO playerInventorySO;
     [SerializeField] private AudioClip pickUpAudioClip;
     [SerializeField] private int itemFromIndex = -1;
     [SerializeField] private int itemToIndex = -1;
@@ -31,12 +34,8 @@ public class Inventory : MonoBehaviour
     private TextMeshProUGUI itemNameText;
     private ItemContractSO itemFrom;
     private ItemContractSO itemTo;
-    private string previousPlayerState;
     private string playerMapName;
     private string inventoryMapName;
-
-    public ItemContractSO flashlightContractSO;
-    public ItemContractSO sandwichContractSO;
 
     public static UnityEvent rechargeEvent = new UnityEvent();
     public static UnityEvent sandwichEvent = new UnityEvent();
@@ -101,9 +100,6 @@ public class Inventory : MonoBehaviour
         itemFromPreviewIndicator = panel.transform.Find("ItemFromIndicator").gameObject;
         itemFromPreviewIndicator.SetActive(false);
 
-#if UNITY_EDITOR
-        playerInventorySO.ClearItemsInstance();
-#endif
         // Load info from PlayerInventorySO
         if (playerInventorySO != null)
         {
@@ -155,7 +151,6 @@ public class Inventory : MonoBehaviour
     private void OpenInventory()
     {
         if (Player.InstanceReference.stateMachine.GetCurrentStateName() == PlayerStateType.InMenu.ToString()) return;
-        previousPlayerState = Player.InstanceReference.stateMachine.GetCurrentStateName();
         isInventoryOpen = true;
 
         // Update flashlight reference if needed (in case it wasn't available at start)
@@ -297,6 +292,12 @@ public class Inventory : MonoBehaviour
         {
             playerInventorySO.items.Add(item);
             playerInventorySO.currentItemIndex = currentItemIndex;
+            // Check if item should be persistent
+            if (playerInventorySO.persistentItemList.Contains(item))
+            {
+                playerInventorySO.persistentItems.Add(item);
+            }
+
             if (Player.InstanceReference != null && Player.InstanceReference.playerAudioSource != null)
             {
                 Player.InstanceReference.playerAudioSource.pitch = Random.Range(0.9f, 1.1f);
@@ -555,4 +556,11 @@ public class Inventory : MonoBehaviour
         }
     }
 
+    #region GAME ENDS
+    void OnApplicationQuit()
+    {
+        playerInventorySO.ClearItemsInstance();
+        playerInventorySO.ClearPersistentItems();
+    }
+    #endregion
 }

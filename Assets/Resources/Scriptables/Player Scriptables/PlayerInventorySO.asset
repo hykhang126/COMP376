@@ -13,21 +13,12 @@ MonoBehaviour:
   m_Name: PlayerInventorySO
   m_EditorClassIdentifier: 
   currentItemIndex: 0
-  items: []
-  itemList:
-  - Key: 42
-    Value: {fileID: 0}
-  - Key: 69
-    Value: {fileID: 0}
-  - Key: 3
-    Value: {fileID: 0}
-  - Key: 4
-    Value: {fileID: 0}
-  - Key: 5
-    Value: {fileID: 0}
-  - Key: 420
-    Value: {fileID: 0}
-  - Key: 0
-    Value: {fileID: 0}
-  - Key: 360
-    Value: {fileID: 0}
+  items:
+  - {fileID: 11400000, guid: 3dbb71b85a532acf6be8782c3f7f6a4e, type: 2}
+  - {fileID: 11400000, guid: 8bc6fabf007c6e247ac7b8600f6aa915, type: 2}
+  - {fileID: 11400000, guid: c505e9578ddbca6f79640918841c0a40, type: 2}
+  - {fileID: 11400000, guid: d8a51167dbeb79241aafbf662716a15b, type: 2}
+  persistentItems:
+  - {fileID: 11400000, guid: 3dbb71b85a532acf6be8782c3f7f6a4e, type: 2}
+  persistentItemList:
+  - {fileID: 11400000, guid: 3dbb71b85a532acf6be8782c3f7f6a4e, type: 2}
