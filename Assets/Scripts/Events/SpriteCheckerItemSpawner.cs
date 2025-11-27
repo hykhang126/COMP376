@@ -1,8 +1,9 @@
 using UnityEngine;
 
-public class ItemSpawner : MonoBehaviour
+[RequireComponent(typeof(AudioSource))]
+public class SpriteCheckerItemSpawner : MonoBehaviour
 {
-    private FrameChecker frameChecker;
+    private SpriteChecker spriteChecker;
     private AudioSource successSource;
 
     [SerializeField] private AudioClip successClip;
@@ -12,8 +13,8 @@ public class ItemSpawner : MonoBehaviour
 
     void Start()
     {
-        frameChecker = transform.parent.GetComponent<FrameChecker>();
-        if (frameChecker == null)
+        spriteChecker = transform.parent.GetComponent<SpriteChecker>();
+        if (spriteChecker == null)
         {
             Debug.LogError("Event checker is null");
         }
@@ -28,7 +29,7 @@ public class ItemSpawner : MonoBehaviour
 
     void Update()
     {
-        if (!hasSpawnedKey && frameChecker != null && frameChecker.isCorrectMaterial)
+        if (!hasSpawnedKey && spriteChecker != null && spriteChecker.isPuzzleCorrect)
         {
             PuzzleSuccessful();
             hasSpawnedKey = true;

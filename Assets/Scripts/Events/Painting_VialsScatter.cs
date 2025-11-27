@@ -5,13 +5,14 @@ public class Painting_VialsScatter : MonoBehaviour
     [SerializeField] private GameObject[] vialsToScatter;
     [SerializeField] private Transform[] scatterLocations;
 
-    public static void FisherYatesShuffle<T>(T[] array)
+    public static T[] FisherYatesShuffle<T>(T[] array)
     {
         for (int i = array.Length - 1; i > 0; i--)
         {
             int j = Random.Range(0, i + 1);
             (array[j], array[i]) = (array[i], array[j]);
         }
+        return array;
     }
 
     void Awake()
