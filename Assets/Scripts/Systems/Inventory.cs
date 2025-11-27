@@ -491,6 +491,8 @@ public class Inventory : MonoBehaviour
                 return;
             }
 
+            Player.InstanceReference.playerAudioSource.PlayOneShot(pickUpAudioClip);
+
             // Safety checks for special-case contracts
             if (flashlightContractSO != null && result.Id == flashlightContractSO.Id)
             {
