@@ -535,6 +535,8 @@ public class Inventory : MonoBehaviour
         itemTo = null;
         itemFromIndex = -1;
         itemToIndex = -1;
+        currentItemIndex = 0;
+        ItemPreview();
     }
 
     //Helper to validate index against current playerInventorySO.items if available, else items

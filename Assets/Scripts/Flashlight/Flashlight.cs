@@ -1,6 +1,8 @@
 using System.Collections.Generic;
+using UnityEditor.SearchService;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.SceneManagement;
 
 [System.Serializable]
 public class ColliderEvent : UnityEvent<Collider> { }
@@ -54,8 +56,19 @@ public class Flashlight : MonoBehaviour
 
   void Start()
   {
+    //If the current scene is the same as the checkpoint scene and it wasnt caused by death, set battery to checkpoint value
+    if (flashlightSO.ResetOnDeath)
+    {
+        flashlightSO.BatteryLife = flashlightSO.BatteryLifeCheckPoint;
+        flashlightSO.ResetOnDeath = false; 
+    }
+    else if(!(flashlightSO.PreviousScene == SceneManager.GetActiveScene().name))
+    {
+        flashlightSO.BatteryLifeCheckPoint = flashlightSO.BatteryLife;
+    }
     TimeLeft = flashlightSO.BatteryLife;
-    flashlightSO.BatteryLifeCheckPoint = flashlightSO.BatteryLife;
+
+    flashlightSO.PreviousScene = SceneManager.GetActiveScene().name;
 
     if (FlashlightLight != null)
       FlashlightLight.SetActive(false);
@@ -66,9 +79,20 @@ public class Flashlight : MonoBehaviour
     Inventory.rechargeEvent.AddListener(HandleBatteryInventorySelect);
     FindAnyObjectByType<DeathManager>()?.onJumpscareComplete.AddListener(() => {
         flashlightSO.BatteryLife = flashlightSO.BatteryLifeCheckPoint;
+        flashlightSO.ResetOnDeath = true;
     });
 
     CheckBatteryStatus();
+  }
+
+  public void ResetFlashLight()
+  {
+    flashlightSO.BatteryLife = maxBattery;
+    flashlightSO.BatteryLifeCheckPoint = maxBattery;
+    TimeLeft = maxBattery;
+    HasBatteryLeft = true;
+    FirstWarningFlag = false;
+    LastWarningFlag = false;
   }
 
   void Update()
@@ -204,6 +228,7 @@ public class Flashlight : MonoBehaviour
     FirstWarningFlag = false;
     LastWarningFlag = false;
     TimeLeft = maxBattery;
+    flashlightSO.BatteryLife = TimeLeft;
     OnBatteryRecharged?.Invoke();
     Debug.Log("Battery inserted");
   }
