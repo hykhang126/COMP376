@@ -9,7 +9,7 @@ public class Flashlight : MonoBehaviour
 {
   [Header("References")]
   [SerializeField] private GameObject FlashlightLight;
-  [SerializeField] public Light FlashlightSpotLight; //Assign if you have a Spot Light child
+  [SerializeField] public Light FlashlightSpotLight;
 
   [Header("Battery")]
   [SerializeField] private float maxBattery = 20.0f;
@@ -35,7 +35,7 @@ public class Flashlight : MonoBehaviour
   public ColliderEvent OnBeamEnter = new ColliderEvent();
   public ColliderEvent OnBeamExit = new ColliderEvent();
 
-  //Legacy single-enemy event you had (kept for compatibility if used elsewhere)
+  //Legacy enemy event just in case
   public UnityEvent OnEnemyHit;
 
 
