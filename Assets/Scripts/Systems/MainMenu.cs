@@ -2,6 +2,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem.UI;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class MainMenu : MonoBehaviour
@@ -42,7 +43,6 @@ public class MainMenu : MonoBehaviour
 
     public void Start()
     {
-        Player.InstanceReference.stateMachine.InvokeStateEvent(PlayerStateType.InMenu.ToString());
         StartCoroutine(MainMenuInit());
     }
 
@@ -55,6 +55,8 @@ public class MainMenu : MonoBehaviour
 
         // Disable player input
         Player.InstanceReference.playerInputHandler.DisableInput();
+        start.onClick.AddListener(StartGame);
+        quit.onClick.AddListener(QuitGame);
     }
 
     public void StartGame()
@@ -65,7 +67,7 @@ public class MainMenu : MonoBehaviour
         //Door Opens
         door.GetComponent<DoorAction>().OpenDoor();
         //camera moves until a certain point after the door
-        Vector3 playerStartPos = Player.InstanceReference != null ? Player.InstanceReference.transform.position : Vector3.zero;
+        Vector3 playerStartPos = FindAnyObjectByType<Camera>() != null ? FindAnyObjectByType<Camera>().transform.position : Vector3.zero;
         StartCoroutine(StartSceneTransition(playerStartPos, playerEndLocation.transform.position, cameraSpeed));
     }
 
@@ -74,7 +76,7 @@ public class MainMenu : MonoBehaviour
         Debug.Log("Quit Game");
         blackVoid.SetActive(true);
         door.GetComponent<DoorAction>().OpenDoor();
-        Vector3 playerStartPos = Player.InstanceReference != null ? Player.InstanceReference.transform.position : Vector3.zero;
+        Vector3 playerStartPos = FindAnyObjectByType<Camera>() != null ? FindAnyObjectByType<Camera>().transform.position : Vector3.zero;
         StartCoroutine(QuitSceneTransition(playerStartPos, playerEndLocation.transform.position, cameraSpeed));
     }
 
@@ -101,15 +103,15 @@ public class MainMenu : MonoBehaviour
         float elapsed = 0f;
         while (elapsed < timeToReach)
         {
-            if (Player.InstanceReference != null)
-                Player.InstanceReference.transform.position = Vector3.Lerp(playerStartPos, playerEndPos, elapsed / timeToReach);
+            if (FindAnyObjectByType<Camera>() != null)
+                FindAnyObjectByType<Camera>().transform.position = Vector3.Lerp(playerStartPos, playerEndPos, elapsed / timeToReach);
             elapsed += Time.deltaTime;
             yield return null;
         }
-        if (Player.InstanceReference != null)
-            Player.InstanceReference.transform.position = playerEndPos;
+        if (FindAnyObjectByType<Camera>() != null)
+            FindAnyObjectByType<Camera>().transform.position = playerEndPos;
 
-        door.GetComponent<DoorAction>().CloseDoor();
+        /*door.GetComponent<DoorAction>().CloseDoor();
 
         // Re-enable player input actions
         if (Player.InstanceReference != null)
@@ -124,11 +126,10 @@ public class MainMenu : MonoBehaviour
         this.gameObject.SetActive(false);
         Cursor.lockState = CursorLockMode.Locked; // Unlock the cursor
         Cursor.visible = false; // Make the cursor visible
-        EventSystem.current.SetSelectedGameObject(null);
+        EventSystem.current.SetSelectedGameObject(null);*/
 
         // Switch to player input map
-        Player.InstanceReference.playerInputHandler.SwitchInputMap(Player.InstanceReference.playerInputHandler.playerActionMap);
-
+        SceneManager.LoadScene("TutorialScene");
     }
 
     private IEnumerator QuitSceneTransition(Vector3 playerStartPos, Vector3 playerEndPos, float timeToReach)
@@ -140,13 +141,13 @@ public class MainMenu : MonoBehaviour
         float elapsed = 0f;
         while (elapsed < timeToReach)
         {
-            if (Player.InstanceReference != null)
-                Player.InstanceReference.transform.position = Vector3.Lerp(playerStartPos, playerEndPos, elapsed / timeToReach);
+            if (FindAnyObjectByType<Camera>() != null)
+                FindAnyObjectByType<Camera>().transform.position = Vector3.Lerp(playerStartPos, playerEndPos, elapsed / timeToReach);
             elapsed += Time.deltaTime;
             yield return null;
         }
-        if (Player.InstanceReference != null)
-            Player.InstanceReference.transform.position = playerEndPos;
+        if (FindAnyObjectByType<Camera>() != null)
+            FindAnyObjectByType<Camera>().transform.position = playerEndPos;
 
         Application.Quit();
 
