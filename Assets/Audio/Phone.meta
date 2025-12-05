@@ -1,8 +1,14 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/Resources/Scriptables/Game Scriptables/FlashlightSO.asset.meta
+guid: 23da3bc3d7b7fd349bc9830a1c1949ab
+NativeFormatImporter:
+========
 guid: 6908657304acdb74aa5920318e1b3c4c
 folderAsset: yes
 DefaultImporter:
+>>>>>>>> main:Assets/Audio/Phone.meta
   externalObjects: {}
+  mainObjectFileID: 11400000
   userData: 
   assetBundleName: 
   assetBundleVariant: 

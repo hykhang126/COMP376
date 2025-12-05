@@ -1,18 +1,29 @@
 using UnityEngine;
 using System.Collections.Generic;
+using System.ComponentModel;
 
 [CreateAssetMenu(fileName = "PlayerInventorySO", menuName = "Scriptable Objects/PlayerInventorySO")]
 public class PlayerInventorySO : MyScriptables
 {
     public int currentItemIndex = 0;
 
-    public List<ItemContractSO> items = new List<ItemContractSO>();
+    [Header("Player Items")]
+    public List<ItemContractSO> items = new();
 
-    [Header("Item Prefab preference")]
-    public List<SerializableKeyValuePair<int, GameObject>> itemList = new();
+    [Header("Persistent Items")]
+    public List<ItemContractSO> persistentItems = new();
+    [Description("Items that should persist across scenes and game sessions. Assign items here to ensure they are not lost.")]
+    public List<ItemContractSO> persistentItemList = new();
 
-    bool hasFlashlight = false;
-    int batteriesCount = 0;
+    [NaughtyAttributes.Button("Clear & Re-add Items")]
+    public void ClearItemsThenReAdd()
+    {
+        ClearItemsInstance();
+        foreach (var pair in persistentItems)
+        {
+            items.Add(pair);
+        }
+    }
 
     [NaughtyAttributes.Button("Clear Items data")]
     public void ClearItemsInstance()
@@ -22,29 +33,38 @@ public class PlayerInventorySO : MyScriptables
         Debug.Log("PlayerInventorySO items cleared.");
     }
 
-    [NaughtyAttributes.Button("Clear All data")]
+    [NaughtyAttributes.Button("Clear Persistent Items")]
+    public void ClearPersistentItems()
+    {
+        persistentItems.Clear();
+    }
+
+    [NaughtyAttributes.Button("TEST: Generate dummy Items & Persistent")]
+    public void GenerateDummyItems()
+    {
+        ClearItemsInstance();
+        ClearPersistentItems();
+
+        for (int i = 0; i < 4; i++)
+        {
+            ItemContractSO newItem = new ItemContractSO();
+            items.Add(newItem);
+
+            if (i == 0) // Make even indexed items persistent
+            {
+                persistentItems.Add(newItem);
+            }
+        }
+    }
+
+    [NaughtyAttributes.Button("DANGER: Clear All data")]
     override public void ClearAllData()
     {
         
         base.ClearAllData();
-        items.Clear();
         currentItemIndex = 0;
-        itemList.Clear();
-
-    }
-}
-
-
-/* Serializable class for Item List */
-[System.Serializable]
-public class SerializableKeyValuePair<TKey, TValue>
-{
-    public TKey Key;
-    public TValue Value;
-
-    public SerializableKeyValuePair(TKey key, TValue value)
-    {
-        Key = key;
-        Value = value;
+        items.Clear();
+        persistentItems.Clear();
+        persistentItemList.Clear();
     }
 }

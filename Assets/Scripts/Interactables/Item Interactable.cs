@@ -73,27 +73,11 @@ public class ItemInteractable : Interactable
             {
                 Debug.Log("flashlight picked up");
                 Flashlight.SetActive(true);
+                Flashlight.GetComponent<Flashlight>().ResetFlashLight();
             }
             Destroy(gameObject);
             
         }
-    }
-
-    // Get the item prefab from the playerInventorySO
-    public GameObject GetItemPrefab(int itemKey)
-    {
-        if (playerInventorySO != null)
-        {
-            foreach (var pair in playerInventorySO.itemList)
-            {
-                if (pair.Key == itemKey)
-                {
-                    return pair.Value;
-                }
-            }
-        }
-        Debug.LogWarning("Item prefab not found for key: " + itemKey);
-        return null;
     }
 
     private void OnValidate()
