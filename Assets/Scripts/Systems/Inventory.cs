@@ -125,12 +125,16 @@ public class Inventory : MonoBehaviour
     void OnDisable()
     {
         // Unsubscribe from input events to prevent memory leaks
-        playerInputHandler.RemoveMapActionNoParamSubscriber(playerMapName, "InventoryToggle", ToggleInventory);
-        playerInputHandler.RemoveMapActionNoParamSubscriber(inventoryMapName, "InventoryToggle", ToggleInventory);
-        playerInputHandler.RemoveMapActionNoParamSubscriber(inventoryMapName, "Next", Next);
-        playerInputHandler.RemoveMapActionNoParamSubscriber(inventoryMapName, "Previous", Previous);
-        playerInputHandler.RemoveMapActionNoParamSubscriber(inventoryMapName, "Combine", Combine);
-        playerInputHandler.RemoveMapActionSubscriber(inventoryMapName, "CycleItems", CycleItems);
+        if(playerInputHandler != null)
+        {
+            playerInputHandler.RemoveMapActionNoParamSubscriber(playerMapName, "InventoryToggle", ToggleInventory);
+            playerInputHandler.RemoveMapActionNoParamSubscriber(inventoryMapName, "InventoryToggle", ToggleInventory);
+            playerInputHandler.RemoveMapActionNoParamSubscriber(inventoryMapName, "Next", Next);
+            playerInputHandler.RemoveMapActionNoParamSubscriber(inventoryMapName, "Previous", Previous);
+            playerInputHandler.RemoveMapActionNoParamSubscriber(inventoryMapName, "Combine", Combine);
+            playerInputHandler.RemoveMapActionSubscriber(inventoryMapName, "CycleItems", CycleItems);
+            playerInputHandler.RemoveMapActionSubscriber(inventoryMapName, "Consume", Consume);
+        }
     }
 
     public void ToggleInventory()

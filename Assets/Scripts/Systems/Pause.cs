@@ -50,6 +50,7 @@ public class Pause : MonoBehaviour
 
     void OnDisable()
     {
+        if(playerInputHandler == null) return;
         playerInputHandler.RemoveMapActionNoParamSubscriber(playerMapName, "PauseGame", DeteminePause);
         playerInputHandler.RemoveMapActionNoParamSubscriber(pauseMapName, "PauseGame", ResumeGame);
     }
