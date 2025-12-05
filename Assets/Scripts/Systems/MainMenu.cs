@@ -54,7 +54,6 @@ public class MainMenu : MonoBehaviour
         EventSystem.current.SetSelectedGameObject(start.gameObject);
 
         // Disable player input
-        Player.InstanceReference.playerInputHandler.DisableInput();
         start.onClick.AddListener(StartGame);
         quit.onClick.AddListener(QuitGame);
     }
