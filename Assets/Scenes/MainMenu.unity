@@ -2049,7 +2049,7 @@ PrefabInstance:
     - target: {fileID: 1144990131310235927, guid: ec90e05d147f74e42a38d973e87d2e07, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: 4e3472c094b8146469870886e7ccf1a0, type: 2}
+      objectReference: {fileID: 2100000, guid: 26f1b36be16f30d409f9ab1a7d20a8a5, type: 2}
     - target: {fileID: 1337667647657584806, guid: ec90e05d147f74e42a38d973e87d2e07, type: 3}
       propertyPath: m_CastShadows
       value: 0
@@ -2121,7 +2121,7 @@ PrefabInstance:
     - target: {fileID: 3750570344084687291, guid: ec90e05d147f74e42a38d973e87d2e07, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: 4e3472c094b8146469870886e7ccf1a0, type: 2}
+      objectReference: {fileID: 2100000, guid: 26f1b36be16f30d409f9ab1a7d20a8a5, type: 2}
     - target: {fileID: 4043763304949687174, guid: ec90e05d147f74e42a38d973e87d2e07, type: 3}
       propertyPath: m_text
       value: Project Rut
@@ -2133,7 +2133,7 @@ PrefabInstance:
     - target: {fileID: 4546327451814354609, guid: ec90e05d147f74e42a38d973e87d2e07, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: a5fe6931b64e0de469d6a1b5b2a23513, type: 2}
+      objectReference: {fileID: 2100000, guid: 4e3472c094b8146469870886e7ccf1a0, type: 2}
     - target: {fileID: 4791340477615653220, guid: ec90e05d147f74e42a38d973e87d2e07, type: 3}
       propertyPath: m_Name
       value: MainMenu
