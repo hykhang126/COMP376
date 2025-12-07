@@ -14,20 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentItemIndex: 0
   items: []
-  itemList:
-  - Key: 42
-    Value: {fileID: 0}
-  - Key: 69
-    Value: {fileID: 0}
-  - Key: 3
-    Value: {fileID: 0}
-  - Key: 4
-    Value: {fileID: 0}
-  - Key: 5
-    Value: {fileID: 0}
-  - Key: 420
-    Value: {fileID: 0}
-  - Key: 0
-    Value: {fileID: 0}
-  - Key: 360
-    Value: {fileID: 0}
+  persistentItems: []
+  persistentItemList:
+  - {fileID: 11400000, guid: 3dbb71b85a532acf6be8782c3f7f6a4e, type: 2}

@@ -98,6 +98,8 @@ public class LightStalkerController : MonoBehaviour
     [Tooltip("Player respawn point (player-only spawner)")]
     public Transform playerRespawnPoint;
 
+    [SerializeField] private float neckSnappingTrigger = 4.4f;
+
     // --- Jumpscare freeze helpers ---
     private Rigidbody[] frozenPlayerRigidbodies = new Rigidbody[0];
     private RigidbodyConstraints[] frozenPlayerRbConstraints = new RigidbodyConstraints[0];
@@ -779,10 +781,31 @@ public class LightStalkerController : MonoBehaviour
 
         // Start jumpscare coroutine
         StartCoroutine(DoJumpscare(playerCollider));
+        StartCoroutine(WaitForNeckSnap());
+    }
+
+    private IEnumerator WaitForNeckSnap()
+    {
+        float elapsed = 0f;
+        while (jumpscarePlaying)
+        {
+            elapsed += Time.deltaTime;
+            if (elapsed >= neckSnappingTrigger)
+            {
+                // Neck snap logic here
+                // For example, you could trigger an animation or sound effect
+                FindAnyObjectByType<DeathManager>().onNeckSnap.Invoke();
+                break;
+            }
+            // Yield until next frame
+            yield return null;
+        }
     }
 
     private IEnumerator DoJumpscare(Collider playerCollider)
     {
+        
+        FindAnyObjectByType<DeathManager>().onDeathSequenceStart.Invoke();
         jumpscarePlaying = true;
         isFleeing = true;
 
@@ -965,6 +988,8 @@ public class LightStalkerController : MonoBehaviour
     // Helper to safely teleport player to playerRespawnPoint and reset stalker position
     private void FinishJumpscareTeleportAndReset(Collider playerCollider)
     {
+        
+        FindAnyObjectByType<DeathManager>().onJumpscareComplete.Invoke();
         // Find the root Player object if possible
         Player rootPlayer = null;
         if (playerCollider != null)

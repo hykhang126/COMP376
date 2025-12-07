@@ -17,7 +17,7 @@ public class TaskManager : MonoBehaviour
 
   bool lightStalkerSequenceEnded = false;
 
-  private String sandwichText = "\r\nMAKE A SANDWICH";
+  private String sandwichText = "\r\nEAT A SANDWICH";
   private String washHandsText = "\r\nWASH HANDS";
   private String clothesText = "\r\nPUT BEDROOM CLOTHES IN WASHER";
 
@@ -34,6 +34,13 @@ public class TaskManager : MonoBehaviour
     UpdateBlackBoardText();
     Inventory.sandwichEvent.AddListener(CompleteSandwichTask);
     Washer.onClothesInWasher.AddListener(CompleteClothesTask);
+
+    FindAnyObjectByType<DeathManager>()?.onJumpscareComplete.AddListener(HandleDeath);
+  }
+
+  public void HandleDeath()
+  {
+    SceneManager.LoadScene(SceneManager.GetActiveScene().name);
   }
 
   public void OnSinkInteract()
@@ -67,7 +74,7 @@ public class TaskManager : MonoBehaviour
   public void CompleteSandwichTask()
   {
     Inventory.sandwichEvent.RemoveListener(CompleteSandwichTask);
-    sandwichText = "\r\n<s>MAKE A SANDWICH</s>";
+    sandwichText = "\r\n<s>EAT A SANDWICH</s>";
     UpdateBlackBoardText();
     makeSandwichTaskFinished = true;
     CheckAllTasksDone();
@@ -83,37 +90,42 @@ public class TaskManager : MonoBehaviour
 
   public void LeaveApartmentFromDoor(GameObject door)
   { 
-    // If all tasks done, let the existing logic handle scene switching.
-    if (allTasksDone)
-    {
-      if (lightStalkerSequenceEnded || SceneManager.GetActiveScene().name != "HorrorActScene3")
+      // If all tasks done, let the existing logic handle scene switching.
+      if (allTasksDone)
       {
-        LeaveApartment();
-        return;
+          if (lightStalkerSequenceEnded)
+          {
+            LeaveApartment();
+            return;
+          }
+          else if(SceneManager.GetActiveScene().name != "HorrorActScene3")
+          {
+            LeaveApartment();
+            return;
+          }
+          else
+          {
+            StartLightStalkerSequence();
+          }
+      }
+
+      AudioSource doorSource = null;
+      if (door != null)
+      {
+        doorSource = door.GetComponent<AudioSource>() ?? door.GetComponentInChildren<AudioSource>();
+      }
+
+      if (doorSource != null && doorSource.clip != null)
+      {
+        doorSource.pitch = UnityEngine.Random.Range(0.95f, 1.05f);
+        doorSource.PlayOneShot(doorSource.clip);
       }
       else
       {
-        StartLightStalkerSequence();
-      }
-    }
-
-    AudioSource doorSource = null;
-    if (door != null)
-    {
-      doorSource = door.GetComponent<AudioSource>() ?? door.GetComponentInChildren<AudioSource>();
-    }
-
-    if (doorSource != null && doorSource.clip != null)
-    {
-      doorSource.pitch = UnityEngine.Random.Range(0.95f, 1.05f);
-      doorSource.PlayOneShot(doorSource.clip);
-    }
-    else
-    {
-      Debug.LogWarning("LeaveApartmentFromDoor: Door AudioSource has no clip assigned.");
-    }   
-    
-    Debug.Log("Must finish all tasks before leaving for groceries");
+        Debug.LogWarning("LeaveApartmentFromDoor: Door AudioSource has no clip assigned.");
+      }   
+      
+      Debug.Log("Must finish all tasks before leaving for groceries");
   }
 
   public void HandleLightStalkerSequenceEnded()
@@ -142,7 +154,7 @@ public class TaskManager : MonoBehaviour
 
     if (laughingLightStalker != null)
     {
-      laughingLightStalker.gameObject.SetActive(true);
+      laughingLightStalker.Play();
     }
   }
 
@@ -162,12 +174,26 @@ public class TaskManager : MonoBehaviour
         SceneManager.LoadScene("HorrorActScene3");
         break;
       case "HorrorActScene3":
-        SceneManager.LoadScene("PuzzleScene");
+        CopyInventoryToPersistent();
+        SceneManager.LoadScene("FinalPuzzle");
         break;
-
       default:
         break;
     }
   }
+  private void CopyInventoryToPersistent()
+  {
+    // Null checks
+    if (Inventory.InstanceReference == null || Inventory.InstanceReference.playerInventorySO == null)
+    {
+      return;
+    }
 
+    var playerInventorySO = Inventory.InstanceReference.playerInventorySO;
+    playerInventorySO.ClearPersistentItems();
+    foreach(var item in playerInventorySO.items)
+    {
+        playerInventorySO.persistentItems.Add(item);
+    }
+  }
 }

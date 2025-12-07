@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -40,11 +41,14 @@ public class PlayerInputHandler : MonoBehaviour
     [Tooltip("Name of the Pause Action Map")]
     public string pauseActionMap = "Pause";
 
+    // Flashlight reference
     public Flashlight flashlight;
 
     // Private
     // Component reference
     private PlayerInput PlayerInput { get; set; }
+    // Copy of action maps for easy access
+    private InputActionMap[] actionMaps;
     // Script reference
     private PlayerInput_Actions PlayerInputActions { get; set; }
     private Player player;
@@ -60,6 +64,7 @@ public class PlayerInputHandler : MonoBehaviour
         {
             Debug.LogError("PlayerInput component not found on Player GameObject!");
         }
+        actionMaps = PlayerInput.actions.actionMaps.ToArray();
 
         // Auto-assign flashlight if not set
         if (flashlight == null)
@@ -183,7 +188,7 @@ public class PlayerInputHandler : MonoBehaviour
 
     public void RemoveMapActionNoParamSubscriber(string mapName, string actionName, Action callback)
     {
-        InputActionMap actionMap = PlayerInput.actions.FindActionMap(mapName);
+        InputActionMap actionMap = actionMaps.FirstOrDefault(map => map.name == mapName);
         InputAction action = actionMap.FindAction(actionName);
         action.performed -= _ => callback();
     }
@@ -197,7 +202,7 @@ public class PlayerInputHandler : MonoBehaviour
 
     public void RemoveMapActionSubscriber(string mapName, string actionName, Action<InputAction.CallbackContext> callback)
     {
-        InputActionMap actionMap = PlayerInput.actions.FindActionMap(mapName);
+        InputActionMap actionMap = actionMaps.FirstOrDefault(map => map.name == mapName);
         InputAction action = actionMap.FindAction(actionName);
         action.performed -= callback;
     }
@@ -259,41 +264,13 @@ public class PlayerInputHandler : MonoBehaviour
 
     #endregion
 
-    #region InMenu Callbacks
-
-    public void InMenuEnter()
-    {
-        PlayerInput.actions[moveAction].performed -= OnMove;
-        PlayerInput.actions[moveAction].canceled -= OnMove;
-        PlayerInput.actions[lookAction].performed -= OnLook;
-        PlayerInput.actions[lookAction].canceled -= OnLook;
-        PlayerInput.actions[crouchAction].performed -= OnCrouch;
-        PlayerInput.actions[crouchAction].canceled -= OnCrouch;
-        PlayerInput.actions[sprintAction].performed -= OnSprint;
-        PlayerInput.actions[sprintAction].canceled -= OnSprint;
-
-    }
-
-    public void InMenuExit()
-    {
-        PlayerInput.actions[moveAction].performed += OnMove;
-        PlayerInput.actions[moveAction].canceled += OnMove;
-        PlayerInput.actions[lookAction].performed += OnLook;
-        PlayerInput.actions[lookAction].canceled += OnLook;
-        PlayerInput.actions[crouchAction].performed += OnCrouch;
-        PlayerInput.actions[crouchAction].canceled += OnCrouch;
-        PlayerInput.actions[sprintAction].performed += OnSprint;
-        PlayerInput.actions[sprintAction].canceled += OnSprint;
-
-    }
-
-    #endregion
-
     // DEBUG
+#if UNITY_EDITOR
     private void Update()
     {
         if (PlayerInput.currentActionMap != null)
             currentActionMapName = PlayerInput.currentActionMap.name;
     }
+#endif
 
 }
